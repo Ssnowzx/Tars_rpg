@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório R2 (Perfil → v29)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>R2 — Perfil reconciliado à v29</h1>
+  <div class="sub">Reputação em 4 índices (§26) + Diário do Colono (§24.3) <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §26 + §24</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /profile</span>
+  </div>
+</div>
+
+<p class="lead">A v29 acaba com a reputação única: ela passa a ser composta por <b>4 índices
+independentes</b> (0–1000), cada um com consequências próprias e sem compensação entre si. A v29
+também posiciona Fertways como MMO de gestão (não RPG) e adiciona o <b>Diário do Colono</b>. Esta
+etapa reconcilia o Perfil a esses dois pontos.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">4</div><div class="l">índices de reputação (§26.2)</div></div>
+  <div class="card"><div class="n">0–1000</div><div class="l">escala de cada índice</div></div>
+  <div class="card"><div class="n">§24.3</div><div class="l">Diário do Colono</div></div>
+  <div class="card"><div class="n">★ 4,7</div><div class="l">mantido como média das avaliações</div></div>
+</div>
+
+<h2>Reputação — 4 índices independentes (§26.2)</h2>
+<table>
+  <thead><tr><th>Índice</th><th>O que mede</th><th>Bloqueia quando baixo</th></tr></thead>
+  <tbody>
+    <tr><td>Confiança Comercial</td><td>Acordos de Troca cumpridos, avaliações de comércio</td><td>Leilões, Mercado Central, Fiscal de Mercado</td></tr>
+    <tr><td>Conduta Social</td><td>Comportamento em chat, denúncias confirmadas</td><td>Chats, Atendente do Espaçoporto, Repórter</td></tr>
+    <tr><td>Status Cívico</td><td>Tributos, missões da administração, terraformação</td><td>Fundar federação, cargos públicos, Auxiliar de Tesouro</td></tr>
+    <tr><td>Honra Militar/Diplomática</td><td>Conduta em guerras, ataques a aliados, tratados</td><td>Fundar federação, alianças, tratados de guerra</td></tr>
+  </tbody>
+</table>
+<p>Cada índice é <b>isolado</b>: Status Cívico alto não compensa Confiança Comercial baixa (§26.9).
+Na tela, cada índice tem barra colorida por faixa de saúde (verde ≥750 · âmbar ≥500 · vermelho &lt;500)
+e a linha "Afeta:" com o que ele desbloqueia.</p>
+
+<h2>Diário do Colono (§24.3)</h2>
+<ul>
+  <li>Entradas <b>geradas automaticamente</b> a cada marco (primeira zona conquistada, entrada em
+      federação, primeiro comércio interplanetário…).</li>
+  <li>O jogador pode anexar uma <b>nota pessoal</b> a cada entrada.</li>
+  <li><b>Privado por padrão</b> — selo Privado/Público por entrada (toggle mock).</li>
+</ul>
+
+<h2>Implementação</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Mudança</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>player_profile.dart</code>: +<code>ReputationIndex</code> (id/label/value/gates), +<code>DiaryEntry</code> (milestone/day/text/note/isPublic), +campos <code>reputation</code> e <code>diary</code></td></tr>
+    <tr><td>Fixture</td><td><code>profile.json</code>: 4 índices + 3 entradas de diário</td></tr>
+    <tr><td>UI</td><td><code>profile_screen.dart</code>: <code>_ReputationCard</code>/<code>_ReputationRow</code> + <code>_DiaryCard</code>/<code>_DiaryRow</code>/<code>_PrivacyTag</code></td></tr>
+  </tbody>
+</table>
+<p>O ★ 0–5 do cabeçalho e as avaliações recebidas (§8.4) foram mantidos — agora explicitamente como a
+<b>média das avaliações de comércio</b> que alimenta o índice de Confiança Comercial. Identidade do
+colono (avatar + nickname, §24.2) já existia no cabeçalho.</p>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: 4 índices (812 verde · 690/745 âmbar · 430 vermelho) com "Afeta:"; diário com 3 entradas,
+      selos Privado/Público e notas pessoais</li>
+  <li>Seam estendido · tokens DsTokens · sem emoji · estados loading/error</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · editar identidade /
+nota do diário / toggle privacidade = mock. <b>Conclui</b> a faixa "Reconciliar o recém-entregue".
+<b>Pendentes da v29:</b> §24 economia (Metal Bruto/Mina/Destilaria/preços), §27.13 ranking por percentil,
+§27 combate territorial.</div>
+
+<footer><span>Fertways — Relatório de Entrega · R2 (Perfil → v29)</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

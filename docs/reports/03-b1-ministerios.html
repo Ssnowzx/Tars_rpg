@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B1 Ministérios da Capital</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B1 — Ministérios da Capital</h1>
+  <div class="sub">Cada slot instalado da Capital vira uma tela de ministério <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD base:</b> v24 — §2.1 + §14</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /capital/ministry</span>
+  </div>
+</div>
+
+<p class="lead">Antes, tocar um slot da Capital abria apenas um aviso "em breve". O B1 transforma os
+10 slots instalados em <b>telas de ministério reais</b>, sobre um layout comum, com conteúdo
+ancorado no GDD v24. Drill-in do shell: mantém HUD e navegação.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">10</div><div class="l">painéis de ministério</div></div>
+  <div class="card"><div class="n">1</div><div class="l">layout comum (MinistryScaffold)</div></div>
+  <div class="card"><div class="n">9</div><div class="l">arquivos novos</div></div>
+  <div class="card"><div class="n">0</div><div class="l">issues no analyze</div></div>
+</div>
+
+<h2>Painéis entregues (GDD §2.1)</h2>
+<table>
+  <thead><tr><th>Ministério</th><th>Conteúdo</th><th>GDD</th></tr></thead>
+  <tbody>
+    <tr><td>Finanças e Tesouro</td><td>Saldo · PIB · receita/despesa · fluxo de caixa do dia</td><td>§2.1</td></tr>
+    <tr><td>Central de Tributos</td><td>Alíquotas 3/2/1% + isenção de federação + arrecadações recentes</td><td>§8.3</td></tr>
+    <tr><td>Pesquisas e Notícias</td><td>Status do Telescópio Gagarin + feed (Gagarin / Evento / Oficial)</td><td>§12.1</td></tr>
+    <tr><td>Administração Pública</td><td>Leis · punições · recompensas · cargos públicos neutros</td><td>§2.1 / §14</td></tr>
+    <tr><td>Segurança e Guerra</td><td>Guerras · tratados/acordos + atalho ao Ranking de Guerras</td><td>§15</td></tr>
+    <tr><td>Estacionamento de Caminhões</td><td>20 vagas · taxa por hora · ocupação · fila de caminhões</td><td>§2.1</td></tr>
+    <tr><td>Ministério dos Transportes</td><td>Registro de placas + estado de conservação/depreciação</td><td>§16.3 / §16.4</td></tr>
+    <tr><td>Depósito Central</td><td>Capacidade de armazenamento por recurso</td><td>§2.1</td></tr>
+    <tr><td>Central de Transportes</td><td>10 níveis (caminhões-base + consumo de energia)</td><td>§19.5</td></tr>
+    <tr><td>Ministério das Reputações</td><td><b>Stub honesto</b> — fluxo de justiça §9 + ponteiro para o Bloco B5 (sem dados falsos)</td><td>§9 → B5</td></tr>
+  </tbody>
+</table>
+
+<h2>Arquitetura</h2>
+<p>Slot tocado é passado por <code>state.extra</code> (campo <code>InstitutionSlot.kind</code>) ao
+<code>MinistryScreen</code>, que despacha o painel certo. <code>MinistryScaffold</code> é o layout
+comum (voltar + identidade do slot + função §2.1 + chip de nível).</p>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/ministry.dart</code> (MinistryKind + dados tipados por ministério)</td></tr>
+    <tr><td>Seam</td><td><code>MinistryRepository</code> → <code>MockMinistryRepository</code> → <code>ministries.json</code> → <code>ministriesProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/capital/ministries/</code>: ministry_screen (dispatcher) · ministry_widgets (scaffold) · ministry_panels</td></tr>
+    <tr><td>Compartilhado</td><td><code>category_meta.dart</code> extraído (cor/ícone) — DRY com o grid da Capital</td></tr>
+    <tr><td>Dados</td><td><code>InstitutionSlot.kind</code> + <code>capital.json</code> atualizados</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado nesta entrega</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Verificação visual: grid → Tesouro (fluxo 8.420 − 5.130 = +3.290) → stub de Reputações</li>
+  <li>Seam completo · estados loading/error · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Decisões:</b> Reputações fica como stub apontando para B5 (não inventa dados de
+justiça). <b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded (consistente com
+rankings/zone) · ações de escrita = mock (SnackBar). <b>Futuro:</b> ações reais (evoluir/instalar),
+Cargos Públicos (B8), Frota (B7), Reputações completo (B5).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B1 Ministérios da Capital</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

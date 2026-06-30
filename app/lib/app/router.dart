@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../domain/models/institution_slot.dart';
+import '../domain/models/planet_models.dart';
+import '../features/capital/capital_screen.dart';
+import '../features/capital/ministries/ministry_screen.dart';
+import '../features/colony/colony_screen.dart';
+import '../features/market/informal_trade_screen.dart';
+import '../features/market/market_screen.dart';
+import '../features/messages/messages_screen.dart';
+import '../features/profile/profile_screen.dart';
+import '../features/rankings/rankings_screen.dart';
+import '../features/shell/app_shell.dart';
+import '../features/spaceport/spaceport_screen.dart';
+import '../features/world_map/view/world_map_screen.dart';
+import '../features/zone/zone_screen.dart';
+
+final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>();
+
+/// Rotas declarativas. StatefulShellRoute preserva o estado de cada aba
+/// (mapa, capital, mercado, espaçoporto, perfil) ao alternar. Sub-rotas
+/// (colony, zone, rankings) são drill-ins que mantêm o HUD/nav do shell.
+final GoRouter appRouter = GoRouter(
+  navigatorKey: _rootKey,
+  initialLocation: '/map',
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/map',
+              builder: (_, __) => const WorldMapScreen(),
+              routes: [
+                GoRoute(path: 'colony', builder: (_, __) => const ColonyScreen()),
+                GoRoute(
+                  path: 'zone',
+                  builder: (_, state) => ZoneScreen(zone: state.extra as MapNode?),
+                ),
+                GoRoute(path: 'messages', builder: (_, __) => const MessagesScreen()),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/capital',
+              builder: (_, __) => const CapitalScreen(),
+              routes: [
+                GoRoute(path: 'rankings', builder: (_, __) => const RankingsScreen()),
+                GoRoute(
+                  path: 'ministry',
+                  builder: (_, state) => MinistryScreen(slot: state.extra as InstitutionSlot?),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/market',
+              builder: (_, __) => const MarketScreen(),
+              routes: [
+                GoRoute(path: 'informal', builder: (_, __) => const InformalTradeScreen()),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/spaceport', builder: (_, __) => const SpaceportScreen()),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
+          ],
+        ),
+      ],
+    ),
+  ],
+);

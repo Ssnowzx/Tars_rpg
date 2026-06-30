@@ -1,0 +1,40 @@
+name: fertways
+description: "Fertways: The Next Colony — cliente Flutter + Flame (frontend, mock data)."
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0" # Color.withValues / CardThemeData / M3 surface roles
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Game render (mapa orgânico + lote isométrico)
+  flame: ^1.18.0
+
+  # Estado e navegação (ver brief §3.1)
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+
+  # i18n e formatação (Fert$ por locale). 'any' evita conflito com a versão
+  # de intl exigida por flutter_localizations no SDK instalado.
+  intl: any
+
+  # Tipografia do design-system (Inter / Lora / JetBrains Mono) sem bundlar binários
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true # gera AppLocalizations a partir de lib/l10n/*.arb
+  assets:
+    - assets/fixtures/
+    - assets/images/

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório E2 (Combate §27)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>E2 — Combate Territorial (§27)</h1>
+  <div class="sub">Sentinela, forças, rodadas, saque e manutenção na Zona Neutra <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §27</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/zone</span>
+  </div>
+</div>
+
+<p class="lead">O §27 torna a guerra por zonas neutras jogável: uma unidade de combate dedicada (a
+Sentinela), forças ofensiva/defensiva com bônus de construção, combate por rodadas de 10 minutos,
+saque de 50%, proteção de novatos e custo de manutenção territorial. Tudo integrado à tela da Zona
+Neutra como uma nova seção "Defesa & Combate".</p>
+
+<div class="cards">
+  <div class="card"><div class="n">Sentinela</div><div class="l">nova unidade (Quartel)</div></div>
+  <div class="card"><div class="n">10 min</div><div class="l">rodada de combate (§27.5)</div></div>
+  <div class="card"><div class="n">50%</div><div class="l">saque ao vencer (§27.8)</div></div>
+  <div class="card"><div class="n">20 dias</div><div class="l">proteção de novatos (§27.11)</div></div>
+</div>
+
+<h2>Escopo entregue (na seção "Defesa & Combate" da Zona)</h2>
+<ul>
+  <li><b>Sentinela</b> (§27.1) — atributos por nível (Defesa 100/150/225/338/506 · Ataque 80/120/180/270/405);
+      tabela de referência na tela. Robô Minerador defende com <b>25%</b> da Sentinela (§27.2).</li>
+  <li><b>Força Defensiva</b> = Σ defesa × (1 + bônus de construção Muralha/Bastião/Torre) — §27.3.</li>
+  <li><b>Força Ofensiva</b> = Σ ataque das Sentinelas enviadas — §27.3.</li>
+  <li><b>Previsão de combate</b> (§27.5) por cenário: vantagem do atacante (~4 rodadas) · equilibrado
+      (~12 rodadas) · vantagem do defensor (ataque destruído).</li>
+  <li><b>Saque 50%</b> ao vencer (§27.8) · <b>cooldown 48h</b> (§27.10).</li>
+  <li><b>Manutenção territorial diária</b> (§27.12) com status Em dia/Atrasada.</li>
+  <li><b>Proteção de novatos</b> (§27.11): zonas protegidas não podem ser atacadas (botão desabilitado).</li>
+</ul>
+
+<h2>Modelo de combate</h2>
+<table>
+  <thead><tr><th>Regra</th><th>Implementação</th></tr></thead>
+  <tbody>
+    <tr><td>Atributos Sentinela (§27.1)</td><td><code>kSentinelSpecs</code> (def/atk nv1–5) + <code>kSentinelCosts</code> (curva 1.65×)</td></tr>
+    <tr><td>Robô defensor 25% (§27.2)</td><td><code>roboDef(level)</code></td></tr>
+    <tr><td>Forças (§27.3)</td><td><code>CombatState.defenseTotal</code> / <code>attackTotal</code></td></tr>
+    <tr><td>Previsão (§27.5)</td><td><code>forecastFor(atk, def)</code> → razão ≥1,6 / 0,7–1,6 / &lt;0,7</td></tr>
+    <tr><td>Manutenção (§27.12)</td><td><code>MaintenanceCost</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Arquitetura (seam novo)</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/combat.dart</code> (Sentinela, UnitStack, CombatState, forecast, manutenção)</td></tr>
+    <tr><td>Seam</td><td><code>CombatRepository</code> → <code>MockCombatRepository</code> → <code>combat.json</code> → <code>combatProvider</code></td></tr>
+    <tr><td>UI</td><td><code>zone_screen.dart</code>: <code>_CombatSection</code> (ConsumerWidget) + guarnição/ataque/previsão/manutenção/tabela</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: zona Jazida Ferrosa → "Forças equilibradas ~12 rodadas" (ataque 2430 vs defesa 2276);
+      guarnição com def correta (225/150 · robô 56=25%); manutenção 100 Biomassa/60 Energia/20 Ligas;
+      tabela da Sentinela 100/150/225/338/506</li>
+  <li>Seam novo · tokens DsTokens · sem emoji · estados loading/error</li>
+</ul>
+
+<div class="note"><b>Encerra a implementação da v29</b> (reconciliações R1–R3 + economia §24 + combate §27).
+<b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · ataque/recrutamento = mock · combate por
+rodadas é previsão por cenário (não simulação ao vivo). <b>Próximo:</b> retomar Bloco B (B3 Mensagens §10…).</div>
+
+<footer><span>Fertways — Relatório de Entrega · E2 Combate §27</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

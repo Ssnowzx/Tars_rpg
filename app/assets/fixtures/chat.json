@@ -1,0 +1,72 @@
+{
+  "channels": [
+    {
+      "id": "global",
+      "name": "Chat Global",
+      "kind": "global",
+      "scope": "Todos os jogadores",
+      "description": "Aberto a todo o servidor. Moderação automática · 3 idiomas.",
+      "moderated": true,
+      "unread": 3,
+      "messages": [
+        { "id": "g1", "author": "Renata Sol", "sector": "E-09", "text": "Alguém vendendo Metal Bruto em quantidade? Pago bem.", "time": "14:21", "language": "pt" },
+        { "id": "g2", "author": "K. Adeyemi", "sector": "C-05", "text": "I have 2400 units near the rust belt, fair price.", "time": "14:22", "language": "en" },
+        { "id": "g3", "author": "Cmdt. Vale", "sector": "F-07", "text": "Fecho 2.000 unidades. Despacho o Furgão agora.", "time": "14:24", "language": "pt", "isYou": true },
+        { "id": "g4", "author": "L. Tanaka", "sector": "B-03", "text": "Tempestade solar começa em 1h — estoquem energia!", "time": "14:30", "language": "pt" }
+      ]
+    },
+    {
+      "id": "region",
+      "name": "Chat de Região",
+      "kind": "region",
+      "scope": "Planície Central · 5 canais regionais",
+      "description": "Colonos da mesma região. Moderação automática.",
+      "moderated": true,
+      "unread": 0,
+      "messages": [
+        { "id": "r1", "author": "J. Pereira", "sector": "F-15", "text": "Quem topa uma rota de biomassa partilhada na planície?", "time": "13:50", "language": "pt" },
+        { "id": "r2", "author": "C. Mendes", "sector": "D-08", "text": "Topo. Tenho Caminhão sobrando às tardes.", "time": "13:58", "language": "pt" }
+      ]
+    },
+    {
+      "id": "federation",
+      "name": "Chat de Federação",
+      "kind": "federation",
+      "scope": "Pacto Boreal · 12 membros",
+      "description": "Privado entre os membros. Sem moderação automática · histórico armazenado.",
+      "moderated": false,
+      "unread": 5,
+      "messages": [
+        { "id": "f1", "author": "Drax", "sector": "H-12", "text": "Plano: cercar a Jazida Ferrosa às 21h. Levem Sentinelas nv4.", "time": "12:10", "language": "pt" },
+        { "id": "f2", "author": "Cmdt. Vale", "sector": "F-07", "text": "Confirmado. Tenho 5 Sentinelas nv4 prontas.", "time": "12:14", "language": "pt", "isYou": true },
+        { "id": "f3", "author": "R. Khan", "sector": "J-11", "text": "Levo reforço defensivo se a resposta vier forte.", "time": "12:16", "language": "pt" }
+      ]
+    },
+    {
+      "id": "dm",
+      "name": "Mensagem Privada",
+      "kind": "dm",
+      "scope": "Colono H · B-22",
+      "description": "Conversa direta. Histórico permanente · pode virar evidência em denúncias.",
+      "moderated": false,
+      "unread": 1,
+      "messages": [
+        { "id": "d1", "author": "Colono H", "sector": "B-22", "text": "Fecha a troca? 300 Biomassa pelos 180 de Energia.", "time": "11:02", "language": "pt" },
+        { "id": "d2", "author": "Cmdt. Vale", "sector": "F-07", "text": "Fecho. Proponho um Acordo de Troca antes (§26.5).", "time": "11:05", "language": "pt", "isYou": true },
+        { "id": "d3", "author": "Colono H", "sector": "B-22", "text": "Combinado, confirmo o aperto de mão digital.", "time": "11:06", "language": "pt" }
+      ]
+    },
+    {
+      "id": "neighborhood",
+      "name": "Chat de Vizinhança",
+      "kind": "neighborhood",
+      "scope": "Slots próximos · raio configurável",
+      "description": "Colonos dos slots vizinhos. Moderação automática.",
+      "moderated": true,
+      "unread": 0,
+      "messages": [
+        { "id": "n1", "author": "A. Costa", "sector": "F-07", "text": "Bem-vindos os novos vizinhos do setor F! Precisam de água é só chamar.", "time": "10:40", "language": "pt" }
+      ]
+    }
+  ]
+}

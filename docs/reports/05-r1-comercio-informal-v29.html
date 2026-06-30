@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório R1 (B2 → v29)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>R1 — Comércio Informal reconciliado à v29</h1>
+  <div class="sub">Logística física (§25) + Acordo de Troca (§26.5) <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §25 + §26</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /market/informal</span>
+  </div>
+</div>
+
+<p class="lead">A v29 "corrige" o comércio informal: o tributo passa a ser cobrado <b>uma única vez na
+entrega física</b>, toda movimentação exige um <b>veículo real</b> percorrendo o mapa, a
+<b>distância importa</b> (tempo + energia), e a reputação de comércio vira o índice de
+<b>Confiança Comercial (0–1000)</b>. Esta etapa reconcilia a tela B2 a esse modelo.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">§25</div><div class="l">logística física unificada</div></div>
+  <div class="card"><div class="n">0–1000</div><div class="l">Confiança Comercial (§26.2)</div></div>
+  <div class="card"><div class="n">6 / 30 m³</div><div class="l">Furgão / Caminhão (§25.4)</div></div>
+  <div class="card"><div class="n">§26.5</div><div class="l">Acordo de Troca (handshake)</div></div>
+</div>
+
+<h2>O que mudou (v24 → v29)</h2>
+<table>
+  <thead><tr><th>Antes (v24)</th><th>Agora (v29)</th></tr></thead>
+  <tbody>
+    <tr><td>"Tributo na saída" (§8.3), abstrato</td><td><b>Tributo de transporte na entrega</b> física, cobrado uma única vez (§25)</td></tr>
+    <tr><td>Transferência sem veículo</td><td>Toda movimentação exige <b>Furgão</b> (6 m³ / 6.000 un) ou <b>Caminhão</b> (30 m³ / 30.000 un)</td></tr>
+    <tr><td>Posição no mapa decorativa</td><td><b>Distância importa</b>: tempo e energia proporcionais (§25.6)</td></tr>
+    <tr><td>Reputação 0–5★ única</td><td><b>Confiança Comercial 0–1000</b> (§26.2) como índice de confiança; ★ vira média das avaliações</td></tr>
+    <tr><td>—</td><td><b>Acordo de Troca</b> (aperto de mão digital): evidência sem escrow; expirado → denúncia pré-preenchida (§26.5)</td></tr>
+  </tbody>
+</table>
+
+<h2>Implementação</h2>
+<ul>
+  <li><b>Banner antifraude</b> reescrito: cada colono despacha o próprio veículo; calote real e visível.</li>
+  <li><b>Card de oferta</b>: barra de Confiança Comercial (0–1000, cor por faixa) + ★ média; linha de
+      <b>logística</b> (veículo · distância em slots · ~tempo · ~energia); <b>tributo de transporte na
+      entrega</b> calculado por camada; ação <b>Acordo</b> + Negociar + Reputação.</li>
+  <li><b>"Como funciona"</b>: fluxos §25.7 (despacho físico independente) + card do <b>Acordo de Troca §26.5</b>
+      + card de <b>Tributo de Transporte (§25)</b>.</li>
+  <li><b>Histórico</b>: calote com acordo expirado mostra "denúncia pré-preenchida (§26.5)".</li>
+</ul>
+
+<h2>Logística — fórmula (§25.4/§25.6)</h2>
+<table>
+  <thead><tr><th>Veículo</th><th>Capacidade</th><th>Tempo / slot</th><th>Energia / slot</th></tr></thead>
+  <tbody>
+    <tr><td>Furgão</td><td>6 m³ (6.000 un)</td><td>~0,25 min</td><td>~0,25 kWh</td></tr>
+    <tr><td>Caminhão de Carga</td><td>30 m³ (30.000 un)</td><td>~0,667 min</td><td>~2,0 kWh</td></tr>
+  </tbody>
+</table>
+
+<h2>Arquitetura (estende o seam existente)</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Mudança</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>informal_trade.dart</code>: +<code>commercialTrust</code>, +<code>distanceSlots</code>, +<code>VehicleSpec</code>/<code>Logistics</code>/<code>computeLogistics</code>, +<code>agreementExpired</code></td></tr>
+    <tr><td>Fixture</td><td><code>informal.json</code>: distância + Confiança Comercial por oferta; calote com acordo expirado</td></tr>
+    <tr><td>UI</td><td><code>informal_trade_screen.dart</code>: <code>_TrustIndex</code>, <code>_InfoLine</code>, <code>_AgreementCard</code> + reescrita de banner/tributo/fluxos</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: logística confere (8 slots → ~2 min/2 kWh · 22 → ~5,5 · 41 → ~10,3); tributos por camada
+      (180×3%=5,4 · 90×2%=1,8); Confiança Comercial 780/640/210/940/430; Acordo na ação e em "Como funciona"</li>
+  <li>Seam estendido · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · ações = mock (SnackBar).
+<b>Próximo:</b> R2 — Perfil reconciliado ao §26 (4 índices de reputação) + §24 (identidade/avatar/diário).</div>
+
+<footer><span>Fertways — Relatório de Entrega · R1 (B2 → v29)</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

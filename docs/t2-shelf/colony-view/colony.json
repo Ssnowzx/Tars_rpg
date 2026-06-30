@@ -1,0 +1,16 @@
+{
+  "name": "Colônia Ares Prime",
+  "lots": [
+    { "id": "l-cap", "name": "Capital", "kind": "capital", "level": 14, "dx": 0, "dy": 0, "built": true },
+
+    { "id": "l-water", "name": "Aquífero Tharsis", "kind": "water", "level": 6, "dx": -350, "dy": -150, "perHour": 54, "built": true },
+    { "id": "l-metals", "name": "Mina Borealis", "kind": "metals", "level": 5, "dx": 360, "dy": -170, "perHour": 38, "built": true },
+    { "id": "l-biomass", "name": "Estufa Elysium", "kind": "biomass", "level": 8, "dx": 300, "dy": 215, "perHour": 22, "built": true },
+    { "id": "l-energy", "name": "Campo Solar", "kind": "energy", "level": 3, "dx": -270, "dy": 235, "perHour": 24, "built": true },
+    { "id": "l-factory", "name": "Fábrica Olympus", "kind": "factory", "level": 7, "dx": 0, "dy": -305, "perHour": 9, "built": true },
+
+    { "id": "l-free1", "name": "Lote livre", "kind": "empty", "level": 0, "dx": 440, "dy": 70, "built": false },
+    { "id": "l-free2", "name": "Lote livre", "kind": "empty", "level": 0, "dx": -480, "dy": 80, "built": false },
+    { "id": "l-free3", "name": "Lote livre", "kind": "empty", "level": 0, "dx": 150, "dy": 340, "built": false }
+  ]
+}

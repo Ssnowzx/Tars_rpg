@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fertways",
+  "navMap": "Map",
+  "navCapital": "Capital",
+  "navMarket": "Market",
+  "navSpaceport": "Spaceport",
+  "navChat": "Chat",
+  "navProfile": "Profile",
+  "hudCurrency": "Fert$",
+  "hudResourcesLabel": "Resources",
+  "capitalTitle": "Capital",
+  "capitalSlotsSummary": "{used} of {total} institutions installed",
+  "capitalEmptySlot": "Empty slot",
+  "capitalBuildAction": "Install",
+  "stateLoading": "Loading…",
+  "stateError": "Couldn't load. Tap to retry.",
+  "comingSoon": "Coming soon"
+}

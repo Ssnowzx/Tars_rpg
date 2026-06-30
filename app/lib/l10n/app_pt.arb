@@ -1,0 +1,30 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Fertways",
+  "@appTitle": { "description": "Nome do jogo, exibido em barras de título" },
+
+  "navMap": "Mapa",
+  "navCapital": "Capital",
+  "navMarket": "Mercado",
+  "navSpaceport": "Espaçoporto",
+  "navChat": "Chat",
+  "navProfile": "Perfil",
+
+  "hudCurrency": "Fert$",
+  "hudResourcesLabel": "Recursos",
+
+  "capitalTitle": "Capital",
+  "capitalSlotsSummary": "{used} de {total} instituições instaladas",
+  "@capitalSlotsSummary": {
+    "placeholders": {
+      "used": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "capitalEmptySlot": "Slot livre",
+  "capitalBuildAction": "Instalar",
+
+  "stateLoading": "Carregando…",
+  "stateError": "Não foi possível carregar. Toque para tentar de novo.",
+  "comingSoon": "Em construção"
+}

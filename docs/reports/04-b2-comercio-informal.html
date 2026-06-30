@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B2 Comércio Informal</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B2 — Comércio Informal + Antifraude</h1>
+  <div class="sub">Troca direta entre colonos com o "calote" como mecânica central <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD base:</b> v24 — §8</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /market/informal</span>
+  </div>
+</div>
+
+<p class="lead">O comércio informal é a camada humana da economia: sem garantias do sistema, sem
+árbitro automático — o <b>calote é real</b>. A reputação (0–5★) e o histórico do comerciante são a
+única proteção (antifraude). Drill-in do Mercado, acessível por botão no header.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">3</div><div class="l">abas (Ofertas/Histórico/Como funciona)</div></div>
+  <div class="card"><div class="n">5</div><div class="l">ofertas mock (confiáveis e arriscadas)</div></div>
+  <div class="card"><div class="n">3/2/1%</div><div class="l">tributo primário/secundário/raro</div></div>
+  <div class="card"><div class="n">&lt;3.5★</div><div class="l">gatilho do sinal de risco</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Banner antifraude (§8.1)</b> — sem bloqueio de recursos nem árbitro; o calote é real.</li>
+  <li><b>Ofertas</b> — swap <i>Você recebe ↔ Você envia</i>; reputação 0–5★ + nº de avaliações;
+      <b>preview de tributo §8.3</b> calculado sobre o envio; badge de federação com isenção;
+      stats de confiança (negociações · % sucesso · calotes). Filtros: Tudo / Confiáveis / Federação.</li>
+  <li><b>Sinal de risco (antifraude)</b> — reputação &lt; 3,5 ganha borda vermelha, tag "Risco de
+      calote" e botão de negociar atenuado; ≥ 4,8 ganha tag "Verificado".</li>
+  <li><b>Histórico</b> — trocas com desfecho sucesso/calote, avaliação dada e denúncia (→ B5).</li>
+  <li><b>Como funciona</b> — fluxos §8.2 (sucesso vs calote, lado a lado) + card de tributação §8.3.</li>
+</ul>
+
+<h2>Tributação no comércio informal (§8.3)</h2>
+<table>
+  <thead><tr><th>Camada de recurso</th><th>Alíquota na saída</th><th>Exemplo</th></tr></thead>
+  <tbody>
+    <tr><td>Primários (Oxigênio, Água, Biomassa, Energia)</td><td>3%</td><td>220 Oxigênio → 6,6</td></tr>
+    <tr><td>Secundários (Ligas, Compostos, Componentes…)</td><td>2%</td><td>90 Ligas → 1,8</td></tr>
+    <tr><td>Raros</td><td>1%</td><td>—</td></tr>
+    <tr><td colspan="3">Entre membros da mesma federação: isento até 35% da produção diária.</td></tr>
+  </tbody>
+</table>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/informal_trade.dart</code> (InformalBoard · InformalOffer · TradeLeg · TradeHistoryEntry)</td></tr>
+    <tr><td>Seam</td><td><code>MarketRepository</code> estendido com <code>loadInformalBoard()</code> → <code>informal.json</code> → <code>informalBoardProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/market/informal_trade_screen.dart</code></td></tr>
+    <tr><td>Compartilhado</td><td><code>resource_visual.dart</code> (cor/ícone) extraído — DRY entre Mercado e Informal</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado nesta entrega</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Verificação visual: tributos corretos (90×2%=1,8 · 220×3%=6,6 · 180×3%=5,4); isenção de
+      federação; oferta arriscada (2,1★, 4 calotes) sinalizada; abas conferem com §8.2/§8.3</li>
+  <li>Seam estendido · estados loading/error/empty · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · ações de escrita
+= mock (SnackBar). <b>Futuro:</b> propor/aceitar troca real, avaliação pós-troca interativa,
+<code>ReputationRepository</code> completo (B5) ligado à denúncia.</div>
+
+<footer><span>Fertways — Relatório de Entrega · B2 Comércio Informal</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

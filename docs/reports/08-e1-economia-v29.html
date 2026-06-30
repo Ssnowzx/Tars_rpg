@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório E1 (Economia §24)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>E1 — Sanitização Econômica (§24)</h1>
+  <div class="sub">Metal Bruto, Mina Local, Destilaria, subsídio e nova fórmula de preço <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §24</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Telas:</b> HUD · Colônia · Mercado</span>
+  </div>
+</div>
+
+<p class="lead">O §24 "saneia" a economia com cadeias de produção completas: um recurso novo (Metal
+Bruto), construções para produzi-lo (Mina Local) e ao Biocombustível (Destilaria), receitas de
+Componentes Eletrônicos, subsídio das construções essenciais e uma nova fórmula de preço para os
+recursos processados.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">Metal Bruto</div><div class="l">novo recurso · 0,183 Fert$</div></div>
+  <div class="card"><div class="n">+2</div><div class="l">construções (Mina Local, Destilaria)</div></div>
+  <div class="card"><div class="n">3</div><div class="l">receitas de Componentes (§24.5)</div></div>
+  <div class="card"><div class="n">nv≤3</div><div class="l">essenciais subsidiadas (§24.7)</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<table>
+  <thead><tr><th>Área</th><th>Mudança</th></tr></thead>
+  <tbody>
+    <tr><td>HUD / Recursos</td><td>+ <b>Metal Bruto</b> (0,183) e + <b>Biocombustível</b> (0,0345) na barra de recursos (ícone/cor próprios)</td></tr>
+    <tr><td>Colônia</td><td>+ <b>Mina Local</b> (Metal Bruto, §24.4) e + <b>Destilaria</b> (Biocombustível, §24.6) na base; produção pelos números do GDD</td></tr>
+    <tr><td>Colônia · Oficina</td><td>Painel mostra as <b>3 receitas de Componentes</b> (Básica/Intermediária/Avançada, §24.5)</td></tr>
+    <tr><td>Colônia · essenciais</td><td>Selo "<b>Custeada pelo Governo Central até o nível 3</b>" (§24.7) nas 5 essenciais ≤ nv3</td></tr>
+    <tr><td>Mercado</td><td>+ tickers/ordens de Metal Bruto e Biocombustível; Componentes repreçado pela <b>nova fórmula</b> (Básico 1,2778); nota da fórmula §24.8</td></tr>
+  </tbody>
+</table>
+
+<h2>Nova fórmula de preço (§24.8)</h2>
+<p><b>Processados</b> (Componentes, Biocombustível): <code>preço = custo de insumos × (1 + markup 30–40%)</code>.
+<b>Brutos/primários</b> (O₂, Água, Biomassa, Energia, Metal Bruto, minerais): fórmula de escassez por
+produção/hora. Componentes: Básico 1,2778 · Intermediário 1,5473 · Avançado 2,0877 Fert$.</p>
+
+<h2>Implementação</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Mudança</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>colony_buildings.dart</code>: + categorias <code>rawmetal</code>/<code>biofuel</code>; + <code>isEssential</code>/<code>isSubsidized</code> (§24.7)</td></tr>
+    <tr><td>Fixtures</td><td><code>player.json</code> (+Metal Bruto/Biocombustível) · <code>colony.json</code> (+Mina Local/Destilaria) · <code>market.json</code> (+recursos/preços §24)</td></tr>
+    <tr><td>UI</td><td><code>resource_hud.dart</code> + <code>resource_visual.dart</code> + <code>colony_game.dart</code> (ícone/cor); <code>colony_building_panel.dart</code> (selo subsídio + receitas); <code>market_screen.dart</code> (nota §24.8)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: Colônia com Mina Local + Destilaria (11 construções); Oficina com 3 receitas §24.5;
+      Gerador de Atmosfera com selo de subsídio; Mercado com Metal Bruto 0,1830 e Componentes 1,28 + nota §24.8</li>
+  <li>Seam · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · ações = mock ·
+identidade/diário §24.2-3 já cobertos no Perfil (R2). <b>Próximo:</b> §27 Combate Territorial
+(Sentinela, rodadas, saque) — consome Metal Bruto/Componentes definidos aqui.</div>
+
+<footer><span>Fertways — Relatório de Entrega · E1 Economia §24</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

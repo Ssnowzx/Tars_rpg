@@ -1,0 +1,28 @@
+{
+  "tickers": [
+    { "resourceId": "oxygen", "resourceLabel": "Oxigênio", "lastPrice": 0.0050, "changePct": 1.2 },
+    { "resourceId": "water", "resourceLabel": "Água", "lastPrice": 0.0062, "changePct": 2.1 },
+    { "resourceId": "biomass", "resourceLabel": "Biomassa", "lastPrice": 0.0083, "changePct": 0.6 },
+    { "resourceId": "energy", "resourceLabel": "Energia", "lastPrice": 0.0033, "changePct": 4.8 },
+    { "resourceId": "metalore", "resourceLabel": "Metal Bruto", "lastPrice": 0.1830, "changePct": 2.7 },
+    { "resourceId": "alloys", "resourceLabel": "Ligas Metálicas", "lastPrice": 0.0125, "changePct": -1.4 },
+    { "resourceId": "biofuel", "resourceLabel": "Biocombustível", "lastPrice": 0.0345, "changePct": 1.9 },
+    { "resourceId": "electronics", "resourceLabel": "Componentes Eletrônicos", "lastPrice": 1.2778, "changePct": -3.2 }
+  ],
+  "orders": [
+    { "id": "o-1", "side": "sell", "resourceId": "water", "resourceLabel": "Água", "quantity": 1200, "unitPrice": 0.0062, "trader": "Renata Sol", "traderSector": "E-09", "traderRating": 4.8 },
+    { "id": "o-2", "side": "sell", "resourceId": "alloys", "resourceLabel": "Ligas Metálicas", "quantity": 540, "unitPrice": 0.0125, "trader": "K. Adeyemi", "traderSector": "C-05", "traderRating": 4.1 },
+    { "id": "o-3", "side": "buy", "resourceId": "biomass", "resourceLabel": "Biomassa", "quantity": 800, "unitPrice": 0.0080, "trader": "J. Pereira", "traderSector": "F-15", "traderRating": 4.9 },
+    { "id": "o-4", "side": "sell", "resourceId": "energy", "resourceLabel": "Energia", "quantity": 300, "unitPrice": 0.0035, "trader": "Drax", "traderSector": "H-12", "traderRating": 2.6 },
+    { "id": "o-5", "side": "sell", "resourceId": "electronics", "resourceLabel": "Componentes Eletrônicos", "quantity": 140, "unitPrice": 1.2778, "trader": "M. Okafor", "traderSector": "G-04", "traderRating": 4.4 },
+    { "id": "o-13", "side": "sell", "resourceId": "metalore", "resourceLabel": "Metal Bruto", "quantity": 2400, "unitPrice": 0.1830, "trader": "Mina Tharsis", "traderSector": "L-31", "traderRating": 4.6 },
+    { "id": "o-14", "side": "buy", "resourceId": "biofuel", "resourceLabel": "Biocombustível", "quantity": 500, "unitPrice": 0.0340, "trader": "A. Costa", "traderSector": "F-07", "traderRating": 4.6 },
+    { "id": "o-6", "side": "buy", "resourceId": "oxygen", "resourceLabel": "Oxigênio", "quantity": 2000, "unitPrice": 0.0048, "trader": "L. Tanaka", "traderSector": "B-03", "traderRating": 3.9 },
+    { "id": "o-7", "side": "sell", "resourceId": "biomass", "resourceLabel": "Biomassa", "quantity": 1500, "unitPrice": 0.0083, "trader": "Posto Tharsis", "traderSector": "E-09", "traderRating": 4.7 },
+    { "id": "o-8", "side": "buy", "resourceId": "alloys", "resourceLabel": "Ligas Metálicas", "quantity": 600, "unitPrice": 0.0130, "trader": "C. Mendes", "traderSector": "D-08", "traderRating": 4.2 },
+    { "id": "o-9", "side": "sell", "resourceId": "electronics", "resourceLabel": "Componentes Eletrônicos", "quantity": 60, "unitPrice": 1.5473, "trader": "V. Nogueira", "traderSector": "K-14", "traderRating": 3.1 },
+    { "id": "o-10", "side": "buy", "resourceId": "energy", "resourceLabel": "Energia", "quantity": 450, "unitPrice": 0.0034, "trader": "A. Costa", "traderSector": "F-07", "traderRating": 4.6 },
+    { "id": "o-11", "side": "sell", "resourceId": "oxygen", "resourceLabel": "Oxigênio", "quantity": 3200, "unitPrice": 0.0050, "trader": "Domo Lyot", "traderSector": "C-05", "traderRating": 3.4 },
+    { "id": "o-12", "side": "sell", "resourceId": "alloys", "resourceLabel": "Ligas Metálicas", "quantity": 980, "unitPrice": 0.0120, "trader": "R. Khan", "traderSector": "J-11", "traderRating": 4.5 }
+  ]
+}

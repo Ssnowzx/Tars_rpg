@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FERTWAYS: The Next Colony — GDD v1.7</title>
+<style>
+:root{--r:#C1440E;--g:#3DDB84;--b:#4FACDE;--a:#F5A623;--dk:#0D0D12;--gy:#4A4E54;--bg:#F7F6F3;--sf:#FFFFFF;--bd:#E0DDD8;--tx:#1A1A1A;--t2:#4A4E54;--lg:#E8FBF2;--lb:#E8F4FB;--la:#FEF6E4;--lr:#FDECEA;--lp:#F0E8FA;--dg:#0A3D22;--nv:#1A1A3A;--pu:#9B59B6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.7;}
+.cover{background:var(--dk);color:#fff;padding:80px 60px;text-align:center;position:relative;overflow:hidden;}
+.cover::before{content:'v1.7';position:absolute;font-size:200px;font-weight:900;color:rgba(193,68,14,0.06);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.cover h1{font-size:72px;font-weight:900;color:var(--r);letter-spacing:8px;line-height:1;position:relative;}
+.cover h2{font-size:22px;font-weight:300;color:#888;letter-spacing:12px;margin-top:8px;}
+.cover .ver{font-size:13px;color:#555;margin-top:24px;border-top:1px solid #2A2A2A;padding-top:20px;font-style:italic;}
+.cover-meta{margin-top:40px;display:inline-grid;grid-template-columns:auto auto;gap:6px 32px;text-align:left;}
+.cm-l{color:#555;font-size:12px;}.cm-v{color:#CCC;font-size:12px;}
+.container{max-width:1000px;margin:0 auto;padding:40px 32px;}
+.toc{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:32px;margin-bottom:48px;}
+.toc h3{font-size:11px;text-transform:uppercase;letter-spacing:3px;color:var(--gy);margin-bottom:16px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 32px;}
+.toc a{color:var(--r);text-decoration:none;font-size:13px;padding:3px 0;display:block;}
+.toc-n{color:var(--gy);font-size:11px;margin-right:6px;}
+.sec{margin-bottom:56px;}
+.sec-h{border-bottom:3px solid var(--r);padding-bottom:10px;margin-bottom:28px;display:flex;align-items:baseline;gap:12px;}
+.sec-n{font-size:13px;color:var(--r);font-weight:700;letter-spacing:2px;}
+.sec-t{font-size:26px;font-weight:700;color:var(--dk);}
+h3.sub{font-size:17px;font-weight:700;color:var(--r);margin:28px 0 12px;}
+h4.ss{font-size:13px;font-weight:700;color:var(--gy);margin:20px 0 8px;text-transform:uppercase;letter-spacing:1px;}
+p.b{color:var(--t2);margin-bottom:12px;font-size:14px;}
+.cb{border-radius:8px;padding:20px 24px;margin:16px 0;font-size:14px;line-height:1.8;}
+.cb.red{background:var(--lr);color:var(--r);border-left:4px solid var(--r);font-style:italic;}
+.cb.amb{background:var(--la);color:#7A5000;border-left:4px solid var(--a);font-style:italic;}
+.cb.blu{background:var(--lb);color:#0C447C;border-left:4px solid var(--b);}
+.cb.grn{background:var(--lg);color:var(--dg);border-left:4px solid var(--g);}
+.cb.drk{background:var(--nv);color:#E8F0F5;border-left:4px solid var(--r);}
+.tw{overflow-x:auto;margin:16px 0 24px;border-radius:8px;border:1px solid var(--bd);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:var(--dk);}
+thead th{color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.5px;}
+tbody tr:nth-child(even){background:#FAFAF8;}
+tbody tr:hover{background:#F0EDE8;}
+td{padding:9px 14px;border-bottom:1px solid var(--bd);color:var(--t2);vertical-align:top;}
+td strong{color:var(--tx);font-weight:600;}
+.tg{background:var(--lg)!important;}.tr{background:var(--lr)!important;}.tb{background:var(--lb)!important;}.ta{background:var(--la)!important;}.tgy{background:#F5F5F5!important;}.tp{background:var(--lp)!important;}
+ul.bl{list-style:none;padding:0;margin:8px 0 16px;}
+ul.bl li{padding:5px 0 5px 20px;position:relative;color:var(--t2);font-size:14px;border-bottom:1px solid #F0EDE8;}
+ul.bl li:last-child{border-bottom:none;}
+ul.bl li::before{content:'•';position:absolute;left:0;color:var(--r);font-weight:700;}
+
+/* CHAT CHANNELS */
+.chat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0;}
+.chat-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:18px;border-left:4px solid var(--r);}
+.chat-card.g{border-left-color:var(--g);}.chat-card.b{border-left-color:var(--b);}.chat-card.a{border-left-color:var(--a);}.chat-card.p{border-left-color:var(--pu);}
+.ch-icon{font-size:24px;margin-bottom:8px;}
+.ch-name{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.ch-desc{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:8px;}
+.ch-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.chtag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;background:#F0EDE8;color:var(--gy);}
+
+/* REPUTATION MINISTRY */
+.ministry-flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:16px 0;}
+.mf-step{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px;border-top:3px solid var(--r);}
+.mf-step.g{border-top-color:var(--g);}.mf-step.b{border-top-color:var(--b);}.mf-step.a{border-top-color:var(--a);}
+.mf-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gy);margin-bottom:6px;}
+.mf-title{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px;}
+.mf-desc{font-size:12px;color:var(--t2);line-height:1.5;}
+
+/* TRADE SYSTEM */
+.trade-flow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.trade-side{border-radius:10px;padding:18px;}
+.trade-side.a{background:var(--lg);border:1px solid rgba(61,219,132,0.3);}
+.trade-side.b{background:var(--lb);border:1px solid rgba(79,172,222,0.3);}
+.trade-side h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.trade-side.a h4{color:var(--dg);}
+.trade-side.b h4{color:#0C447C;}
+.trade-item{font-size:12px;color:var(--t2);padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);}
+.trade-item:last-child{border-bottom:none;}
+
+/* I18N */
+.i18n-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.i18n-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px;text-align:center;}
+.i18n-flag{font-size:32px;margin-bottom:8px;}
+.i18n-lang{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.i18n-market{font-size:11px;color:var(--t2);}
+.i18n-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:8px;padding:2px 8px;border-radius:20px;display:inline-block;}
+.i18n-status.launch{background:var(--lg);color:var(--dg);}
+.i18n-status.soon{background:var(--la);color:#7A5000;}
+
+/* ADMIN PANEL */
+.admin-panel{background:var(--nv);border-radius:10px;padding:24px;margin:16px 0;color:#CCC;}
+.admin-panel h4{color:var(--a);font-size:13px;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.admin-panel ul{list-style:none;padding:0;}
+.admin-panel ul li{padding:6px 0 6px 16px;position:relative;font-size:13px;border-bottom:1px solid #2A2A3A;}
+.admin-panel ul li:last-child{border-bottom:none;}
+.admin-panel ul li::before{content:'›';position:absolute;left:0;color:var(--a);}
+
+/* STAR RATING */
+.star-demo{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:20px;margin:16px 0;max-width:400px;}
+.star-demo .player{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.star-demo .stars{font-size:20px;color:var(--a);margin-bottom:6px;}
+.star-demo .count{font-size:11px;color:var(--gy);margin-bottom:8px;}
+.star-demo .comment{font-size:12px;color:var(--t2);font-style:italic;padding:8px;background:#F8F7F5;border-radius:6px;border-left:3px solid var(--bd);}
+
+/* MOON PREVIEW */
+.moon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:16px 0;}
+.moon-card{background:var(--nv);border-radius:10px;padding:16px;color:#CCC;}
+.moon-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--r);margin-bottom:6px;}
+.moon-name{font-size:14px;font-weight:700;color:#E8F0F5;margin-bottom:6px;}
+.moon-atm{font-size:11px;margin-bottom:4px;}
+.moon-atm.none{color:#8B1A0E;}
+.moon-atm.toxic{color:var(--a);}
+.moon-atm.similar{color:var(--g);}
+.moon-desc{font-size:11px;line-height:1.5;color:#888;}
+
+/* GAGARIN */
+.gagarin-card{background:linear-gradient(135deg,#0A0A1A,#1A1A3A);border:1px solid rgba(79,172,222,0.3);border-radius:12px;padding:24px;margin:16px 0;color:#CCC;}
+.gagarin-card h4{color:var(--b);font-size:16px;font-weight:700;margin-bottom:4px;}
+.gagarin-card .subtitle{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.gagarin-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.gs-item{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 12px;}
+.gs-label{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.gs-value{font-size:13px;color:#E8F0F5;font-weight:600;}
+
+/* NEXT */
+.nx{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:16px 0;}
+.nx-s{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.nx-n{background:var(--r);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.nx-t{font-size:13px;font-weight:700;color:var(--tx);}
+.nx-d{font-size:12px;color:var(--t2);margin-top:2px;}
+
+.footer{background:var(--dk);color:#555;text-align:center;padding:32px;font-size:12px;font-style:italic;margin-top:48px;}
+.footer strong{color:var(--r);}
+
+/* JOB CARDS */
+.job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0;}
+.job-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;overflow:hidden;}
+.job-head{padding:14px 18px;color:#fff;display:flex;align-items:center;gap:10px;}
+.job-icon{font-size:22px;}
+.job-name{font-size:14px;font-weight:700;}
+.job-inst{font-size:11px;opacity:0.75;}
+.job-body{padding:14px 18px;}
+.job-body p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:10px;}
+.job-pay{display:flex;gap:8px;flex-wrap:wrap;}
+.job-pay-item{background:var(--la);color:#7A5000;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;}
+.job-pay-item.bonus{background:var(--lg);color:var(--dg);}
+
+/* ELIGIBILITY */
+.elig-list{display:grid;grid-template-columns:1fr;gap:8px;margin:16px 0;}
+.elig-item{background:var(--sf);border:1px solid var(--bd);border-left:3px solid var(--r);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.elig-num{background:var(--r);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.elig-text{font-size:13px;color:var(--t2);}
+.elig-text strong{color:var(--tx);}
+
+
+/* RANKING TABLE */
+.rank-weight-bar{height:10px;background:#F0EDE8;border-radius:5px;overflow:hidden;margin-top:4px;}
+.rank-weight-fill{height:100%;border-radius:5px;}
+.rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0;}
+.rank-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px;border-top:4px solid var(--r);}
+.rank-card.g{border-top-color:var(--g);}.rank-card.b{border-top-color:var(--b);}.rank-card.a{border-top-color:var(--a);}.rank-card.p{border-top-color:var(--pu);}
+.rank-pct{font-size:24px;font-weight:900;color:var(--r);margin-bottom:4px;}
+.rank-card.g .rank-pct{color:var(--g);}.rank-card.b .rank-pct{color:var(--b);}.rank-card.a .rank-pct{color:var(--a);}.rank-card.p .rank-pct{color:var(--pu);}
+.rank-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px;}
+.rank-desc{font-size:11px;color:var(--t2);line-height:1.5;}
+
+/* INACTIVITY TIMELINE */
+.inact-flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:16px 0;}
+.inact-step{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--a);}
+.inact-step.critical{border-top-color:var(--r);}
+.inact-time{font-size:18px;font-weight:900;color:var(--a);margin-bottom:4px;}
+.inact-step.critical .inact-time{color:var(--r);}
+.inact-action{font-size:11px;color:var(--t2);line-height:1.4;}
+
+/* VEHICLE CARDS */
+.veh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0;}
+.veh-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;overflow:hidden;}
+.veh-head{padding:14px 18px;color:#fff;}
+.veh-owner{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.7;margin-bottom:3px;}
+.veh-name{font-size:15px;font-weight:700;}
+.veh-body{padding:14px 18px;}
+.veh-body p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:8px;}
+.veh-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.vtag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;background:#F0EDE8;color:var(--gy);}
+.vtag.reg{background:var(--lb);color:#0C447C;}
+.vtag.secret{background:var(--lr);color:#8B1A0E;}
+.vtag.gov{background:var(--la);color:#7A5000;}
+
+/* DEPRECIATION FLOW */
+.dep-flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:16px 0;}
+.dep-step{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--g);}
+.dep-step.mid{border-top-color:var(--a);}
+.dep-step.crit{border-top-color:var(--r);}
+.dep-icon{font-size:24px;margin-bottom:6px;}
+.dep-title{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.dep-desc{font-size:11px;color:var(--t2);line-height:1.4;}
+
+/* REGISTRY CARD */
+.registry-card{background:var(--nv);border-radius:10px;padding:20px;margin:16px 0;color:#CCC;font-family:monospace;}
+.registry-card .rtitle{color:var(--b);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;font-family:'Segoe UI',sans-serif;}
+.reg-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #2A2A3A;font-size:12px;}
+.reg-row:last-child{border-bottom:none;}
+.reg-label{color:#666;}
+.reg-value{color:#E8F0F5;}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>FERTWAYS</h1>
+  <h2>THE NEXT COLONY</h2>
+  <div class="ver">Game Design Document — v1.7 · Junho 2026</div>
+  <div class="cover-meta">
+    <span class="cm-l">Novo nesta versão</span><span class="cm-v">Comércio informal, reputação, mensagens, internacionalização e luas</span>
+    <span class="cm-l">Idiomas</span><span class="cm-v">Português · Espanhol · Inglês</span>
+    <span class="cm-l">Ministério das Reputações</span><span class="cm-v">Slot 7 da Capital — conciliadores jogadores + equipe</span>
+    <span class="cm-l">Telescópio Gagarin</span><span class="cm-v">Homenagem a Yuri Gagarin — propriedade do governo</span>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <h3>Índice</h3>
+  <div class="toc-grid">
+    <a href="#s1"><span class="toc-n">1.</span> Narrativa e Universo</a>
+    <a href="#s8"><span class="toc-n">8.</span> Comércio Informal entre Colonos</a>
+    <a href="#s2"><span class="toc-n">2.</span> Configuração do Mundo</a>
+    <a href="#s9"><span class="toc-n">9.</span> Ministério das Reputações</a>
+    <a href="#s3"><span class="toc-n">3.</span> Espaçoporto e Planetas NPC</a>
+    <a href="#s10"><span class="toc-n">10.</span> Sistema de Mensagens</a>
+    <a href="#s4"><span class="toc-n">4.</span> Sistema de Federações</a>
+    <a href="#s11"><span class="toc-n">11.</span> Internacionalização</a>
+    <a href="#s5"><span class="toc-n">5.</span> Progressão e Retenção</a>
+    <a href="#s12"><span class="toc-n">12.</span> Exploração Lunar — Base para T2</a>
+    <a href="#s6"><span class="toc-n">6.</span> Missões, Conquistas e Eventos</a>
+    <a href="#s13"><span class="toc-n">13.</span> Economia, Loja e Stack</a>
+    <a href="#s7"><span class="toc-n">7.</span> Zonas Neutras e Transportes</a>
+    <a href="#s14"><span class="toc-n">14.</span> Cargos Públicos Neutros</a>
+    <a href="#s15"><span class="toc-n">15.</span> Ranking de Guerras</a>
+    <a href="#s16"><span class="toc-n">16.</span> Frota e Ministério dos Transportes</a>
+    <a href="#s17"><span class="toc-n">17.</span> Próximos Passos</a>
+  </div>
+</div>
+
+<!-- 1 -->
+<div class="sec" id="s1">
+  <div class="sec-h"><span class="sec-n">01</span><span class="sec-t">Narrativa e Universo</span></div>
+  <div class="cb red">O ano é 2387. A Terra não existe mais.</div>
+  <p class="b">Não foi uma guerra. Não foi um meteoro. Foi lento — décadas de colapso climático irreversível. Os últimos governos uniram recursos para o Programa Arca. A maioria das frotas se perdeu. Uma chegou.</p>
+  <div class="cb amb">"Ela não era bonita. Era enorme, funcional e improvisada — construída com peças de sete nações diferentes em menos de quatro anos. Mas ela voou. E chegou." — A Endurance of Mankind</div>
+  <p class="b">A Endurance pousou no ponto mais plano do continente principal de Fertways. Ela nunca voltará a voar. O telescópio Gagarin — nomeado em homenagem ao primeiro humano no espaço, Yuri Gagarin — repousa em seu casco como um dos instrumentos mais valiosos que ela trouxe. É propriedade do governo. E com ele, Fertways começa a olhar além.</p>
+</div>
+
+<!-- 2 -->
+<div class="sec" id="s2">
+  <div class="sec-h"><span class="sec-n">02</span><span class="sec-t">Configuração do Mundo</span></div>
+  <h3 class="sub">2.1 Slots da Capital — Versão Final v1.7</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Slot</th><th>Instituição</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Prédio da Administração Pública</strong></td><td>Sede do governo, leis, punições e recompensas</td></tr>
+      <tr><td>2</td><td><strong>Central de Tributos</strong></td><td>Coleta e redistribuição de impostos sobre comércio</td></tr>
+      <tr><td>3</td><td><strong>Central de Pesquisas e Notícias</strong></td><td>Descobertas, notícias do Gagarin, eventos e comunicados oficiais</td></tr>
+      <tr><td>4</td><td><strong>Secretaria de Finanças e Tesouro</strong></td><td>Gestão do Fert$, PIB, todas as taxas, painel financeiro central</td></tr>
+      <tr><td>5</td><td><strong>Ministério da Segurança e Guerra</strong></td><td>Registro de guerras, tratados, validação de acordos</td></tr>
+      <tr><td>6</td><td><strong>Estacionamento de Caminhões</strong></td><td>20 vagas. Cobrança por hora. Caminhões aguardam retirada de carga.</td></tr>
+      <tr><td>7</td><td><strong>Ministério das Reputações</strong></td><td>Denúncias, conciliação, avaliações, punições de reputação</td></tr>
+      <tr class="tb"><td>8</td><td><strong>Ministério dos Transportes</strong></td><td>Registro de placas, depreciação, manutenção, frota de cargueiros do governo</td></tr>
+      <tr><td>9</td><td><strong>Reservado</strong></td><td>Quartel de Alianças / Embaixada Interplanetária</td></tr>
+      <tr><td>10–20</td><td><strong>Vagos</strong></td><td>Definidos pela equipe e comunidade</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 3 -->
+<div class="sec" id="s3">
+  <div class="sec-h"><span class="sec-n">03</span><span class="sec-t">Espaçoporto e Planetas NPC</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Planeta</th><th>Distância</th><th>Risco</th><th>Exporta</th><th>Importa</th></tr></thead>
+    <tbody>
+      <tr class="tg"><td><strong>Kalidor</strong></td><td>~4h</td><td>Nenhum</td><td>Metais pesados, compostos químicos</td><td>Biomassa, água</td></tr>
+      <tr class="tg"><td><strong>Veyra</strong></td><td>~6,5h</td><td>Nenhum</td><td>Sementes alienígenas, compostos orgânicos</td><td>Energia, componentes</td></tr>
+      <tr class="ta"><td><strong>Auryn</strong></td><td>~12h</td><td>Baixo</td><td>Variedade enorme</td><td>Qualquer recurso</td></tr>
+      <tr class="tb"><td><strong>Solène</strong></td><td>~18h</td><td>Nenhum</td><td>Tecnologia, dados de pesquisa</td><td>Recursos raros</td></tr>
+      <tr class="tr"><td><strong>Drakmoor</strong></td><td>~31h</td><td>Alto — escolta opcional</td><td>Minerais raros exclusivos</td><td>Biomassa, água, componentes</td></tr>
+    </tbody>
+  </table></div>
+  <p class="b">Novos planetas são descobertos pela administração pública através de missões de reconhecimento. Quando descoberto, a notícia aparece na Central de Pesquisas e Notícias — criando expansão orgânica do universo.</p>
+</div>
+
+<!-- 4 -->
+<div class="sec" id="s4">
+  <div class="sec-h"><span class="sec-n">04</span><span class="sec-t">Sistema de Federações</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Aspecto</th><th>Definição</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Membros</strong></td><td>Máximo 12. Cargos: Líder (voto de Minerva) e Diplomata.</td></tr>
+      <tr><td><strong>Fundo</strong></td><td>1–10% da produção diária (padrão 3%). Fica na Capital. Futuramente: slots próprios como sede.</td></tr>
+      <tr><td><strong>Tributação interna</strong></td><td>Gratuito até 35% da produção diária. Acima: 35% de tributo.</td></tr>
+      <tr><td><strong>Entre aliadas</strong></td><td>50% de desconto nos tributos. Limite antimonopólio dinâmico: 20% → 10%.</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 5 -->
+<div class="sec" id="s5">
+  <div class="sec-h"><span class="sec-n">05</span><span class="sec-t">Progressão e Retenção</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Nível</th><th>Título</th><th>Desbloqueios</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Sobrevivente</td><td>Kit inicial, slot, furgão básico</td></tr>
+      <tr><td>5</td><td>Colono</td><td>Mercado Central, primeira missão narrativa</td></tr>
+      <tr><td>10</td><td>Pioneiro</td><td>Peças comuns da Endurance, drone nível 2</td></tr>
+      <tr><td>20</td><td>Desbravador</td><td>Zonas neutras, cargueiro interplanetário (mín. 10 dias)</td></tr>
+      <tr><td>35</td><td>Construtor</td><td>Peças de reputação nível 1</td></tr>
+      <tr><td>50</td><td>Arquiteto</td><td>Mineração profunda, aliança formal</td></tr>
+      <tr><td>75</td><td>Guardião</td><td>Peças de reputação nível 2, voto comunitário</td></tr>
+      <tr><td>100</td><td>Lenda de Fertways</td><td>Título permanente, leilões de peças únicas</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 6 -->
+<div class="sec" id="s6">
+  <div class="sec-h"><span class="sec-n">06</span><span class="sec-t">Missões, Conquistas e Eventos</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Categoria</th><th>Ciclo</th><th>Recompensas</th></tr></thead>
+    <tbody>
+      <tr class="tg"><td>🎓 Tutoria</td><td>5 missões — dias 1 a 3</td><td>Fert$, recursos, XP</td></tr>
+      <tr class="tb"><td>📅 Diária</td><td>3 por dia (pool 30+), 1 rejeição</td><td>Fert$, recursos ou XP</td></tr>
+      <tr class="ta"><td>📆 Semanal</td><td>Qua 07h → Ter 23h59</td><td>Fert$, XP, peças, cosméticos</td></tr>
+      <tr><td>📖 Narrativa</td><td>Capítulos periódicos</td><td>Peças únicas, emblemas, Fert$</td></tr>
+      <tr class="tp"><td>🤝 Federação</td><td>2 por semana</td><td>XP individual (cooperativa dá mais)</td></tr>
+      <tr class="tr"><td>⚔️ Guerra</td><td>Pool contínuo</td><td>Fert$, XP, recursos raros</td></tr>
+      <tr class="tp"><td>🌍 Evento</td><td>Duração do evento</td><td>Itens exclusivos</td></tr>
+      <tr><td>🏆 Conquista</td><td>Permanentes — Bronze/Prata/Ouro/Platina</td><td>Fert$, emblemas, títulos, peças</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 7 -->
+<div class="sec" id="s7">
+  <div class="sec-h"><span class="sec-n">07</span><span class="sec-t">Zonas Neutras e Transportes</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Aspecto</th><th>Definição</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Requisitos</strong></td><td>Unidades militares + recursos de instalação + tempo de ocupação</td></tr>
+      <tr><td><strong>Depósitos</strong></td><td>10 níveis. Quando lota, extração para.</td></tr>
+      <tr><td><strong>Ataques</strong></td><td>4 tipos: Invasão Direta, Sabotagem, Captura, Cerco. Atacante escolhe.</td></tr>
+      <tr><td><strong>Transporte</strong></td><td>Manual. 4 destinos: Mercado, Slot, Jogador, Federação.</td></tr>
+      <tr><td><strong>Central de Transportes</strong></td><td>10 níveis. Caminhões extras produzíveis — permanentes.</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 8 — COMÉRCIO INFORMAL -->
+<div class="sec" id="s8">
+  <div class="sec-h"><span class="sec-n">08</span><span class="sec-t">Comércio Informal entre Colonos</span></div>
+
+  <h3 class="sub">8.1 Conceito</h3>
+  <p class="b">O comércio entre colonos é informal e sem garantias do sistema. Não há bloqueio de recursos, não há árbitro automático. O calote é real e possível — parte intencional da mecânica social do jogo. A confiança entre colonos é construída organicamente ao longo do tempo.</p>
+  <div class="cb amb">O comércio informal é a camada humana da economia de Fertways. A reputação de um colono como comerciante honesto vale mais que qualquer estrutura automática.</div>
+
+  <h3 class="sub">8.2 Como Funciona</h3>
+  <div class="trade-flow">
+    <div class="trade-side a">
+      <h4>✅ Negociação bem-sucedida</h4>
+      <div class="trade-item">Colonos combinam via chat privado ou canal</div>
+      <div class="trade-item">Colono A envia 50 Água para Colono B</div>
+      <div class="trade-item">Tributo cobrado no envio (3% de recursos primários)</div>
+      <div class="trade-item">Colono B envia 120 Metais Ferrosos para A</div>
+      <div class="trade-item">Tributo cobrado no envio (secundários: 2%)</div>
+      <div class="trade-item">Ambos avaliam: 5 estrelas ⭐⭐⭐⭐⭐</div>
+    </div>
+    <div class="trade-side b">
+      <h4>❌ Calote</h4>
+      <div class="trade-item">Colonos combinam via chat privado</div>
+      <div class="trade-item">Colono A envia 50 Água para Colono B</div>
+      <div class="trade-item">Tributo cobrado no envio</div>
+      <div class="trade-item">Colono B não envia nada — calote</div>
+      <div class="trade-item">Colono A avalia B: 1 estrela ⭐</div>
+      <div class="trade-item">Colono A abre denúncia no Ministério das Reputações</div>
+    </div>
+  </div>
+
+  <h3 class="sub">8.3 Tributação no Comércio Informal</h3>
+  <p class="b">Todo envio de recursos entre jogadores é tributado independente de ser negociação combinada ou presente. O sistema não distingue — cobra na saída.</p>
+  <ul class="bl">
+    <li>Recursos primários: 3% do volume enviado vai para o Tesouro</li>
+    <li>Recursos secundários: 2% do volume enviado</li>
+    <li>Recursos raros: 1% do volume enviado</li>
+    <li>Entre membros da mesma federação: isento até 35% da produção diária</li>
+  </ul>
+
+  <h3 class="sub">8.4 Sistema de Avaliação — 0 a 5 Estrelas</h3>
+  <p class="b">Após qualquer envio ou recebimento de recursos entre dois colonos, ambos podem avaliar a experiência. A avaliação é voluntária, pública e vinculada ao perfil do jogador.</p>
+
+  <div class="star-demo">
+    <div class="player">Colono B — Setor K-14</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div class="count">4,7 estrelas · 23 avaliações recebidas</div>
+    <div class="comment">"Enviou os metais imediatamente após receber a água. Colono confiável, recomendo!" — Colono A, F-07</div>
+  </div>
+
+  <ul class="bl">
+    <li>Qualquer colono que enviou ou recebeu recursos do avaliado pode deixar nota</li>
+    <li>Avaliações ficam no perfil público do jogador — visíveis para todos</li>
+    <li>Média de estrelas afeta a reputação geral do jogador no sistema unificado</li>
+    <li>Avaliações falsas ou spam podem ser denunciadas ao Ministério das Reputações</li>
+  </ul>
+</div>
+
+<!-- 9 — MINISTÉRIO DAS REPUTAÇÕES -->
+<div class="sec" id="s9">
+  <div class="sec-h"><span class="sec-n">09</span><span class="sec-t">Ministério das Reputações</span></div>
+
+  <h3 class="sub">9.1 Localização e Propósito</h3>
+  <p class="b">O Ministério das Reputações ocupa o slot 7 da Capital. É a instituição responsável por receber denúncias, investigar casos, aplicar punições e manter a integridade da reputação social de Fertways.</p>
+
+  <h3 class="sub">9.2 Fluxo de uma Denúncia</h3>
+  <div class="ministry-flow">
+    <div class="mf-step">
+      <div class="mf-num">Passo 1</div>
+      <div class="mf-title">Abertura da denúncia</div>
+      <div class="mf-desc">Colono abre denúncia com: texto descrevendo o caso, upload de screenshots como evidência e indicação do colono denunciado.</div>
+    </div>
+    <div class="mf-step b">
+      <div class="mf-num">Passo 2</div>
+      <div class="mf-title">Triagem automática</div>
+      <div class="mf-desc">Sistema analisa logs de envio entre os dois colonos. Caso simples vai para conciliador jogador. Caso grave vai direto para a equipe.</div>
+    </div>
+    <div class="mf-step a">
+      <div class="mf-num">Passo 3</div>
+      <div class="mf-title">Conciliador analisa</div>
+      <div class="mf-desc">Conciliador jogador recebe: texto da denúncia, screenshots, log completo de envios entre os dois colonos e histórico de reputação de ambos.</div>
+    </div>
+    <div class="mf-step g">
+      <div class="mf-num">Passo 4</div>
+      <div class="mf-title">Decisão e punição</div>
+      <div class="mf-desc">Conciliador decide: improcedente, advertência, redução de reputação ou silêncio temporário. Casos graves sobem para a equipe do jogo.</div>
+    </div>
+    <div class="mf-step">
+      <div class="mf-num">Futuro</div>
+      <div class="mf-title">IA de triagem</div>
+      <div class="mf-desc">IA lê o caso, analisa os logs e faz recomendação de decisão. Conciliador valida. Acelera a resolução drasticamente.</div>
+    </div>
+  </div>
+
+  <h3 class="sub">9.3 O Cargo de Conciliador</h3>
+  <ul class="bl">
+    <li>Disponível para jogadores com status de Neutro Registrado</li>
+    <li>Remunerado em Fert$ por caso resolvido</li>
+    <li>Sem conciliadores disponíveis: equipe do jogo assume automaticamente</li>
+    <li>Conciliador pode ser avaliado pela qualidade de suas decisões</li>
+    <li>Decisões podem ser apeladas para a equipe do jogo em casos contestados</li>
+  </ul>
+
+  <h3 class="sub">9.4 Punições Disponíveis</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Punição</th><th>Aplicada por</th><th>Efeito</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Advertência</strong></td><td>Conciliador jogador</td><td>Registro no histórico. Sem efeito imediato na reputação.</td></tr>
+      <tr class="ta"><td><strong>Redução de reputação</strong></td><td>Conciliador jogador</td><td>Pontos deduzidos da reputação geral. Configurável.</td></tr>
+      <tr class="tr"><td><strong>Silêncio temporário</strong></td><td>Conciliador / equipe</td><td>Jogador não pode usar chats por X horas/dias.</td></tr>
+      <tr class="tr"><td><strong>Restrição comercial</strong></td><td>Equipe do jogo</td><td>Jogador não pode enviar recursos por X dias.</td></tr>
+      <tr class="tr"><td><strong>Bloqueio de leilões</strong></td><td>Automático — Persona Non Grata</td><td>Reputação negativa bloqueia acesso a leilões da Endurance.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">9.5 Sistema Unificado de Reputação</h3>
+  <p class="b">A reputação em Fertways é única — um único índice afetado por todas as ações do jogador:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Ação</th><th>Efeito na reputação</th></tr></thead>
+    <tbody>
+      <tr class="tg"><td>Receber avaliação 5 estrelas</td><td>+++ Reputação</td></tr>
+      <tr class="tg"><td>Completar missões da administração pública</td><td>++ Reputação</td></tr>
+      <tr class="tg"><td>Contribuir para terraformação global</td><td>+ Reputação</td></tr>
+      <tr class="tg"><td>Pagar tributos em dia</td><td>+ Reputação pequena e constante</td></tr>
+      <tr class="tr"><td>Receber avaliação 1 estrela</td><td>-- Reputação</td></tr>
+      <tr class="tr"><td>Ser condenado por denúncia procedente</td><td>--- Reputação</td></tr>
+      <tr class="tr"><td>Atacar aliado registrado</td><td>-- Reputação</td></tr>
+      <tr class="tr"><td>Sonegar tributos ou burlar sistema</td><td>--- Reputação + penalidade administrativa</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="admin-panel">
+    <h4>Painel do Ministério das Reputações</h4>
+    <ul>
+      <li>Receber e triagem de denúncias com texto + screenshots + logs de envio</li>
+      <li>Atribuir casos a conciliadores jogadores disponíveis</li>
+      <li>Ver histórico completo de trocas entre dois colonos via logs de comércio</li>
+      <li>Aplicar punições com registro e justificativa</li>
+      <li>Gerenciar conciliadores: cadastro, avaliação de desempenho, remuneração em Fert$</li>
+      <li>Visualizar denúncias em aberto, resolvidas e apeladas</li>
+      <li>Configurar pontos de reputação perdidos por tipo de punição</li>
+      <li>Futuro: painel de IA com recomendação automática de decisão</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 10 — SISTEMA DE MENSAGENS -->
+<div class="sec" id="s10">
+  <div class="sec-h"><span class="sec-n">10</span><span class="sec-t">Sistema de Mensagens</span></div>
+
+  <h3 class="sub">10.1 Os 5 Canais de Comunicação</h3>
+  <div class="chat-grid">
+    <div class="chat-card">
+      <div class="ch-icon">🌍</div>
+      <div class="ch-name">Chat Global</div>
+      <div class="ch-desc">Canal aberto para todos os jogadores do servidor. Livre para negociações, anúncios e conversas gerais.</div>
+      <div class="ch-tags">
+        <span class="chtag">Todos os jogadores</span>
+        <span class="chtag">Moderação automática</span>
+        <span class="chtag">3 idiomas</span>
+      </div>
+    </div>
+    <div class="chat-card b">
+      <div class="ch-icon">📍</div>
+      <div class="ch-name">Chat de Região</div>
+      <div class="ch-desc">Canal exclusivo para colonos da mesma região geográfica. Ideal para negociações locais e alianças entre vizinhos.</div>
+      <div class="ch-tags">
+        <span class="chtag">Por região</span>
+        <span class="chtag">5 canais regionais</span>
+        <span class="chtag">Moderação automática</span>
+      </div>
+    </div>
+    <div class="chat-card" style="border-left-color:var(--pu)">
+      <div class="ch-icon">🛡️</div>
+      <div class="ch-name">Chat de Federação</div>
+      <div class="ch-desc">Canal privado entre os 12 membros da federação. Estratégia, coordenação de ataques e gestão do fundo.</div>
+      <div class="ch-tags">
+        <span class="chtag">Privado</span>
+        <span class="chtag">Sem moderação automática</span>
+        <span class="chtag">Histórico armazenado</span>
+      </div>
+    </div>
+    <div class="chat-card g">
+      <div class="ch-icon">💬</div>
+      <div class="ch-name">Mensagem Privada</div>
+      <div class="ch-desc">Conversa direta entre dois jogadores. Onde negociações informais acontecem. Histórico armazenado e acessível ao jogador.</div>
+      <div class="ch-tags">
+        <span class="chtag">Entre 2 jogadores</span>
+        <span class="chtag">Histórico permanente</span>
+        <span class="chtag">Evidência em denúncias</span>
+      </div>
+    </div>
+    <div class="chat-card a">
+      <div class="ch-icon">🏘️</div>
+      <div class="ch-name">Chat de Vizinhança</div>
+      <div class="ch-desc">Canal com colonos dos slots próximos no mapa. Escopo limitado por distância — varia conforme o jogador se expande.</div>
+      <div class="ch-tags">
+        <span class="chtag">Slots próximos</span>
+        <span class="chtag">Raio configurável</span>
+        <span class="chtag">Moderação automática</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">10.2 Moderação Automática</h3>
+  <ul class="bl">
+    <li>Filtro automático de palavras — configurável pela equipe por idioma</li>
+    <li>Botão de denúncia em toda mensagem dos chats públicos</li>
+    <li>Punição automática por acúmulo de denúncias confirmadas: silêncio temporário</li>
+    <li>Silêncio temporário remove acesso aos chats públicos por período configurável</li>
+    <li>Silêncio afeta reputação geral do jogador</li>
+    <li>Chat de federação e mensagens privadas não têm filtro automático — denúncias manuais</li>
+  </ul>
+
+  <h3 class="sub">10.3 Mensagens Privadas — Armazenamento</h3>
+  <ul class="bl">
+    <li>Todo histórico de mensagens privadas fica armazenado e acessível ao jogador</li>
+    <li>Ao abrir denúncia no Ministério das Reputações, conciliador pode solicitar acesso ao histórico</li>
+    <li>Jogador denunciado é notificado que o histórico pode ser consultado</li>
+    <li>Armazenamento indefinido — sem prazo de expiração no lançamento</li>
+  </ul>
+
+  <h3 class="sub">10.4 Multilíngue nos Chats</h3>
+  <p class="b">O chat global e regional opera nos 3 idiomas simultaneamente. Cada jogador vê as mensagens no idioma do remetente. Futuramente: tradução automática em tempo real integrada ao chat.</p>
+</div>
+
+<!-- 11 — INTERNACIONALIZAÇÃO -->
+<div class="sec" id="s11">
+  <div class="sec-h"><span class="sec-n">11</span><span class="sec-t">Internacionalização</span></div>
+
+  <h3 class="sub">11.1 Idiomas do Lançamento</h3>
+  <div class="i18n-grid">
+    <div class="i18n-card">
+      <div class="i18n-flag">🇧🇷</div>
+      <div class="i18n-lang">Português</div>
+      <div class="i18n-market">Brasil — mercado principal</div>
+      <div class="i18n-status launch">Lançamento</div>
+    </div>
+    <div class="i18n-card">
+      <div class="i18n-flag">🇪🇸</div>
+      <div class="i18n-lang">Espanhol</div>
+      <div class="i18n-market">América Latina + Espanha</div>
+      <div class="i18n-status launch">Lançamento</div>
+    </div>
+    <div class="i18n-card">
+      <div class="i18n-flag">🇺🇸</div>
+      <div class="i18n-lang">Inglês</div>
+      <div class="i18n-market">Mercado global</div>
+      <div class="i18n-status launch">Lançamento</div>
+    </div>
+  </div>
+
+  <h3 class="sub">11.2 Regras de Tradução</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Elemento</th><th>Traduzido?</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr class="tr"><td><strong>FERTWAYS</strong></td><td>Não</td><td>Nome do jogo — identidade preservada em todos os idiomas</td></tr>
+      <tr class="tr"><td><strong>Endurance of Mankind</strong></td><td>Não</td><td>Nome da nave-mãe — preservado em todos os idiomas</td></tr>
+      <tr class="tr"><td><strong>Gagarin</strong></td><td>Não</td><td>Nome próprio em homenagem a Yuri Gagarin</td></tr>
+      <tr class="tg"><td><strong>Interface do jogo</strong></td><td>Sim</td><td>Botões, menus, HUD, painéis — 3 idiomas completos</td></tr>
+      <tr class="tg"><td><strong>Narrativa e cutscene</strong></td><td>Sim</td><td>Narração gravada nos 3 idiomas com vozes diferentes</td></tr>
+      <tr class="tg"><td><strong>Missões e conquistas</strong></td><td>Sim</td><td>Textos, descrições e recompensas — 3 idiomas</td></tr>
+      <tr class="tg"><td><strong>Nomes de instituições</strong></td><td>Sim</td><td>Capital, Espaçoporto, Ministérios — traduzidos</td></tr>
+      <tr class="tg"><td><strong>Nomes de regiões</strong></td><td>Sim</td><td>Planície Central, Cinturão Ferrugem etc. — traduzidos</td></tr>
+      <tr class="tg"><td><strong>Nomes dos planetas NPC</strong></td><td>Não</td><td>Kalidor, Veyra, Auryn, Solène, Drakmoor — nomes próprios</td></tr>
+      <tr class="tg"><td><strong>Notícias do Gagarin</strong></td><td>Sim</td><td>Publicadas nos 3 idiomas simultaneamente</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">11.3 Implementação Técnica</h3>
+  <ul class="bl">
+    <li>Detecção automática do idioma do dispositivo ao primeiro acesso</li>
+    <li>Opção de troca manual nas configurações do perfil a qualquer momento</li>
+    <li>Laravel com pacote de i18n — arquivos de tradução separados por idioma</li>
+    <li>React com react-i18next para internacionalização do frontend</li>
+    <li>React Native com a mesma biblioteca para o app Android</li>
+    <li>Banco de dados com suporte a textos multilíngue nas tabelas de conteúdo dinâmico</li>
+    <li>Painel administrativo em português — idioma de operação da equipe</li>
+  </ul>
+</div>
+
+<!-- 12 — EXPLORAÇÃO LUNAR -->
+<div class="sec" id="s12">
+  <div class="sec-h"><span class="sec-n">12</span><span class="sec-t">Exploração Lunar — Base para Temporada 2</span></div>
+
+  <h3 class="sub">12.1 Telescópio Gagarin — Peça Única do Governo</h3>
+  <div class="gagarin-card">
+    <h4>Telescópio Orbital Gagarin</h4>
+    <div class="subtitle">Em homenagem a Yuri Gagarin — primeiro humano no espaço · 1934–1968</div>
+    <div class="gagarin-stats">
+      <div class="gs-item"><div class="gs-label">Proprietário</div><div class="gs-value">Governo de Fertways</div></div>
+      <div class="gs-item"><div class="gs-label">Não vendável</div><div class="gs-value">Permanece no governo</div></div>
+      <div class="gs-item"><div class="gs-label">Gatilho de ativação</div><div class="gs-value">50 jogadores cadastrados OU 45 dias de jogo — o que ocorrer primeiro</div></div>
+      <div class="gs-item"><div class="gs-label">Frequência de notícias</div><div class="gs-value">A cada 2 a 4 dias</div></div>
+      <div class="gs-item"><div class="gs-label">Canal de publicação</div><div class="gs-value">Central de Pesquisas e Notícias</div></div>
+      <div class="gs-item"><div class="gs-label">Conteúdo das notícias</div><div class="gs-value">Observações das 8 luas, dados atmosféricos, recursos detectados, anomalias</div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">12.2 As 8 Luas de Fertways — Nomenclatura e Perfil</h3>
+  <p class="b">As luas homenageiam pioneiros da exploração espacial humana — astronautas, cosmonautas e cientistas que sonharam com o espaço antes de qualquer um chegar lá. Mesma lógica do Telescópio Gagarin.</p>
+  <div class="moon-grid">
+    <div class="moon-card">
+      <div class="moon-num">Lua 1 · Neil Armstrong</div>
+      <div class="moon-name">Armstrong</div>
+      <div class="moon-atm similar">Atmosfera similar a Fertways</div>
+      <div class="moon-desc">Primeiro homem na Lua. Potencial de colonização com terraformação. Mineração + slots futuros.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 2 · Valentina Tereshkova</div>
+      <div class="moon-name">Tereshkova</div>
+      <div class="moon-atm none">Sem atmosfera</div>
+      <div class="moon-desc">Primeira mulher no espaço. Mineração com estruturas herméticas. Rico em Cristal de Hélio-3.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 3 · Carl Sagan</div>
+      <div class="moon-name">Sagan</div>
+      <div class="moon-atm toxic">Atmosfera tóxica</div>
+      <div class="moon-desc">Divulgador científico do "Pálido Ponto Azul". Terraformação lenta. Recursos raros de superfície.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 4 · Buzz Aldrin</div>
+      <div class="moon-name">Aldrin</div>
+      <div class="moon-atm none">Sem atmosfera</div>
+      <div class="moon-desc">Segundo homem na Lua. Mineração pesada. Ferro Vermelho em grande quantidade.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 5 · Sally Ride</div>
+      <div class="moon-name">Ride</div>
+      <div class="moon-atm similar">Atmosfera similar a Fertways</div>
+      <div class="moon-desc">Primeira americana no espaço. Melhor candidata à colonização após terraformação.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 6 · Alexei Leonov</div>
+      <div class="moon-name">Leonov</div>
+      <div class="moon-atm toxic">Atmosfera tóxica</div>
+      <div class="moon-desc">Primeira caminhada espacial da história. Gelo de Metano abundante — propulsão de naves avançadas.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 7 · Stephen Hawking</div>
+      <div class="moon-name">Hawking</div>
+      <div class="moon-atm none">Sem atmosfera</div>
+      <div class="moon-desc">Física teórica e cosmologia. Plasma Fossilizado em camadas profundas — lua mais disputada militarmente.</div>
+    </div>
+    <div class="moon-card">
+      <div class="moon-num">Lua 8 · Laika</div>
+      <div class="moon-name">Laika</div>
+      <div class="moon-atm toxic">Atmosfera tóxica</div>
+      <div class="moon-desc">Primeira terráquea em órbita — enviada sem volta. Anomalia detectada pelo Gagarin. Sinal de origem desconhecida.</div>
+    </div>
+  </div>
+  <div class="cb amb">Laika foi enviada ao espaço sem saber o que encontraria, sem garantia de retorno. A lua que carrega seu nome esconde o maior mistério de Fertways — um sinal que ninguém sabe explicar. A homenagem é deliberada: o desconhecido sempre teve um preço, e ela foi quem primeiro pagou.</div>
+
+  <h3 class="sub">12.3 Preparativos da Temporada 1 para as Luas</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Elemento T1</th><th>Função na T2</th></tr></thead>
+    <tbody>
+      <tr class="tg"><td><strong>Telescópio Gagarin ativo</strong></td><td>Publica dados progressivos sobre cada lua a cada 2–4 dias</td></tr>
+      <tr class="tb"><td><strong>Evento: Janela de Órbita Lunar</strong></td><td>Log público de dados capturados por drones — acumula informação sobre cada lua</td></tr>
+      <tr class="ta"><td><strong>Marco 75% de terraformação</strong></td><td>Gatilho oficial do início da Temporada 2 — exploração lunar habilitada</td></tr>
+      <tr class="tp"><td><strong>Missões de reconhecimento</strong></td><td>Enviadas pela administração pública — detalhes a definir na T2</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">12.4 Estrutura das Bases Lunares — Visão T2</h3>
+  <div class="cb drk">Detalhamento completo na Temporada 2. Visão geral registrada aqui como fundação de design.</div>
+  <ul class="bl">
+    <li><strong>Base Central</strong> — pode ser individual (custoso, alvo fácil), de federação, de grupo de federações ou do governo</li>
+    <li><strong>Slots de estrutura</strong> — silos, armazéns, geradores e suporte à vida</li>
+    <li><strong>Slots de mineração</strong> — ocupados por jogadores ou federações. Aluguel/compra por jogadores neutros possível</li>
+    <li><strong>Terceirização</strong> — manter base lunar é caro. Alugar slots de mineração para outros jogadores viabiliza economicamente</li>
+    <li><strong>Base abandonada</strong> — fica disponível para quem primeiro chegar e reconstruir</li>
+    <li><strong>Ataques e guerras lunares</strong> — detalhados na Temporada 2</li>
+  </ul>
+</div>
+
+<!-- 13 -->
+<div class="sec" id="s13">
+  <div class="sec-h"><span class="sec-n">13</span><span class="sec-t">Economia, Loja e Stack</span></div>
+  <div class="cb grn">Gateway: AbacatePay — PIX, cartão parcelado e recorrência mensal. Tudo passa pelo Fert$. Nenhum item pago confere vantagem de progresso ou combate.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Pacote Avulso</th><th>Fert$</th><th>Bônus</th><th>Preço</th></tr></thead>
+    <tbody>
+      <tr><td>Sobrevivente</td><td>500</td><td>—</td><td>R$ 4,90</td></tr>
+      <tr><td>Colono</td><td>1.200</td><td>+200</td><td>R$ 9,90</td></tr>
+      <tr><td><strong>Pioneiro ★</strong></td><td>2.800</td><td>+600</td><td>R$ 19,90 (2x)</td></tr>
+      <tr><td>Desbravador</td><td>6.500</td><td>+1.500</td><td>R$ 39,90 (3x)</td></tr>
+      <tr><td><strong>Fundador ★</strong></td><td>15.000</td><td>+4.000</td><td>R$ 79,90 (6x)</td></tr>
+      <tr><td>Lenda</td><td>35.000</td><td>+12.000</td><td>R$ 149,90 (12x)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tw"><table>
+    <thead><tr><th>Assinatura</th><th>Fert$/mês</th><th>Benefícios</th><th>Preço</th></tr></thead>
+    <tbody>
+      <tr><td>Colono Plus</td><td>1.500</td><td>Fila dupla de construção</td><td>R$ 12,90/mês</td></tr>
+      <tr><td><strong>Pioneiro Plus ★</strong></td><td>3.500</td><td>Fila dupla + pesquisa + prioridade Espaçoporto</td><td>R$ 24,90/mês</td></tr>
+      <tr><td>Lenda Plus</td><td>8.000</td><td>Tudo + skin mensal + acesso antecipado 48h</td><td>R$ 49,90/mês</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tw"><table>
+    <thead><tr><th>Camada</th><th>Tecnologia</th><th>Função</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td>PHP 8.2+ + Laravel</td><td>Lógica do jogo, missões, reputação, mensagens, i18n</td></tr>
+      <tr><td>Banco principal</td><td>MySQL 8</td><td>Jogadores, slots, mensagens privadas, avaliações, denúncias</td></tr>
+      <tr><td>Cache / Filas</td><td>Redis</td><td>Rankings, chats em tempo real, streaks, notificações</td></tr>
+      <tr><td>Banco econômico</td><td>MySQL separado</td><td>Fert$, tributos, logs de envio de recursos (evidência judicial)</td></tr>
+      <tr><td>Banco de logs</td><td>MySQL separado</td><td>Guerras, ataques, denúncias, chat moderado, segurança</td></tr>
+      <tr><td>Tempo real</td><td>Laravel Reverb</td><td>Chats em tempo real, status de docas, ataques, eventos</td></tr>
+      <tr><td>Frontend</td><td>TypeScript + React + react-i18next</td><td>Interface multilíngue, chat, mensagens, Ministério</td></tr>
+      <tr><td>Motor do jogo</td><td>Phaser.js</td><td>Mapa orgânico + slot isométrico fotorrealista</td></tr>
+      <tr><td>Mobile</td><td>React Native + FCM</td><td>Android, push notifications, chat mobile</td></tr>
+      <tr><td>Infra</td><td>Docker + Nginx + VPS</td><td>Deploy inicial, migração futura para dedicado</td></tr>
+      <tr><td>Auth</td><td>Login Social — Google + Facebook</td><td>OAuth via Socialite, anti-exploit, telefone</td></tr>
+      <tr><td>Pagamentos</td><td>AbacatePay SDK</td><td>PIX, cartão parcelado, recorrência mensal</td></tr>
+      <tr><td>i18n</td><td>Laravel + react-i18next</td><td>PT · ES · EN — detecção automática + troca manual</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 14 — CARGOS PÚBLICOS -->
+<div class="sec" id="s14">
+  <div class="sec-h"><span class="sec-n">14</span><span class="sec-t">Cargos Públicos Neutros</span></div>
+
+  <h3 class="sub">14.1 Conceito</h3>
+  <p class="b">Jogadores com status de Neutro Registrado podem se candidatar a cargos públicos remunerados dentro das instituições da Capital. Os cargos dão vida econômica e social ao governo de Fertways, ao mesmo tempo que oferecem uma trilha de progressão alternativa para jogadores que preferem um papel administrativo a um papel produtivo ou militar.</p>
+
+  <h3 class="sub">14.2 Os 5 Cargos Iniciais</h3>
+  <div class="job-grid">
+    <div class="job-card">
+      <div class="job-head" style="background:linear-gradient(135deg,#9B59B6,#6A1A8A)">
+        <div class="job-icon">⚖️</div>
+        <div><div class="job-name">Conciliador</div><div class="job-inst">Ministério das Reputações</div></div>
+      </div>
+      <div class="job-body">
+        <p>Analisa denúncias entre colonos, revisa logs de comércio e histórico de mensagens, aplica punições conforme as regras do Ministério.</p>
+        <div class="job-pay">
+          <span class="job-pay-item">50 Fert$/dia fixo</span>
+          <span class="job-pay-item bonus">+3 Fert$ por denúncia atendida</span>
+        </div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="job-head" style="background:linear-gradient(135deg,#1A7A3A,#0A4A1A)">
+        <div class="job-icon">📊</div>
+        <div><div class="job-name">Fiscal de Mercado</div><div class="job-inst">Mercado Central</div></div>
+      </div>
+      <div class="job-body">
+        <p>Monitora preços suspeitos no Mercado Central, identifica possíveis manipulações ou cartéis de preço e sinaliza para a Secretaria de Finanças.</p>
+        <div class="job-pay">
+          <span class="job-pay-item">Salário fixo/dia</span>
+          <span class="job-pay-item bonus">Bônus por irregularidade confirmada</span>
+        </div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="job-head" style="background:linear-gradient(135deg,#1A4A8A,#0A2A5A)">
+        <div class="job-icon">🚀</div>
+        <div><div class="job-name">Atendente do Espaçoporto</div><div class="job-inst">Espaçoporto</div></div>
+      </div>
+      <div class="job-body">
+        <p>Auxilia novos usuários a entender rotas interplanetárias, taxas, docas e o funcionamento do estacionamento de caminhões.</p>
+        <div class="job-pay">
+          <span class="job-pay-item">Salário fixo/dia</span>
+          <span class="job-pay-item bonus">Bônus por atendimento concluído</span>
+        </div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="job-head" style="background:linear-gradient(135deg,#C1440E,#8A2A08)">
+        <div class="job-icon">📰</div>
+        <div><div class="job-name">Repórter</div><div class="job-inst">Central de Pesquisas e Notícias</div></div>
+      </div>
+      <div class="job-body">
+        <p>Escreve resumos e notícias sobre eventos do servidor, descobertas do Gagarin e acontecimentos relevantes da comunidade.</p>
+        <div class="job-pay">
+          <span class="job-pay-item">Salário fixo/dia</span>
+          <span class="job-pay-item bonus">Bônus por matéria publicada</span>
+        </div>
+      </div>
+    </div>
+    <div class="job-card">
+      <div class="job-head" style="background:linear-gradient(135deg,#F5A623,#B07010)">
+        <div class="job-icon">🧾</div>
+        <div><div class="job-name">Auxiliar de Tesouro</div><div class="job-inst">Secretaria de Finanças e Tesouro</div></div>
+      </div>
+      <div class="job-body">
+        <p>Ajuda a sinalizar inconsistências financeiras para a Secretaria, monitora arrecadação de taxas e fluxo de Fert$.</p>
+        <div class="job-pay">
+          <span class="job-pay-item">Salário fixo/dia</span>
+          <span class="job-pay-item bonus">Bônus por inconsistência identificada</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cb amb">Novos cargos serão criados conforme o jogo crescer e novas instituições forem fundadas na Capital. A estrutura de salário fixo + bônus por atividade será o padrão para todos os cargos futuros.</div>
+
+  <h3 class="sub">14.3 Critérios de Elegibilidade</h3>
+  <p class="b">Qualquer jogador com status de Neutro Registrado pode se candidatar a um cargo público, desde que cumpra todos os critérios abaixo simultaneamente:</p>
+
+  <div class="elig-list">
+    <div class="elig-item"><div class="elig-num">1</div><div class="elig-text">Não ter recebido <strong>nenhuma avaliação menor que 3 estrelas</strong> nos últimos <strong>7 dias</strong></div></div>
+    <div class="elig-item"><div class="elig-num">2</div><div class="elig-text">Não ter recebido <strong>nenhuma avaliação menor que 3 estrelas</strong> nas últimas <strong>7 negociações</strong></div></div>
+    <div class="elig-item"><div class="elig-num">3</div><div class="elig-text">Estar entre os <strong>35% dos jogadores</strong> que mais contribuíram para a terraformação global</div></div>
+    <div class="elig-item"><div class="elig-num">4</div><div class="elig-text">Não ter tido <strong>restrição comercial</strong> nos últimos <strong>7 dias</strong></div></div>
+    <div class="elig-item"><div class="elig-num">5</div><div class="elig-text">Não estar <strong>bloqueado de participar de leilões</strong> (status Persona Non Grata)</div></div>
+    <div class="elig-item"><div class="elig-num">6</div><div class="elig-text">Ter <strong>reputação</strong> dentro de faixa mínima aceitável</div></div>
+    <div class="elig-item"><div class="elig-num">7</div><div class="elig-text">Ter concluído <strong>10 missões diárias</strong> ao longo do jogo</div></div>
+  </div>
+
+  <h3 class="sub">14.4 Regras de Inatividade nos Cargos</h3>
+  <div class="inact-flow">
+    <div class="inact-step">
+      <div class="inact-time">24h</div>
+      <div class="inact-action">Notificações enviadas: push no app, e-mail e WhatsApp (após implementado)</div>
+    </div>
+    <div class="inact-step">
+      <div class="inact-time">48h</div>
+      <div class="inact-action">Administração pública é avisada sobre a inatividade do ocupante do cargo</div>
+    </div>
+    <div class="inact-step critical">
+      <div class="inact-time">96h (4 dias)</div>
+      <div class="inact-action">Jogador perde o cargo automaticamente. Vaga reaberta para nova candidatura.</div>
+    </div>
+  </div>
+
+  <h3 class="sub">14.5 Painel Administrativo de Cargos Públicos</h3>
+  <div class="admin-panel">
+    <h4>Painel de Gestão de Cargos Públicos — Administração de Fertways</h4>
+    <ul>
+      <li>Configurar salário fixo diário de cada cargo</li>
+      <li>Configurar valor de bônus por tipo de atividade realizada em cada cargo</li>
+      <li>Criar novos cargos públicos vinculados a novas instituições</li>
+      <li>Editar critérios de elegibilidade por cargo individualmente</li>
+      <li>Visualizar candidatos elegíveis em tempo real</li>
+      <li>Aprovar, suspender ou demitir jogadores de cargos públicos</li>
+      <li>Acompanhar desempenho: atividades realizadas, avaliação da comunidade, tempo no cargo</li>
+      <li>Ver histórico de pagamentos realizados por cargo e por jogador</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 16 — FROTA E TRANSPORTES -->
+<div class="sec" id="s16">
+  <div class="sec-h"><span class="sec-n">16</span><span class="sec-t">Frota e Ministério dos Transportes</span></div>
+
+  <h3 class="sub">16.1 Frota dos Colonos</h3>
+  <div class="veh-grid">
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#4FACDE,#1A6A9A)">
+        <div class="veh-owner">Propriedade do colono</div>
+        <div class="veh-name">🚛 Furgão de Comércio</div>
+      </div>
+      <div class="veh-body">
+        <p>Veículo terrestre leve para rotas locais entre slots vizinhos. Parte do kit inicial — todo colono começa com um.</p>
+        <div class="veh-tags"><span class="vtag reg">Placa registrada</span><span class="vtag">Depreciação por uso</span><span class="vtag">Vendável</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#3DDB84,#208850)">
+        <div class="veh-owner">Propriedade do colono</div>
+        <div class="veh-name">🛰️ Drone de Exploração</div>
+      </div>
+      <div class="veh-body">
+        <p>Pequena unidade de reconhecimento. Revela mapa ao redor do slot e zonas neutras antes de ocupação.</p>
+        <div class="veh-tags"><span class="vtag reg">Placa registrada</span><span class="vtag">Vendável</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#9B59B6,#5A1A8A)">
+        <div class="veh-owner">Propriedade do colono</div>
+        <div class="veh-name">🚀 Nave de Longa Distância</div>
+      </div>
+      <div class="veh-body">
+        <p>Nave pessoal para expedições futuras às luas — Armstrong, Tereshkova, Sagan e demais. Adormecida até a Temporada 2.</p>
+        <div class="veh-tags"><span class="vtag reg">Placa registrada</span><span class="vtag">Vendável</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#F5A623,#B07010)">
+        <div class="veh-owner">Propriedade do colono</div>
+        <div class="veh-name">🚚 Caminhão de Carga</div>
+      </div>
+      <div class="veh-body">
+        <p>Produzido pela Central de Transportes. Transporta recursos das zonas neutras aos 4 destinos possíveis.</p>
+        <div class="veh-tags"><span class="vtag reg">Placa registrada</span><span class="vtag">Depreciação por uso</span><span class="vtag">Vendável</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#8B1A0E,#5A0A06)">
+        <div class="veh-owner">Propriedade do colono — secreto</div>
+        <div class="veh-name">⚙️ Robô Minerador</div>
+      </div>
+      <div class="veh-body">
+        <p>Ocupa e defende zonas neutras enquanto extrai recursos. Quantidade necessária varia por nível da zona (20 a 150+).</p>
+        <div class="veh-tags"><span class="vtag secret">Sem registro público</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#4A1A4A,#2A0A2A)">
+        <div class="veh-owner">Propriedade do colono — secreto</div>
+        <div class="veh-name">Infiltrador</div>
+      </div>
+      <div class="veh-body">
+        <p>Unidade de sabotagem. Danifica estruturas de zonas neutras inimigas sem tomar o controle da área.</p>
+        <div class="veh-tags"><span class="vtag secret">Sem registro público — militar</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#6A1A1A,#3A0A0A)">
+        <div class="veh-owner">Propriedade do colono — secreto</div>
+        <div class="veh-name">Predador</div>
+      </div>
+      <div class="veh-body">
+        <p>Unidade de captura. Rápida e furtiva — entra e sai de zonas neutras capturando trabalhadores para resgate.</p>
+        <div class="veh-tags"><span class="vtag secret">Sem registro público — militar</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">16.2 Frota Governamental</h3>
+  <div class="veh-grid">
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#1A1A3A,#0A0A2A)">
+        <div class="veh-owner">Propriedade do governo</div>
+        <div class="veh-name">🛸 Cargueiro Interplanetário</div>
+      </div>
+      <div class="veh-body">
+        <p>O governo de Fertways detém o monopólio inicial do comércio interplanetário. Colonos alugam o uso do cargueiro para viajar aos 5 planetas NPC — não constroem o próprio. Privatização possível em expansões futuras.</p>
+        <div class="veh-tags"><span class="vtag gov">Monopólio estatal</span><span class="vtag reg">Placa registrada</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#4A3A1A,#2A1A0A)">
+        <div class="veh-owner">Patrimônio do governo</div>
+        <div class="veh-name">🏗️ Endurance of Mankind</div>
+      </div>
+      <div class="veh-body">
+        <p>Não é um veículo ativo — nave-mãe estacionária, patrimônio histórico fonte de peças e missões narrativas.</p>
+        <div class="veh-tags"><span class="vtag gov">Patrimônio histórico</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#1A3A5A,#0A1A3A)">
+        <div class="veh-owner">Equipamento do governo</div>
+        <div class="veh-name">🔭 Telescópio Orbital Gagarin</div>
+      </div>
+      <div class="veh-body">
+        <p>Equipamento orbital fixo. Não se desloca, mas publica notícias e dados sobre as luas a cada 2–4 dias.</p>
+        <div class="veh-tags"><span class="vtag gov">Não vendável</span></div>
+      </div>
+    </div>
+    <div class="veh-card">
+      <div class="veh-head" style="background:linear-gradient(135deg,#8B1A0E,#4A0A06)">
+        <div class="veh-owner">NPC — não controlável</div>
+        <div class="veh-name">👾 Nave Hostil</div>
+      </div>
+      <div class="veh-body">
+        <p>Antagonista do evento raro de guerra planetária. Não pertence a ninguém — ameaça externa que une todos os colonos contra ela.</p>
+        <div class="veh-tags"><span class="vtag">Evento especial</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">16.3 Ministério dos Transportes — Registro de Placas</h3>
+  <p class="b">Todo veículo civil — exceto Robô Minerador, Infiltrador e Predador (unidades militares secretas) — recebe registro obrigatório no Ministério dos Transportes ao ser construído ou adquirido.</p>
+
+  <div class="registry-card">
+    <div class="rtitle">Registro de Veículo — Ministério dos Transportes</div>
+    <div class="reg-row"><span class="reg-label">Placa</span><span class="reg-value">FW-07429-F</span></div>
+    <div class="reg-row"><span class="reg-label">Tipo</span><span class="reg-value">Furgão de Comércio</span></div>
+    <div class="reg-row"><span class="reg-label">Proprietário</span><span class="reg-value">Colono #18402 — Setor F-07</span></div>
+    <div class="reg-row"><span class="reg-label">Dia de construção (calendário Fertways)</span><span class="reg-value">Dia 1.247</span></div>
+    <div class="reg-row"><span class="reg-label">Horas de uso ativo</span><span class="reg-value">312h</span></div>
+    <div class="reg-row"><span class="reg-label">Estado de conservação</span><span class="reg-value">78% — Manutenção recomendada</span></div>
+    <div class="reg-row"><span class="reg-label">Manutenções realizadas</span><span class="reg-value">3</span></div>
+    <div class="reg-row"><span class="reg-label">Vida útil restante estimada</span><span class="reg-value">~640h</span></div>
+    <div class="reg-row"><span class="reg-label">Valor de revenda estimado</span><span class="reg-value">680 Fert$</span></div>
+    <div class="reg-row"><span class="reg-label">Status</span><span class="reg-value">Disponível para venda</span></div>
+  </div>
+
+  <h3 class="sub">16.4 Depreciação e Manutenção — Furgão e Caminhão de Carga</h3>
+  <p class="b">Apenas Furgão e Caminhão de Carga possuem depreciação ativa, já que rodam continuamente em missões. Os demais veículos registrados não têm desgaste por uso.</p>
+
+  <div class="dep-flow">
+    <div class="dep-step">
+      <div class="dep-icon">🟢</div>
+      <div class="dep-title">Veículo novo</div>
+      <div class="dep-desc">100% de desempenho. Velocidade e capacidade de carga máximas.</div>
+    </div>
+    <div class="dep-step mid">
+      <div class="dep-icon">🟡</div>
+      <div class="dep-title">Uso acumulado</div>
+      <div class="dep-desc">Desgaste calculado por horas de uso ativo — não por tempo desde a fabricação.</div>
+    </div>
+    <div class="dep-step mid">
+      <div class="dep-icon">🟠</div>
+      <div class="dep-title">Desempenho reduzido</div>
+      <div class="dep-desc">Sem manutenção, o veículo fica mais lento e carrega menos progressivamente.</div>
+    </div>
+    <div class="dep-step crit">
+      <div class="dep-icon">🔴</div>
+      <div class="dep-title">Bloqueio operacional</div>
+      <div class="dep-desc">Abaixo de um limite crítico, o veículo não pode iniciar nova missão sem manutenção.</div>
+    </div>
+    <div class="dep-step">
+      <div class="dep-icon">🔧</div>
+      <div class="dep-title">Manutenção realizada</div>
+      <div class="dep-desc">Restaura desempenho, mas reduz permanentemente a vida útil total e o valor máximo de revenda.</div>
+    </div>
+  </div>
+
+  <ul class="bl">
+    <li>Depreciação calculada por <strong>horas de uso ativo</strong>, não por tempo de posse</li>
+    <li>Sem manutenção, o veículo perde desempenho (velocidade e capacidade) progressivamente</li>
+    <li>Abaixo do limite crítico, o veículo fica bloqueado até a manutenção ser feita</li>
+    <li>Cada manutenção restaura desempenho mas reduz a vida útil total restante e o teto de valor de revenda</li>
+    <li>O estado de conservação é visível no registro e afeta diretamente o preço de venda no mercado de usados</li>
+    <li>Veículos podem ser vendidos a outros colonos a qualquer momento via comércio informal ou Mercado Central</li>
+  </ul>
+
+  <div class="admin-panel">
+    <h4>Painel do Ministério dos Transportes</h4>
+    <ul>
+      <li>Emitir e consultar registro de placas de todos os veículos civis do planeta</li>
+      <li>Configurar curva de depreciação por hora de uso para Furgão e Caminhão de Carga</li>
+      <li>Configurar limite crítico de desempenho que bloqueia novas missões</li>
+      <li>Configurar perda de vida útil e teto de revenda a cada manutenção realizada</li>
+      <li>Gerenciar a frota de Cargueiros Interplanetários do governo — disponibilidade para aluguel</li>
+      <li>Visualizar volume de veículos registrados, vendidos e sucateados por período</li>
+      <li>Histórico de propriedade de cada veículo — todos os donos anteriores</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 17 -->
+<div class="sec" id="s17">
+  <div class="sec-h"><span class="sec-n">17</span><span class="sec-t">Próximos Passos</span></div>
+  <div class="nx">
+    <div class="nx-s"><div class="nx-n">1</div><div><div class="nx-t">Assets Visuais — Fase 1</div><div class="nx-d">Conceitos Midjourney + Kenney.nl para protótipo inicial</div></div></div>
+    <div class="nx-s"><div class="nx-n">2</div><div><div class="nx-t">Integração AbacatePay</div><div class="nx-d">Fluxo de compra, recorrência e parcelamento</div></div></div>
+    <div class="nx-s"><div class="nx-n">3</div><div><div class="nx-t">Missões de Reconhecimento</div><div class="nx-d">Detalhar missões de descoberta de planetas e luas pela administração pública</div></div></div>
+    <div class="nx-s"><div class="nx-n">4</div><div><div class="nx-t">Início do Desenvolvimento</div><div class="nx-d">Setup Docker + Laravel + MySQL + Redis — Fase 1 do roadmap</div></div></div>
+  </div>
+</div>
+
+</div>
+<div class="footer">
+  <strong>FERTWAYS: The Next Colony</strong> — "A humanidade não tem para onde voltar. Só pode seguir em frente."<br>
+  Game Design Document v1.7 — Junho 2026
+</div>
+</body>
+</html>

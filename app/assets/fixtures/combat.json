@@ -1,0 +1,19 @@
+{
+  "zoneLevel": 3,
+  "constructionBonusPct": 35,
+  "garrison": [
+    { "type": "sentinel", "level": 3, "count": 4 },
+    { "type": "sentinel", "level": 2, "count": 3 },
+    { "type": "robo", "level": 3, "count": 6 }
+  ],
+  "yourUnits": [
+    { "type": "sentinel", "level": 4, "count": 5 },
+    { "type": "sentinel", "level": 3, "count": 6 }
+  ],
+  "maintenance": { "biomass": 100, "energy": 60, "alloys": 20 },
+  "maintenancePaid": true,
+  "noviceProtected": false,
+  "noviceDaysLeft": 0,
+  "cooldownHours": 0,
+  "lootPct": 50
+}

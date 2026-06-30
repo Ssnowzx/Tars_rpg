@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório R3 (Rankings → v29)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>R3 — Ranking de Guerras reconciliado à v29</h1>
+  <div class="sub">Normalização por percentil (§27.13) <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §27.13</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /capital/rankings</span>
+  </div>
+</div>
+
+<p class="lead">A v29 corrige um problema matemático do §15: somar vitórias (escala pequena) com recursos
+saqueados (escala enorme) sem normalização tornava os pesos percentuais decorativos. A solução:
+<b>cada sub-ranking vira percentil no servidor (0–100)</b> e o Ranking Geral passa a ser a
+<b>soma ponderada dos percentis</b> — escala final 0–100.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">0–100</div><div class="l">escala normalizada</div></div>
+  <div class="card"><div class="n">6</div><div class="l">sub-rankings por percentil</div></div>
+  <div class="card"><div class="n">§27.13</div><div class="l">regra aplicada</div></div>
+  <div class="card"><div class="n">=</div><div class="l">pesos agora importam de verdade</div></div>
+</div>
+
+<h2>O que mudou (v24 → v29)</h2>
+<table>
+  <thead><tr><th>Antes (v24/§15)</th><th>Agora (v29/§27.13)</th></tr></thead>
+  <tbody>
+    <tr><td>Ranking Geral em "pontos" brutos (ex.: 9.420 pts)</td><td><b>Score 0–100</b> = soma ponderada dos percentis normalizados</td></tr>
+    <tr><td>Sub-rankings só com valor bruto</td><td>Valor bruto + <b>percentil no servidor</b> por entrada</td></tr>
+    <tr><td>Pesos 25/20/20/15/10/10% "decorativos"</td><td>Mesmos pesos, agora aplicados sobre percentis comparáveis</td></tr>
+    <tr><td>Recursos Saqueados em volume cru</td><td>Convertidos para <b>Fert$ equivalente</b> antes de comparar</td></tr>
+  </tbody>
+</table>
+
+<h2>Fórmula (§27.13)</h2>
+<p><code>percentil = (valor do jogador ÷ máximo no servidor) × 100</code> &nbsp;·&nbsp;
+<code>Ranking Geral = Σ (peso × percentil)</code> (escala 0–100).</p>
+<p>Exemplo do GDD: 5 vitórias com máximo 200 no servidor → percentil 2,5 → contribuição 20% × 2,5 =
+0,5 ponto.</p>
+
+<h2>Implementação</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Mudança</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>war_ranking.dart</code>: +<code>percentile</code> (0–100) em <code>RankingEntry</code></td></tr>
+    <tr><td>Fixture</td><td><code>rankings.json</code>: geral em escala 0–100; cada entrada de sub-ranking com <code>percentile</code>; saque rotulado em Fert$</td></tr>
+    <tr><td>UI</td><td><code>rankings_screen.dart</code>: cabeçalho do geral explica percentil + exemplo; entrada geral mostra <code>/100</code>; entrada de sub mostra chip "percentil NN"; cabeçalho do sub nota §27.13</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: Geral em 0–100 (Legião 84,6 · Pacto 73,2 · Vale 50,7); sub "Vitórias" com percentis
+      94/90/62/53/45 + nota "ranqueado por percentil (§27.13)"</li>
+  <li>Seam · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Conclui a reconciliação de tudo o que já estava construído ao v29</b> (B2, Perfil,
+Rankings). <b>Pendentes da v29 (sistemas novos / números):</b> §24 economia (Metal Bruto, Mina,
+Destilaria, receitas de Componentes, subsídio, nova fórmula de preço) · §27 combate territorial
+(Sentinela, rodadas, saque, novatos). <b>Dívida:</b> <span class="badge debt">i18n</span> pt hard-coded.</div>
+
+<footer><span>Fertways — Relatório de Entrega · R3 (Rankings → v29)</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

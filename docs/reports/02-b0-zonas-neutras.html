@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B0 Zonas Neutras</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B0 — Zonas Neutras: Ocupar / Extrair / Transportar</h1>
+  <div class="sub">Bloco B · recurso extra fora da colônia <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD base:</b> v24 — §7 + §16 + §17.4</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/zone</span>
+  </div>
+</div>
+
+<p class="lead">As zonas neutras são a fonte de recurso extra do jogo, fora da colônia: o colono
+<b>ocupa</b> (Robô Minerador), <b>extrai</b> (depósito de 10 níveis) e <b>transporta</b> a carga
+para um de quatro destinos. A tela é um drill-in do mapa do planeta.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">10</div><div class="l">níveis de depósito</div></div>
+  <div class="card"><div class="n">7</div><div class="l">estruturas da zona (§17.4)</div></div>
+  <div class="card"><div class="n">4</div><div class="l">destinos de transporte</div></div>
+  <div class="card"><div class="n">3</div><div class="l">fases: ocupar/extrair/transportar</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Ocupar</b> — requisito de Robôs Mineradores por nível (20 + nível×20).</li>
+  <li><b>Depósito</b> — 10 níveis com barra de capacidade; quando lota, a extração para.</li>
+  <li><b>Estruturas do §17.4</b> — Posto de Comando, Depósito, Extração, Abrigo, Muralha,
+      Torre de Vigia, Refinaria de Campo.</li>
+  <li><b>Transporte</b> — manual, 4 destinos: Mercado, Slot, Jogador, Federação.</li>
+  <li>Painel da zona no mapa → "Gerenciar zona" abre a tela.</li>
+</ul>
+
+<h2>Rota e seam de repositório</h2>
+<table>
+  <thead><tr><th>Rota</th><th>Tela</th><th>Dados</th></tr></thead>
+  <tbody>
+    <tr><td><code>/map/zone</code></td><td>Zona Neutra (ocupar/extrair/transportar)</td>
+        <td>Recebe o <code>MapNode</code> via <code>state.extra</code> (drill-in do planeta)</td></tr>
+  </tbody>
+</table>
+<p>Drill-in dentro do shell → mantém HUD + nav rail. Ações de escrita são mock (SnackBar).</p>
+
+<h2>Definition of Done</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Drill-in integrado ao mapa do planeta (painel → "Gerenciar zona")</li>
+  <li>Tokens <code>DsTokens</code> · sem emoji · estados explícitos</li>
+</ul>
+
+<div class="note"><b>Correção de modelo registrada:</b> a antiga vista de "Colônia com lotes de recurso"
+(convenção Travian/Ikariam) <b>não</b> é Fertways — foi revertida e prateleirada em
+<code>docs/t2-shelf/colony-view/</code> (reuso para bases lunares T2). <b>Futuro:</b> estado real
+(livre/ocupada), recrutar robôs no Quartel, ataques (4 tipos: Invasão, Sabotagem, Captura, Cerco).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B0 Zonas Neutras</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

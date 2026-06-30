@@ -1,0 +1,39 @@
+schema: spec-driven
+
+# Project context — shown to AI when creating artifacts.
+context: |
+  Fertways: The Next Colony — MMO de estratégia econômica/colônia (linhagem
+  Travian/Ikariam/OGame), ambientado em Marte (ano 2387). GDD atual: FERTWAYS_GDD_v24.html
+  (supera v21/v17; economia COMPLETA — §15 Guerras, §18 Recursos, §19 Produção,
+  §20 Custos, §21 Veículos, §22 Preços do Mercado todos preenchidos).
+  Modelo: Planeta → Colônia/Slot (construções de produção/estrutura, §17) → Capital
+  (20 instituições de governo, §2.1). Recurso das construções + zonas neutras (§7/§16).
+  Recursos (§18): primários Oxigênio/Água/Biomassa/Energia; secundários Ligas Metálicas/
+  Compostos Químicos/Componentes Eletrônicos/Biocombustível; 8 minerais (governo) + 8 raros (luas).
+  Números reais: produção/custo = Base×1.5^(N-1) (§19/§20); preços-base do Mercado §22.
+
+  Stack (decidida):
+  - Cliente: Flutter (web + Android), código em app/. UI em widgets Flutter.
+  - Motor 2D: Flame (mapa-mundo + lotes). Ponte HUD via overlays/Stack.
+  - Estado: Riverpod. Navegação: go_router (StatefulShellRoute).
+  - i18n: pt-BR (padrão), es, en (ARB).
+  - Backend: ADIADO. Hoje tudo com mock data atrás de interfaces de repositório
+    (data/mock + assets/fixtures/*.json), trocável por API sem mexer na UI.
+  - REJEITADOS: React/Phaser (o §13 do GDD está desatualizado), PHP/Laravel, Supabase.
+
+  Design system: direção "Solar Frontier" (claro/quente, futurista). Tokens DTCG em
+  design-system/tokens/* (fonte única), espelhados no tema Flutter (app/lib/app/theme/).
+  Paleta: rust #C1440E (marca), areia/ink (neutros), solar/ouro #F2A33C, teal #2C7E78.
+  Regra dura: sem emoji (ícones lucide/Material ou palavras). Contraste AA verificado
+  por design-system/scripts/validate_contrast.py. Doc: docs/fertways-design-system.md.
+
+  Convenções: arquivos Dart em snake_case; sem valores hard-coded (ler tokens via
+  Theme/DsTokens); pt-BR na UI via chaves ARB. Build web para verificação:
+  flutter build web --pwa-strategy=none --no-tree-shake-icons.
+
+# Per-artifact rules (optional)
+rules:
+  proposal:
+    - Escopo atual é frontend/visual apenas — não propor backend/servidor.
+  tasks:
+    - Verificar com `flutter analyze` + `flutter build web` antes de marcar concluído.

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B3 (Mensagens)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B3 — Sistema de Mensagens (§10)</h1>
+  <div class="sub">5 canais, denúncia por mensagem e multilíngue <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §10</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/messages</span>
+  </div>
+</div>
+
+<p class="lead">O §10 define a camada de comunicação: cinco canais com escopos e regras de moderação
+distintas, denúncia por mensagem, histórico de mensagens privadas como evidência, e operação
+multilíngue (cada colono vê a mensagem no idioma do remetente).</p>
+
+<div class="cards">
+  <div class="card"><div class="n">5</div><div class="l">canais (§10.1)</div></div>
+  <div class="card"><div class="n">3</div><div class="l">idiomas simultâneos (§10.4)</div></div>
+  <div class="card"><div class="n">2</div><div class="l">canais sem filtro (Fed./MP)</div></div>
+  <div class="card"><div class="n">§9</div><div class="l">denúncia → Reputações</div></div>
+</div>
+
+<h2>Os 5 canais (§10.1)</h2>
+<table>
+  <thead><tr><th>Canal</th><th>Escopo</th><th>Moderação automática</th></tr></thead>
+  <tbody>
+    <tr><td>Chat Global</td><td>Todos os jogadores · 3 idiomas</td><td>Sim</td></tr>
+    <tr><td>Chat de Região</td><td>Mesma região · 5 canais regionais</td><td>Sim</td></tr>
+    <tr><td>Chat de Federação</td><td>12 membros · histórico armazenado</td><td><b>Não</b> — só denúncia manual</td></tr>
+    <tr><td>Mensagem Privada</td><td>2 jogadores · evidência em denúncias</td><td><b>Não</b> — só denúncia manual</td></tr>
+    <tr><td>Chat de Vizinhança</td><td>Slots próximos · raio configurável</td><td>Sim</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Seletor de canais</b> com ícone por tipo e <b>badge de não-lidas</b>.</li>
+  <li><b>Cabeçalho do canal</b>: escopo + descrição + indicador de moderação (§10.2) — verde "Moderação
+      automática" nos públicos; âmbar "Sem filtro automático — só denúncia manual" em Federação/MP.</li>
+  <li><b>Thread de mensagens</b>: bolhas com autor·setor·hora; suas mensagens à direita (rust); avatar
+      inicial para os demais; <b>botão de denúncia</b> por mensagem (§10.2 → Ministério das Reputações §9).</li>
+  <li><b>Multilíngue (§10.4)</b>: tag de idioma (ex.: EN) + nota "mostrado no idioma do remetente".</li>
+  <li><b>Compositor</b> de mensagem (envio mock).</li>
+  <li><b>Acesso</b>: ação "Mensagens" da barra inferior agora abre a tela (as demais ações dão feedback "em breve").</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/chat.dart</code> (ChannelKind, ChatChannel, ChatMessage, ChatState)</td></tr>
+    <tr><td>Seam</td><td><code>ChatRepository</code> → <code>MockChatRepository</code> → <code>chat.json</code> → <code>chatProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/messages/messages_screen.dart</code>; rota <code>/map/messages</code>; ação no <code>app_shell.dart</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual: 5 canais com badges; Global "Moderação automática (§10.2)"; mensagem EN com nota §10.4;
+      Federação "Sem filtro automático — só denúncia manual"</li>
+  <li>Seam · tokens DsTokens · sem emoji · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · enviar/denunciar = mock ·
+tradução automática (§10.4) é futura. <b>Próximo:</b> B4 — Federações (§4).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B3 Mensagens</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

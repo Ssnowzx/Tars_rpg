@@ -1,0 +1,11 @@
+{
+  "freighters": 2,
+  "freightersTotal": 3,
+  "planets": [
+    { "id": "kalidor", "name": "Kalidor", "distance": "~4h", "risk": "none", "riskLabel": "Nenhum", "exports": "Metais pesados, compostos químicos", "imports": "Biomassa, água" },
+    { "id": "veyra", "name": "Veyra", "distance": "~6,5h", "risk": "none", "riskLabel": "Nenhum", "exports": "Sementes alienígenas, compostos orgânicos", "imports": "Energia, componentes" },
+    { "id": "auryn", "name": "Auryn", "distance": "~12h", "risk": "low", "riskLabel": "Baixo", "exports": "Variedade enorme", "imports": "Qualquer recurso" },
+    { "id": "solene", "name": "Solène", "distance": "~18h", "risk": "none", "riskLabel": "Nenhum", "exports": "Tecnologia, dados de pesquisa", "imports": "Recursos raros" },
+    { "id": "drakmoor", "name": "Drakmoor", "distance": "~31h", "risk": "high", "riskLabel": "Alto — escolta opcional", "exports": "Minerais raros exclusivos", "imports": "Biomassa, água, componentes" }
+  ]
+}

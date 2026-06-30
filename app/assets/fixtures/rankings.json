@@ -1,0 +1,87 @@
+{
+  "weights": [
+    { "metric": "Zonas Neutras Conquistadas", "weight": 25 },
+    { "metric": "Vitórias Totais", "weight": 20 },
+    { "metric": "Tempo de Controle", "weight": 20 },
+    { "metric": "Recursos Saqueados", "weight": 15 },
+    { "metric": "Guerras Vencidas por Federação", "weight": 10 },
+    { "metric": "Maior Sequência de Vitórias", "weight": 10 }
+  ],
+  "general": [
+    { "rank": 1, "name": "Legião Vermelha", "value": "84,6", "federation": true },
+    { "rank": 2, "name": "Pacto Boreal", "value": "73,2", "federation": true },
+    { "rank": 3, "name": "Drax", "value": "71,1" },
+    { "rank": 4, "name": "Clã Ferrugem", "value": "58,4", "federation": true },
+    { "rank": 5, "name": "Cmdt. Vale", "value": "50,7", "isYou": true },
+    { "rank": 6, "name": "R. Khan", "value": "46,9" },
+    { "rank": 7, "name": "K. Adeyemi", "value": "40,3" }
+  ],
+  "subs": [
+    {
+      "id": "zones", "name": "Zonas Neutras Conquistadas",
+      "measures": "Total de zonas tomadas com sucesso ao longo do jogo", "scope": "Individual + Federação",
+      "entries": [
+        { "rank": 1, "name": "Legião Vermelha", "value": "142", "percentile": 95, "federation": true },
+        { "rank": 2, "name": "Drax", "value": "88", "percentile": 59 },
+        { "rank": 3, "name": "Cmdt. Vale", "value": "61", "percentile": 41, "isYou": true },
+        { "rank": 4, "name": "Pacto Boreal", "value": "57", "percentile": 38, "federation": true },
+        { "rank": 5, "name": "R. Khan", "value": "44", "percentile": 29 }
+      ]
+    },
+    {
+      "id": "victories", "name": "Vitórias Totais",
+      "measures": "Número total de batalhas vencidas", "scope": "Individual + Federação",
+      "entries": [
+        { "rank": 1, "name": "Drax", "value": "311", "percentile": 94 },
+        { "rank": 2, "name": "Legião Vermelha", "value": "298", "percentile": 90, "federation": true },
+        { "rank": 3, "name": "R. Khan", "value": "204", "percentile": 62 },
+        { "rank": 4, "name": "Cmdt. Vale", "value": "176", "percentile": 53, "isYou": true },
+        { "rank": 5, "name": "M. Okafor", "value": "150", "percentile": 45 }
+      ]
+    },
+    {
+      "id": "control", "name": "Tempo de Controle",
+      "measures": "Soma do tempo total em que zonas permaneceram sob controle", "scope": "Individual + Federação",
+      "entries": [
+        { "rank": 1, "name": "Pacto Boreal", "value": "812h", "percentile": 96, "federation": true },
+        { "rank": 2, "name": "Cmdt. Vale", "value": "604h", "percentile": 71, "isYou": true },
+        { "rank": 3, "name": "Legião Vermelha", "value": "588h", "percentile": 69, "federation": true },
+        { "rank": 4, "name": "Drax", "value": "471h", "percentile": 55 },
+        { "rank": 5, "name": "J. Pereira", "value": "350h", "percentile": 41 }
+      ]
+    },
+    {
+      "id": "loot", "name": "Recursos Saqueados",
+      "measures": "Volume saqueado, convertido para Fert$ equivalente antes de comparar (§27.13)", "scope": "Individual + Federação",
+      "entries": [
+        { "rank": 1, "name": "Legião Vermelha", "value": "1,2M Fert$", "percentile": 92, "federation": true },
+        { "rank": 2, "name": "Drax", "value": "840k Fert$", "percentile": 65 },
+        { "rank": 3, "name": "Clã Ferrugem", "value": "610k Fert$", "percentile": 47, "federation": true },
+        { "rank": 4, "name": "Cmdt. Vale", "value": "512k Fert$", "percentile": 39, "isYou": true },
+        { "rank": 5, "name": "K. Adeyemi", "value": "388k Fert$", "percentile": 30 }
+      ]
+    },
+    {
+      "id": "streak", "name": "Maior Sequência de Vitórias",
+      "measures": "Recorde de vitórias consecutivas sem derrota", "scope": "Individual + Federação",
+      "entries": [
+        { "rank": 1, "name": "Drax", "value": "29", "percentile": 97 },
+        { "rank": 2, "name": "R. Khan", "value": "21", "percentile": 70 },
+        { "rank": 3, "name": "Legião Vermelha", "value": "18", "percentile": 60, "federation": true },
+        { "rank": 4, "name": "Cmdt. Vale", "value": "14", "percentile": 47, "isYou": true },
+        { "rank": 5, "name": "M. Okafor", "value": "11", "percentile": 37 }
+      ]
+    },
+    {
+      "id": "fedwars", "name": "Guerras Vencidas por Federação",
+      "measures": "Número de guerras formais vencidas como federação", "scope": "Somente Federação",
+      "entries": [
+        { "rank": 1, "name": "Legião Vermelha", "value": "12", "percentile": 92, "federation": true },
+        { "rank": 2, "name": "Pacto Boreal", "value": "9", "percentile": 69, "federation": true },
+        { "rank": 3, "name": "Clã Ferrugem", "value": "6", "percentile": 46, "federation": true },
+        { "rank": 4, "name": "Aliança Solar", "value": "4", "percentile": 31, "federation": true },
+        { "rank": 5, "name": "Ordem de Tharsis", "value": "2", "percentile": 15, "federation": true }
+      ]
+    }
+  ]
+}

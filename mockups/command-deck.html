@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fertways: The Next Colony — Console de Comando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Neutros frios — base do console */
+  --bg-0:#D5DDE4;
+  --bg-1:#E7ECF1;
+  --surface:#F4F7FA;
+  --surface-2:#FBFCFE;
+  --line:#CBD6E0;
+  --line-2:#AEBDCA;
+  --grid:rgba(40,72,102,.07);
+
+  /* Tinta */
+  --ink:#14222E;
+  --ink-2:#3B5061;
+  --ink-3:#67808F;
+  --ink-4:#94A7B5;
+
+  /* Dados e marca */
+  --accent:#0B6FAE;        /* azul de comando */
+  --accent-2:#0FA0AC;      /* turquesa de dado */
+  --rust:#C1440E;          /* marca Marte / alerta */
+  --gold:#A9791F;          /* moeda */
+  --good:#159158;
+  --bad:#CB3F3F;
+  --warn:#D2851A;
+
+  --r:8px;
+  --shadow:0 1px 0 rgba(255,255,255,.75) inset, 0 14px 34px -18px rgba(18,40,60,.55), 0 2px 6px -3px rgba(18,40,60,.30);
+  --ui:'Inter',system-ui,sans-serif;
+  --head:'Rajdhani',sans-serif;
+  --brand:'Orbitron',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:var(--ui);color:var(--ink);background:var(--bg-0);-webkit-font-smoothing:antialiased;font-size:13px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+svg{display:block}
+
+.app{display:flex;flex-direction:column;height:100vh;width:100vw;overflow:hidden}
+
+/* ============ BARRA SUPERIOR ============ */
+.topbar{
+  height:64px;flex:none;display:flex;align-items:center;gap:18px;padding:0 16px;
+  background:linear-gradient(180deg,#FCFDFE,#EFF3F7);
+  border-bottom:1px solid var(--line-2);
+  box-shadow:0 6px 18px -14px rgba(18,40,60,.6);
+  position:relative;z-index:30;
+}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(11,111,174,.35),rgba(193,68,14,.30),transparent)}
+
+/* marca + colonia */
+.brand{display:flex;align-items:center;gap:12px;flex:none}
+.logo{width:38px;height:42px;display:grid;place-items:center;position:relative;color:#fff}
+.logo svg{filter:drop-shadow(0 3px 6px rgba(193,68,14,.45))}
+.brandtxt{display:flex;flex-direction:column;line-height:1;gap:3px}
+.brandtxt b{font-family:var(--brand);font-weight:800;font-size:15px;letter-spacing:1.5px;color:var(--ink);background:linear-gradient(90deg,var(--ink),#2c4356);-webkit-background-clip:text;background-clip:text}
+.brandtxt span{font-family:var(--head);font-weight:600;font-size:8.5px;letter-spacing:3px;color:var(--rust)}
+
+.sep{width:1px;height:38px;background:linear-gradient(180deg,transparent,var(--line-2),transparent);flex:none}
+
+.colony{display:flex;flex-direction:column;gap:5px;flex:none;min-width:178px}
+.colony-top{display:flex;align-items:center;gap:8px}
+.colony-name{font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.4px;color:var(--ink);display:flex;align-items:center;gap:6px}
+.colony-name svg{color:var(--accent)}
+.lvl{font-family:var(--head);font-weight:700;font-size:9.5px;letter-spacing:.6px;color:#fff;
+  background:linear-gradient(180deg,#0F7FC2,#0A5E92);padding:2px 7px;border-radius:5px;
+  box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 2px 5px -2px rgba(11,111,174,.7)}
+.xp{display:flex;align-items:center;gap:8px}
+.xp-bar{width:148px;height:6px;border-radius:4px;background:#D4DEE7;overflow:hidden;border:1px solid #C2D0DC;position:relative}
+.xp-bar i{display:block;height:100%;width:70%;border-radius:4px;background:linear-gradient(90deg,#0FA0AC,#0B6FAE)}
+.xp-bar i::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.0) 0 8px,rgba(255,255,255,.35) 8px 9px)}
+.xp small{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* recursos */
+.res-bar{flex:1;display:flex;align-items:center;justify-content:center;gap:7px}
+.res{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);border-radius:7px;padding:6px 9px 6px 6px;min-width:122px;position:relative;
+  box-shadow:0 1px 2px rgba(18,40,60,.06)}
+.res-ic{width:30px;height:30px;border-radius:6px;display:grid;place-items:center;flex:none;color:var(--c);
+  background:color-mix(in srgb,var(--c) 13%, #fff);border:1px solid color-mix(in srgb,var(--c) 28%, #fff)}
+.res-ic svg{width:17px;height:17px}
+.res-meta{display:flex;flex-direction:column;gap:2px;line-height:1}
+.res-label{font-family:var(--head);font-weight:600;font-size:8.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-3)}
+.res-vals{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:baseline;gap:1px;font-variant-numeric:tabular-nums}
+.res-vals i{font-style:normal;color:var(--ink-4);font-size:10px;font-weight:500;margin-right:4px}
+.res-vals em{font-style:normal;font-size:10px;font-weight:600;display:inline-flex;align-items:center}
+.res-vals em.up{color:var(--good)}
+.res-vals em.down{color:var(--bad)}
+.res-vals em u{text-decoration:none;font-size:8px;color:var(--ink-4);margin-left:1px;font-weight:500}
+.res.alert{border-color:rgba(193,68,14,.55);box-shadow:0 0 0 1px rgba(193,68,14,.18),0 1px 2px rgba(18,40,60,.06)}
+.res.alert::after{content:"";position:absolute;top:-4px;right:-4px;width:8px;height:8px;border-radius:50%;
+  background:var(--rust);box-shadow:0 0 0 3px rgba(193,68,14,.18)}
+
+/* lado direito */
+.user{display:flex;align-items:center;gap:10px;flex:none}
+.tools{display:flex;align-items:center;gap:4px}
+.icbtn{width:34px;height:34px;border-radius:7px;display:grid;place-items:center;color:var(--ink-2);
+  border:1px solid transparent;position:relative;transition:.15s}
+.icbtn:hover{background:var(--surface-2);border-color:var(--line);color:var(--accent)}
+.icbtn svg{width:18px;height:18px}
+.badge{position:absolute;top:-2px;right:-2px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;
+  background:var(--rust);color:#fff;font-size:9px;font-weight:700;display:grid;place-items:center;
+  border:1.5px solid #FCFDFE;font-family:var(--mono)}
+.avatar{display:flex;align-items:center;gap:9px;padding:4px 4px 4px 10px;border-radius:9px;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line)}
+.avatar-meta{display:flex;flex-direction:column;line-height:1.1;gap:2px;text-align:right}
+.avatar-meta b{font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:.3px}
+.avatar-meta span{font-size:9px;color:var(--ink-3);font-family:var(--head);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.pf{width:34px;height:34px;border-radius:8px;position:relative;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(150deg,#0FA0AC,#0B6FAE);box-shadow:0 2px 6px -2px rgba(11,111,174,.6)}
+.pf svg{width:20px;height:20px}
+.pf .lvl{position:absolute;bottom:-6px;right:-6px;font-size:8px;padding:1px 4px;
+  background:linear-gradient(180deg,#D8541C,#B23C0B)}
+
+/* ============ PALCO ============ */
+.stage{flex:1;display:flex;min-height:0;position:relative;background:var(--bg-1)}
+
+/* RAIL ESQUERDA */
+.rail{width:78px;flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 0;
+  background:linear-gradient(180deg,#FBFCFE,#EEF2F6);border-right:1px solid var(--line-2);
+  z-index:20;box-shadow:4px 0 16px -14px rgba(18,40,60,.6)}
+.rail .sysdot{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--rust);
+  background:color-mix(in srgb,var(--rust) 10%,#fff);border:1px solid color-mix(in srgb,var(--rust) 24%,#fff);margin-bottom:4px}
+.rail-div{width:40px;height:1px;background:var(--line-2);margin:2px 0 4px}
+.nav{width:60px;height:54px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  color:var(--ink-3);position:relative;transition:.15s;border:1px solid transparent}
+.nav svg{width:21px;height:21px}
+.nav span{font-family:var(--head);font-weight:600;font-size:8.5px;letter-spacing:.5px;text-transform:uppercase}
+.nav:hover{background:var(--surface-2);border-color:var(--line);color:var(--ink-2)}
+.nav.active{color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,#fff);border-color:color-mix(in srgb,var(--accent) 22%,#fff)}
+.nav.active::before{content:"";position:absolute;left:-9px;top:14px;bottom:14px;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,#0FA0AC,#0B6FAE)}
+.nav .nb{position:absolute;top:5px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--rust);border:1.5px solid #FCFDFE}
+.rail .grow{flex:1}
+
+/* ============ MAPA ============ */
+.map{flex:1;position:relative;overflow:hidden;background:var(--bg-1)}
+.map svg.terrain{position:absolute;inset:0;width:100%;height:100%}
+.routes{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.vignette{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 42%,transparent 55%,rgba(20,42,62,.10) 100%);
+  box-shadow:inset 0 14px 26px -18px rgba(18,40,60,.5)}
+
+/* nos de lote */
+.node{position:absolute;transform:translate(-50%,-50%);z-index:5;display:flex;flex-direction:column;align-items:center;gap:4px}
+.dot{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);
+  font-weight:700;font-size:14px;color:var(--ink);background:radial-gradient(circle at 35% 28%,#FFFFFF,#EAF0F5);
+  border:2px solid var(--line-2);box-shadow:0 4px 10px -4px rgba(18,40,60,.45),0 1px 0 rgba(255,255,255,.8) inset;
+  transition:.15s;position:relative}
+.node:hover .dot{transform:translateY(-2px) scale(1.06);box-shadow:0 8px 16px -6px rgba(18,40,60,.5)}
+.node .tag{font-family:var(--head);font-weight:600;font-size:9px;letter-spacing:.4px;color:var(--ink-3);
+  background:rgba(251,252,254,.85);padding:1px 6px;border-radius:5px;border:1px solid var(--line);white-space:nowrap;
+  backdrop-filter:blur(3px)}
+.n-owned .dot{border-color:var(--accent);box-shadow:0 0 0 4px rgba(11,111,174,.12),0 4px 10px -4px rgba(18,40,60,.45)}
+.n-owned .dot::after{content:"";position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;
+  background:var(--accent);border:1.5px solid #fff}
+.n-allied .dot{border-color:var(--accent-2);box-shadow:0 0 0 4px rgba(15,160,172,.12),0 4px 10px -4px rgba(18,40,60,.45)}
+.n-neutral .dot{border-color:var(--line-2);color:var(--ink-3)}
+.n-hostile .dot{border-color:var(--rust);background:radial-gradient(circle at 35% 28%,#fff,#FBEAE2);color:var(--rust)}
+.n-empty .dot{border-style:dashed;border-color:var(--ink-4);color:var(--ink-4);background:rgba(251,252,254,.6);font-size:18px}
+
+/* alerta hostil */
+.ping::before{content:"";position:absolute;width:42px;height:42px;border-radius:50%;border:2px solid var(--rust);
+  top:50%;left:50%;transform:translate(-50%,-50%);animation:ping 2s ease-out infinite}
+@keyframes ping{0%{width:42px;height:42px;opacity:.7}100%{width:78px;height:78px;opacity:0}}
+
+/* selecao */
+.selected .ring{position:absolute;width:60px;height:60px;border-radius:50%;top:21px;left:50%;transform:translateX(-50%);
+  border:1.5px dashed var(--accent);animation:spin 14s linear infinite}
+@keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+
+/* CAPITAL */
+.capital{position:absolute;transform:translate(-50%,-50%);z-index:6;display:flex;flex-direction:column;align-items:center;gap:6px}
+.cap-glow{position:absolute;width:120px;height:120px;border-radius:50%;top:-39px;left:50%;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(11,111,174,.18),transparent 68%);pointer-events:none}
+.cap-hex{width:64px;height:72px;display:grid;place-items:center;position:relative;color:var(--accent);
+  background:linear-gradient(160deg,#FFFFFF,#E9F1F7);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  box-shadow:0 8px 20px -6px rgba(18,40,60,.5)}
+.cap-hex::before{content:"";position:absolute;inset:2px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(160deg,#fff,#F2F7FB);border:0}
+.cap-hex::after{content:"";position:absolute;inset:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(160deg,rgba(11,111,174,.0),rgba(193,68,14,.10));mix-blend-mode:multiply}
+.cap-hex svg{width:30px;height:30px;position:relative;z-index:2;filter:drop-shadow(0 2px 3px rgba(11,111,174,.4))}
+.cap-frame{position:absolute;inset:-4px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(160deg,var(--accent),var(--rust));z-index:-1}
+.cap-label{font-family:var(--head);font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#fff;
+  background:linear-gradient(180deg,#0F7FC2,#0A5E92);padding:3px 12px;border-radius:6px;
+  box-shadow:0 3px 8px -3px rgba(11,111,174,.7),0 1px 0 rgba(255,255,255,.3) inset}
+
+/* timers flutuantes */
+.timer{position:absolute;transform:translate(-50%,-50%);z-index:7;display:flex;align-items:center;gap:8px;
+  background:rgba(251,252,254,.92);border:1px solid var(--line-2);border-radius:8px;padding:5px 10px;
+  box-shadow:0 6px 16px -8px rgba(18,40,60,.5);backdrop-filter:blur(4px);white-space:nowrap}
+.timer svg{width:14px;height:14px;flex:none}
+.timer .tl{font-family:var(--head);font-weight:600;font-size:10px;letter-spacing:.3px;color:var(--ink-2);text-transform:uppercase}
+.timer b{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.timer.build svg{color:var(--accent)} .timer.build b{color:var(--accent)}
+.timer.car svg{color:var(--rust)} .timer.car b{color:var(--rust)}
+
+/* ============ PAINEIS HUD ============ */
+.panel{position:absolute;z-index:12;background:linear-gradient(180deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line-2);border-radius:var(--r);box-shadow:var(--shadow)}
+.panel::before{content:"";position:absolute;top:-1px;left:-1px;width:13px;height:13px;
+  border-top:2px solid var(--accent);border-left:2px solid var(--accent);border-top-left-radius:var(--r)}
+.panel::after{content:"";position:absolute;bottom:-1px;right:-1px;width:13px;height:13px;
+  border-bottom:2px solid var(--rust);border-right:2px solid var(--rust);border-bottom-right-radius:var(--r)}
+.ph{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);position:relative}
+.ph::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--rust)}
+.ph h3{font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink)}
+.ph .sub{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-left:auto;font-variant-numeric:tabular-nums}
+
+/* painel: setor selecionado (sup. esquerda) */
+.sector{top:18px;left:18px;width:252px}
+.sector .ph::before{background:var(--accent)}
+.sector .body{padding:11px 12px 12px}
+.sec-name{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sec-name b{font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink)}
+.chip{font-family:var(--head);font-weight:700;font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;
+  padding:2px 7px;border-radius:5px}
+.chip.dom{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,#fff);border:1px solid color-mix(in srgb,var(--accent) 28%,#fff)}
+.coords{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.coords b{color:var(--ink-2)}
+.stat{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.stat .sl{font-family:var(--head);font-weight:600;font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--ink-3);width:64px;flex:none}
+.stat .sbar{flex:1;height:6px;border-radius:4px;background:#DCE5EC;overflow:hidden;border:1px solid #CCD8E1}
+.stat .sbar i{display:block;height:100%;border-radius:4px}
+.stat .sv{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink);width:42px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* RADAR (inf. esquerda) */
+.radar{bottom:18px;left:18px;width:196px}
+.radar .ph::before{background:var(--accent-2)}
+.radar .scope{margin:10px;height:138px;border-radius:6px;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 50% 50%,#EAF1F6,#DCE6EE);border:1px solid var(--line)}
+.radar .scope::before{content:"";position:absolute;inset:0;
+  background:
+   repeating-linear-gradient(0deg,transparent 0 17px,var(--grid) 17px 18px),
+   repeating-linear-gradient(90deg,transparent 0 17px,var(--grid) 17px 18px)}
+.scope .ring2{position:absolute;border:1px solid rgba(15,160,172,.35);border-radius:50%}
+.r1{width:60px;height:60px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.r2{width:108px;height:108px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.scope .cross{position:absolute;background:rgba(15,160,172,.3)}
+.cx{top:50%;left:8%;right:8%;height:1px}
+.cy{left:50%;top:8%;bottom:8%;width:1px}
+.scope .vp{position:absolute;width:46px;height:34px;border:1.5px solid var(--accent);border-radius:3px;
+  top:38%;left:40%;background:rgba(11,111,174,.08)}
+.rdot{position:absolute;width:6px;height:6px;border-radius:50%;transform:translate(-50%,-50%)}
+.scope .sweep{position:absolute;top:50%;left:50%;width:50%;height:2px;transform-origin:left center;
+  background:linear-gradient(90deg,rgba(15,160,172,.6),transparent);animation:sweep 4s linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+
+/* CONSTRUCAO (inf. direita) */
+.build-panel{bottom:18px;right:18px;width:344px}
+.build-panel .body{padding:11px 12px}
+.q{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;column-gap:10px;row-gap:7px;
+  padding:9px 0;border-bottom:1px dashed var(--line)}
+.q:first-child{padding-top:2px}
+.q-ic{grid-row:1/3;width:38px;height:38px;border-radius:8px;display:grid;place-items:center;align-self:center;color:var(--c);
+  background:color-mix(in srgb,var(--c) 12%,#fff);border:1px solid color-mix(in srgb,var(--c) 26%,#fff)}
+.q-ic svg{width:20px;height:20px}
+.q-top{display:flex;align-items:baseline;gap:7px}
+.q-name{font-family:var(--head);font-weight:700;font-size:13px;color:var(--ink)}
+.q-lv{font-family:var(--head);font-weight:600;font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);
+  background:#E8EEF3;padding:1px 6px;border-radius:4px;border:1px solid var(--line)}
+.q-time{grid-row:1;display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;gap:2px}
+.q-time .eta{font-family:var(--head);font-weight:600;font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-4)}
+.q-time b{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.q-bar{grid-column:2/4;height:7px;border-radius:4px;background:#DCE5EC;overflow:hidden;border:1px solid #CAD6E0;position:relative}
+.q-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#0FA0AC,#0B6FAE)}
+.q-bar.r i{background:linear-gradient(90deg,#E07B3C,#C1440E)}
+.build-foot{display:flex;align-items:center;gap:10px;margin-top:11px}
+.rush{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;height:38px;border-radius:8px;color:#fff;
+  font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;
+  background:linear-gradient(180deg,#0F84C8,#0A5E92);
+  box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 14px -6px rgba(11,111,174,.8);transition:.15s}
+.rush:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.rush svg{width:16px;height:16px}
+.cost{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;gap:2px}
+.cost span{font-family:var(--head);font-weight:600;font-size:8px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-4)}
+.cost b{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.cost b svg{width:13px;height:13px}
+
+/* controles de zoom (dir. centro) */
+.zoom{position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:12;display:flex;flex-direction:column;gap:6px;align-items:center}
+.zbtn{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;color:var(--ink-2);
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);
+  box-shadow:0 4px 12px -7px rgba(18,40,60,.6);transition:.15s}
+.zbtn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,#fff)}
+.zbtn svg{width:18px;height:18px}
+.compass{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 40% 35%,#fff,#E9F0F5);border:1px solid var(--line-2);color:var(--rust);
+  box-shadow:0 4px 12px -7px rgba(18,40,60,.6);position:relative;font-family:var(--head);font-weight:700;font-size:11px}
+.compass svg{position:absolute;width:34px;height:34px;color:var(--accent);opacity:.5}
+
+/* DOCK inferior */
+.dock{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:12;display:flex;align-items:center;gap:3px;
+  padding:6px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);
+  border-radius:11px;box-shadow:var(--shadow)}
+.dock .dg{width:7px;height:7px;border-radius:50%;background:var(--good);margin:0 7px 0 4px;box-shadow:0 0 0 3px rgba(21,145,88,.16)}
+.sc{width:46px;height:42px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:var(--ink-3);transition:.15s;position:relative;border:1px solid transparent}
+.sc:hover{background:var(--surface);border-color:var(--line);color:var(--accent)}
+.sc svg{width:18px;height:18px}
+.sc span{font-family:var(--head);font-weight:600;font-size:7.5px;letter-spacing:.4px;text-transform:uppercase}
+.sc .nb{position:absolute;top:4px;right:8px;min-width:13px;height:13px;padding:0 2px;border-radius:7px;background:var(--rust);
+  color:#fff;font-size:8px;font-weight:700;display:grid;place-items:center;border:1.5px solid var(--surface);font-family:var(--mono)}
+.dock .dsep{width:1px;height:30px;background:var(--line-2);margin:0 4px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== BARRA SUPERIOR ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg width="32" height="36" viewBox="0 0 32 36" fill="none">
+          <path d="M16 1.5 30 9v18L16 34.5 2 27V9z" fill="#0B6FAE"/>
+          <path d="M16 1.5 30 9v18L16 34.5 2 27V9z" fill="url(#g)" opacity=".5"/>
+          <path d="M16 8 24 12.5v9L16 26l-8-4.5v-9z" fill="#C1440E"/>
+          <path d="M16 13.5 19.5 15.5v4L16 21.5l-3.5-2v-4z" fill="#fff" opacity=".92"/>
+          <defs><linearGradient id="g" x1="2" y1="2" x2="30" y2="34"><stop stop-color="#23A6C9"/><stop offset="1" stop-color="#0B6FAE"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div class="brandtxt"><b>FERTWAYS</b><span>THE NEXT COLONY</span></div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="colony">
+      <div class="colony-top">
+        <span class="colony-name">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M5 20v-7a7 7 0 0 1 14 0v7"/><path d="M9 20v-5h6v5"/></svg>
+          Aether Nova
+        </span>
+        <span class="lvl">NÍVEL 14</span>
+      </div>
+      <div class="xp">
+        <div class="xp-bar"><i></i></div>
+        <small>8.420 / 12.000</small>
+      </div>
+    </div>
+
+    <div class="res-bar">
+      <div class="res">
+        <span class="res-ic" style="--c:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></span>
+        <span class="res-meta"><span class="res-label">Fert$</span><span class="res-vals">48.260<i>/90.000</i><em class="up">+1.240<u>/h</u></em></span></span>
+      </div>
+      <div class="res">
+        <span class="res-ic" style="--c:var(--accent-2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>
+        <span class="res-meta"><span class="res-label">Água</span><span class="res-vals">599<i>/800</i><em class="up">+11<u>/h</u></em></span></span>
+      </div>
+      <div class="res">
+        <span class="res-ic" style="--c:#5B7184"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h16l-2 5H6z"/><path d="M7 9h10l1.6 4H5.4z"/><path d="M9.5 5h5l1 3.5h-7z"/></svg></span>
+        <span class="res-meta"><span class="res-label">Metais Ferrosos</span><span class="res-vals">712<i>/800</i><em class="up">+24<u>/h</u></em></span></span>
+      </div>
+      <div class="res">
+        <span class="res-ic" style="--c:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+        <span class="res-meta"><span class="res-label">Biomassa</span><span class="res-vals">405<i>/800</i><em class="up">+8<u>/h</u></em></span></span>
+      </div>
+      <div class="res alert">
+        <span class="res-ic" style="--c:var(--warn)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <span class="res-meta"><span class="res-label">Energia</span><span class="res-vals">180<i>/600</i><em class="down">-20<u>/h</u></em></span></span>
+      </div>
+      <div class="res">
+        <span class="res-ic" style="--c:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></span>
+        <span class="res-meta"><span class="res-label">Componentes</span><span class="res-vals">96<i>/200</i><em class="up">+3<u>/h</u></em></span></span>
+      </div>
+    </div>
+
+    <div class="user">
+      <div class="tools">
+        <button class="icbtn" title="Notificações" aria-label="Notificações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge">3</span></button>
+        <button class="icbtn" title="Ajuda" aria-label="Ajuda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button>
+        <button class="icbtn" title="Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div class="sep"></div>
+      <div class="avatar">
+        <div class="avatar-meta"><b>Cmdr. Vale</b><span>Comandante</span></div>
+        <div class="pf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M19 21v-1a5 5 0 0 0-5-5h-4a5 5 0 0 0-5 5v1"/></svg><span class="lvl">14</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== PALCO ===================== -->
+  <div class="stage">
+
+    <!-- RAIL ESQUERDA -->
+    <nav class="rail">
+      <div class="sysdot" title="Menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
+      <div class="rail-div"></div>
+      <button class="nav active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><path d="M9 3v15M15 6v15"/></svg><span>Mapa</span></button>
+      <button class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M5 20v-7a7 7 0 0 1 14 0v7"/><path d="M9 20v-5h6v5"/></svg><span>Capital</span></button>
+      <button class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v11h16V9"/><path d="M3 4h18l1 5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M10 20v-5h4v5"/></svg><span>Mercado</span></button>
+      <button class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg><span>Espaçoporto</span></button>
+      <button class="nav"><span class="nb"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg><span>Federação</span></button>
+      <button class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span>Reputações</span></button>
+      <div class="grow"></div>
+      <button class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M5 5l2 2M17 17l2 2M2 12h3M19 12h3M5 19l2-2M17 7l2-2"/></svg><span>Painel</span></button>
+    </nav>
+
+    <!-- MAPA -->
+    <main class="map">
+
+      <!-- Terreno (CSS/SVG, sem imagens) -->
+      <svg class="terrain" viewBox="0 0 1364 840" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="terra" cx="48%" cy="44%" r="75%">
+            <stop offset="0%" stop-color="#F3EFEA"/>
+            <stop offset="42%" stop-color="#EAEDED"/>
+            <stop offset="100%" stop-color="#DBE4EB"/>
+          </radialGradient>
+          <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1" fill="rgba(40,72,102,.06)"/>
+          </pattern>
+          <radialGradient id="craterA" cx="40%" cy="35%" r="70%">
+            <stop offset="0%" stop-color="rgba(255,255,255,.6)"/>
+            <stop offset="100%" stop-color="rgba(130,150,165,.05)"/>
+          </radialGradient>
+        </defs>
+
+        <rect width="1364" height="840" fill="url(#terra)"/>
+        <rect width="1364" height="840" fill="url(#dots)"/>
+
+        <!-- patches de regiao (rust suave + gelo turquesa) -->
+        <path d="M 760 150 C 840 90, 990 95, 1090 165 C 1185 232, 1190 345, 1095 392 C 995 440, 845 425, 786 352 C 730 285, 690 215, 760 150 Z" fill="#C1440E" opacity=".07"/>
+        <path d="M 110 540 C 215 495, 365 515, 428 600 C 482 672, 432 768, 326 788 C 212 808, 104 742, 90 658 C 80 596, 62 580, 110 540 Z" fill="#0FA0AC" opacity=".06"/>
+        <path d="M 600 660 C 690 615, 815 628, 866 692 C 908 745, 866 806, 770 810 C 676 814, 602 772, 592 720 C 587 694, 575 680, 600 660 Z" fill="#C1440E" opacity=".05"/>
+
+        <!-- linhas topograficas (contornos) -->
+        <g fill="none" stroke="rgba(70,96,118,.16)" stroke-width="1.2">
+          <path d="M 560 372 C 640 338, 760 348, 800 408 C 832 456, 800 522, 712 536 C 624 550, 540 512, 524 452 C 512 410, 510 396, 560 372 Z"/>
+          <path d="M 520 348 C 624 300, 792 312, 846 392 C 888 454, 846 542, 730 562 C 614 582, 500 532, 480 452 C 466 396, 456 374, 520 348 Z"/>
+          <path d="M 478 322 C 606 262, 824 276, 892 376 C 944 452, 892 562, 748 588 C 604 614, 460 552, 436 452 C 418 382, 398 354, 478 322 Z"/>
+        </g>
+        <g fill="none" stroke="rgba(70,96,118,.13)" stroke-width="1.1">
+          <ellipse cx="1080" cy="560" rx="92" ry="64" transform="rotate(-16 1080 560)"/>
+          <ellipse cx="1080" cy="560" rx="62" ry="42" transform="rotate(-16 1080 560)"/>
+          <ellipse cx="240" cy="280" rx="70" ry="50" transform="rotate(12 240 280)"/>
+          <ellipse cx="240" cy="280" rx="44" ry="30" transform="rotate(12 240 280)"/>
+        </g>
+
+        <!-- crateras com leve relevo -->
+        <circle cx="1112" cy="270" r="58" fill="url(#craterA)" stroke="rgba(70,96,118,.18)" stroke-width="1.2"/>
+        <circle cx="1112" cy="270" r="40" fill="none" stroke="rgba(70,96,118,.14)"/>
+        <circle cx="180" cy="660" r="46" fill="url(#craterA)" stroke="rgba(70,96,118,.18)" stroke-width="1.2"/>
+
+        <!-- grade de setores -->
+        <g stroke="rgba(70,96,118,.09)" stroke-width="1">
+          <line x1="341" y1="0" x2="341" y2="840"/>
+          <line x1="682" y1="0" x2="682" y2="840"/>
+          <line x1="1023" y1="0" x2="1023" y2="840"/>
+          <line x1="0" y1="210" x2="1364" y2="210"/>
+          <line x1="0" y1="420" x2="1364" y2="420"/>
+          <line x1="0" y1="630" x2="1364" y2="630"/>
+        </g>
+        <g fill="rgba(103,128,143,.6)" font-family="'JetBrains Mono',monospace" font-size="10">
+          <text x="348" y="20">X·420</text>
+          <text x="689" y="20">X·560</text>
+          <text x="1030" y="20">X·700</text>
+          <text x="8" y="206">Y·300</text>
+          <text x="8" y="416">Y·220</text>
+          <text x="8" y="626">Y·140</text>
+        </g>
+      </svg>
+
+      <!-- rotas de suprimento (alinhadas por %) -->
+      <svg class="routes" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <g stroke="#0B6FAE" stroke-opacity=".40" stroke-width="1.4" fill="none" stroke-dasharray="3 2.4" vector-effect="non-scaling-stroke">
+          <line x1="47" y1="49" x2="30" y2="27"/>
+          <line x1="47" y1="49" x2="33" y2="44"/>
+          <line x1="47" y1="49" x2="24" y2="53"/>
+          <line x1="47" y1="49" x2="50" y2="21"/>
+        </g>
+        <line x1="47" y1="49" x2="60" y2="65" stroke="#C1440E" stroke-opacity=".75" stroke-width="2"
+          fill="none" stroke-dasharray="4 3" vector-effect="non-scaling-stroke">
+          <animate attributeName="stroke-dashoffset" from="7" to="0" dur="0.7s" repeatCount="indefinite"/>
+        </line>
+      </svg>
+
+      <div class="vignette"></div>
+
+      <!-- NOS DE LOTE -->
+      <div class="node n-allied" style="left:50%;top:21%"><span class="dot">02</span><span class="tag">Pacto Helios</span></div>
+      <div class="node n-owned" style="left:30%;top:27%"><span class="dot">12</span><span class="tag">Borda Norte</span></div>
+      <div class="node n-allied" style="left:65%;top:24%"><span class="dot">07</span></div>
+      <div class="node n-neutral" style="left:84%;top:33%"><span class="dot">26</span></div>
+      <div class="node n-neutral" style="left:73%;top:43%"><span class="dot">21</span></div>
+      <div class="node n-owned" style="left:33%;top:44%"><span class="dot">15</span><span class="tag">Mina Talos</span></div>
+      <div class="node n-owned selected" style="left:24%;top:53%"><span class="ring"></span><span class="dot">09</span><span class="tag">Vallis Aurora</span></div>
+      <div class="node n-owned" style="left:60%;top:65%"><span class="dot">04</span><span class="tag">Posto Sigma</span></div>
+      <div class="node n-hostile ping" style="left:39%;top:71%"><span class="dot">33</span><span class="tag">Hostil · Krell</span></div>
+      <div class="node n-neutral" style="left:80%;top:61%"><span class="dot">18</span></div>
+      <div class="node n-empty" style="left:66%;top:79%"><span class="dot">+</span><span class="tag">Colonizável</span></div>
+
+      <!-- CAPITAL -->
+      <div class="capital" style="left:47%;top:49%">
+        <div class="cap-glow"></div>
+        <div class="cap-hex">
+          <div class="cap-frame"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"/><path d="M5 21v-9a7 7 0 0 1 14 0v9"/><path d="M9 21v-6h6v6"/><path d="M12 5V2"/><circle cx="12" cy="2" r="1.1" fill="currentColor"/></svg>
+        </div>
+        <span class="cap-label">Capital</span>
+      </div>
+
+      <!-- TIMERS FLUTUANTES -->
+      <div class="timer build" style="left:47%;top:39%">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span class="tl">Cúpula de Comando</span><b id="captimer">00:00:31</b>
+      </div>
+      <div class="timer car" style="left:53%;top:57.5%">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M14 9h4l4 4v4a1 1 0 0 1-1 1h-1"/><circle cx="7.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/></svg>
+        <span class="tl">Caravana</span><b>02:14:08</b>
+      </div>
+
+      <!-- PAINEL: SETOR SELECIONADO -->
+      <section class="panel sector">
+        <div class="ph"><h3>Setor 09</h3><span class="sub">SEL · LOCK</span></div>
+        <div class="body">
+          <div class="sec-name"><b>Vallis Aurora</b><span class="chip dom">Domínio</span></div>
+          <div class="coords">COORD <b>X 412</b> · <b>Y 287</b> &nbsp;|&nbsp; SOLO <b>Basalto</b></div>
+          <div class="stat"><span class="sl">Defesa</span><span class="sbar"><i style="width:74%;background:linear-gradient(90deg,#0FA0AC,#0B6FAE)"></i></span><span class="sv">7.420</span></div>
+          <div class="stat"><span class="sl">População</span><span class="sbar"><i style="width:58%;background:linear-gradient(90deg,#3FA76A,#159158)"></i></span><span class="sv">5.890</span></div>
+          <div class="stat"><span class="sl">Lealdade</span><span class="sbar"><i style="width:92%;background:linear-gradient(90deg,#E0A93C,#C1440E)"></i></span><span class="sv">92%</span></div>
+        </div>
+      </section>
+
+      <!-- RADAR / MINIMAPA -->
+      <section class="panel radar">
+        <div class="ph"><h3>Radar</h3><span class="sub">AETHER · Q-3</span></div>
+        <div class="scope">
+          <div class="cross cx"></div><div class="cross cy"></div>
+          <div class="ring2 r1"></div><div class="ring2 r2"></div>
+          <div class="sweep"></div>
+          <div class="vp"></div>
+          <div class="rdot" style="left:50%;top:49%;background:#0B6FAE;box-shadow:0 0 0 2px rgba(11,111,174,.25)"></div>
+          <div class="rdot" style="left:32%;top:33%;background:#0B6FAE"></div>
+          <div class="rdot" style="left:40%;top:54%;background:#0B6FAE"></div>
+          <div class="rdot" style="left:64%;top:42%;background:#0FA0AC"></div>
+          <div class="rdot" style="left:43%;top:70%;background:#C1440E;box-shadow:0 0 0 2px rgba(193,68,14,.22)"></div>
+          <div class="rdot" style="left:72%;top:62%;background:#94A7B5"></div>
+        </div>
+      </section>
+
+      <!-- PAINEL: CONSTRUCAO EM ANDAMENTO -->
+      <section class="panel build-panel">
+        <div class="ph"><h3>Construção em andamento</h3><span class="sub">FILA 2/5</span></div>
+        <div class="body">
+          <div class="q">
+            <span class="q-ic" style="--c:var(--rust)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span>
+            <div class="q-top"><span class="q-name">Reator de Fusão</span><span class="q-lv">Nível 3</span></div>
+            <div class="q-time"><span class="eta">Restante</span><b id="captimer2">00:00:31</b></div>
+            <div class="q-bar r"><i id="capbar" style="width:67%"></i></div>
+          </div>
+          <div class="q">
+            <span class="q-ic" style="--c:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+            <div class="q-top"><span class="q-name">Domo Hidropônico</span><span class="q-lv">Nível 5</span></div>
+            <div class="q-time"><span class="eta">Restante</span><b>01:42:10</b></div>
+            <div class="q-bar"><i style="width:28%"></i></div>
+          </div>
+          <div class="build-foot">
+            <button class="rush"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>Concluir agora</button>
+            <div class="cost"><span>Custo</span><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/></svg>120</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROLES DE ZOOM / BUSSOLA -->
+      <div class="zoom">
+        <button class="zbtn" title="Aproximar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="zbtn" title="Centralizar na Capital"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
+        <button class="zbtn" title="Afastar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></button>
+        <div class="compass" title="Norte">N<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+      </div>
+
+      <!-- DOCK INFERIOR (atalhos) -->
+      <div class="dock">
+        <span class="dg" title="Online"></span>
+        <button class="sc" title="Mensagens"><span class="nb">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg><span>Correio</span></button>
+        <button class="sc" title="Missões"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg><span>Missões</span></button>
+        <button class="sc" title="Pesquisa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L14 9.5V3"/><path d="M7 15h10"/></svg><span>Pesquisa</span></button>
+        <div class="dsep"></div>
+        <button class="sc" title="Ranking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span>Ranking</span></button>
+        <button class="sc" title="Eventos"><span class="nb">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Eventos</span></button>
+        <button class="sc" title="Diário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Diário</span></button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var total = 95, s = 31;
+    var t1 = document.getElementById('captimer');
+    var t2 = document.getElementById('captimer2');
+    var bar = document.getElementById('capbar');
+    function fmt(v){
+      var m = String(Math.floor(v/60)).padStart(2,'0');
+      var sec = String(v%60).padStart(2,'0');
+      return '00:'+m+':'+sec;
+    }
+    function tick(){
+      s -= 1;
+      if(s < 0){ s = total; }
+      var label = fmt(s);
+      t1.textContent = label;
+      t2.textContent = label;
+      bar.style.width = (((total - s)/total)*100).toFixed(0)+'%';
+    }
+    setInterval(tick, 1000);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+/* Solar Frontier — estilo de relatório de entrega (print A4). */
+@page {
+  size: A4;
+  margin: 16mm 14mm 18mm 14mm;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color: #2A2118;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  margin: 0;
+}
+
+h1, h2, h3 { font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+
+/* Cabeçalho do relatório */
+.cover {
+  background: linear-gradient(110deg, #C1440E 0%, #E8941E 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+.cover .kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 8.5pt;
+  font-weight: 700;
+  opacity: 0.92;
+}
+.cover h1 {
+  margin: 6px 0 2px;
+  font-size: 20pt;
+  font-weight: 800;
+  line-height: 1.05;
+}
+.cover .sub { font-size: 10pt; opacity: 0.95; }
+.cover .meta {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 8.5pt;
+}
+.cover .meta b { font-weight: 700; }
+
+/* Selo de status */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-size: 8pt;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.badge.ok { background: rgba(37,122,85,0.14); color: #1A4D38; border: 1px solid rgba(37,122,85,0.4); }
+.badge.debt { background: rgba(232,148,30,0.16); color: #97600D; border: 1px solid rgba(232,148,30,0.45); }
+.badge.invert { background: rgba(255,255,255,0.18); color: #fff; }
+
+h2 {
+  font-size: 12.5pt;
+  color: #C1440E;
+  margin: 20px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #EFEAE0;
+}
+h3 { font-size: 10.5pt; color: #4B4034; margin: 14px 0 5px; }
+
+p { margin: 6px 0; }
+ul { margin: 6px 0; padding-left: 18px; }
+li { margin: 3px 0; }
+
+.lead { font-size: 11pt; color: #4B4034; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 12px;
+  font-size: 9pt;
+}
+th, td {
+  text-align: left;
+  padding: 6px 9px;
+  border-bottom: 1px solid #EFEAE0;
+  vertical-align: top;
+}
+th {
+  background: #F7F6F3;
+  color: #6E6151;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-size: 7.8pt;
+  font-weight: 700;
+}
+tr td { color: #2A2118; }
+code, .mono {
+  font-family: "SF Mono", "Roboto Mono", Menlo, monospace;
+  font-size: 8.4pt;
+  background: #F2EFE9;
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: #7C2C0C;
+}
+
+.cards { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+.card {
+  flex: 1 1 150px;
+  border: 1px solid #EFEAE0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #FBFAF7;
+}
+.card .n { font-size: 17pt; font-weight: 800; color: #C1440E; line-height: 1; }
+.card .l { font-size: 8.2pt; color: #6E6151; margin-top: 3px; }
+
+.dod { list-style: none; padding-left: 0; }
+.dod li { padding-left: 22px; position: relative; }
+.dod li::before {
+  content: "✓";
+  position: absolute; left: 0;
+  color: #257A55; font-weight: 800;
+}
+
+.note {
+  background: #F7F6F3;
+  border-left: 3px solid #E8941E;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 9pt;
+  color: #4B4034;
+  margin: 10px 0;
+}
+
+footer {
+  margin-top: 22px;
+  padding-top: 8px;
+  border-top: 1px solid #EFEAE0;
+  font-size: 8pt;
+  color: #917F66;
+  display: flex;
+  justify-content: space-between;
+}
+.section { page-break-inside: avoid; }

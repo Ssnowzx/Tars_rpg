@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório Marco A</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>Marco A — Navegação Principal Completa</h1>
+  <div class="sub">Fundação (F1–F7) + Bloco A (A1–A4) + Ranking de Guerras §15 <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD base:</b> v24</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Stack:</b> Flutter + Flame · Riverpod · go_router</span>
+  </div>
+</div>
+
+<p class="lead">Objetivo do marco: zerar todos os <code>PlaceholderScreen</code> — app 100% navegável,
+sem stubs, com tema, shell adaptativo, mapa do planeta em Flame e as cinco abas principais
+(Mapa · Capital · Mercado · Espaçoporto · Perfil) ligadas a dados mock atrás de interfaces de repositório.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">7</div><div class="l">itens de fundação (F1–F7)</div></div>
+  <div class="card"><div class="n">5</div><div class="l">abas principais navegáveis</div></div>
+  <div class="card"><div class="n">9</div><div class="l">rotas vivas</div></div>
+  <div class="card"><div class="n">0</div><div class="l">placeholders restantes</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<table>
+  <thead><tr><th>Item</th><th>Descrição</th><th>GDD</th></tr></thead>
+  <tbody>
+    <tr><td>F1</td><td>Tema/tokens "Solar Frontier" (claro/quente), tokens DTCG espelhados, contraste AA</td><td>—</td></tr>
+    <tr><td>F2</td><td>Shell adaptativo (NavigationRail + bottom action bar) + go_router (StatefulShellRoute)</td><td>—</td></tr>
+    <tr><td>F3/F7</td><td>Mapa-PLANETA (macro MMO) em Flame: colônias, zonas neutras, espaçoporto, marcos; bioma por região; câmera cover + trava; pan/zoom/tap</td><td>—</td></tr>
+    <tr><td>F4</td><td>HUD de recursos (barra superior: Fert$ + recursos)</td><td>§18</td></tr>
+    <tr><td>F5</td><td>Capital — grid dos 20 slots de instituição de governo</td><td>§2.1</td></tr>
+    <tr><td>F6</td><td>i18n base pt/es/en (ARB)</td><td>—</td></tr>
+    <tr><td>A1</td><td>Mercado Central: tickers dos recursos, filtros, ordens compra/venda, sinal de risco (reputação)</td><td>§13 / §8</td></tr>
+    <tr><td>A2</td><td>Espaçoporto: 5 planetas NPC (distância, risco, exporta/importa, enviar carga)</td><td>§3</td></tr>
+    <tr><td>A3</td><td>Perfil público: avatar, ★0–5, nível/XP, escada de progressão 1–100, estatísticas</td><td>§5 / §8</td></tr>
+    <tr><td>A4</td><td>Reconciliação ao GDD v24: +Oxigênio, "Ligas Metálicas", produção pela fórmula §19, preços §22</td><td>§18–§22</td></tr>
+    <tr><td>§15</td><td>Ranking de Guerras: Ranking Geral (pesos §15.3) + 6 sub-rankings (§15.2)</td><td>§15</td></tr>
+  </tbody>
+</table>
+
+<h2>Rotas e seam de repositório</h2>
+<table>
+  <thead><tr><th>Rota</th><th>Tela</th><th>Repositório / fixture</th></tr></thead>
+  <tbody>
+    <tr><td><code>/map</code></td><td>Mapa-Planeta (Flame)</td><td>WorldRepository · planet.json</td></tr>
+    <tr><td><code>/capital</code></td><td>Capital — 20 slots</td><td>CapitalRepository · capital.json</td></tr>
+    <tr><td><code>/capital/rankings</code></td><td>Ranking de Guerras</td><td>RankingRepository · rankings.json</td></tr>
+    <tr><td><code>/market</code></td><td>Mercado Central</td><td>MarketRepository · market.json</td></tr>
+    <tr><td><code>/spaceport</code></td><td>Espaçoporto</td><td>SpaceportRepository · spaceport.json</td></tr>
+    <tr><td><code>/profile</code></td><td>Perfil público</td><td>ProfileRepository · profile.json</td></tr>
+    <tr><td>HUD</td><td>Barra de recursos</td><td>resourcesProvider · player.json</td></tr>
+  </tbody>
+</table>
+
+<h2>Arquitetura</h2>
+<p>Seam de repositório em três camadas: <code>domain/repositories/*</code> (interface) →
+<code>data/mock/mock_*</code> (lê <code>assets/fixtures/*.json</code>, simula latência) →
+<code>data/providers.dart</code> (binding Riverpod). Trocar mock por API real = mudar só o binding.
+Telas em Flame usam câmera <em>cover</em> (terreno preenche o frame) + <code>_clamp()</code> (pan travado).</p>
+
+<h2>Definition of Done</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Seam de repositório completo (interface + mock + fixture + provider) por tela</li>
+  <li>Estados explícitos loading / empty / error / sucesso</li>
+  <li>Tokens <code>DsTokens</code>/Theme — sem cores/spacing cravados; sem emoji (ícones Material)</li>
+  <li>Integração à navegação go_router + HUD compartilhado</li>
+</ul>
+
+<div class="note"><b>Marco atingido:</b> navegação principal completa, sem placeholders. Base pronta
+para o aprofundamento do Bloco B. <b>Dívidas conhecidas:</b> <span class="badge debt">i18n</span>
+telas em pt hard-coded (ARB só na base) · produção/consumo dinâmicos · ações mock (SnackBar).</p></div>
+
+<footer><span>Fertways — Relatório de Entrega · Marco A</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "colony": {
+    "name": "Colônia Ares Prime",
+    "sector": "Setor 04",
+    "level": 14,
+    "xp": 8420,
+    "xpMax": 12000
+  },
+  "plots": [
+    { "id": "p-olympus", "name": "Fábrica Olympus", "kind": "factory", "level": 7, "dx": 0,    "dy": -210 },
+    { "id": "p-tharsis", "name": "Aquífero Tharsis", "kind": "water",   "level": 6, "dx": -240, "dy": -118 },
+    { "id": "p-borealis","name": "Mina Borealis",   "kind": "metals",  "level": 5, "dx": 250,  "dy": -150 },
+    { "id": "p-solar",   "name": "Campo Solar",     "kind": "energy",  "level": 3, "dx": -165, "dy": 205 },
+    { "id": "p-elysium", "name": "Estufa Elysium",  "kind": "biomass", "level": 8, "dx": 205,  "dy": 200 },
+    { "id": "p-free",    "name": "Lote livre",      "kind": "empty",   "level": 0, "dx": 340,  "dy": 35, "connected": false }
+  ],
+  "construction": [
+    { "id": "c-1", "name": "Coletor Solar",       "kind": "energy", "fromLevel": 3, "toLevel": 4, "remaining": "00:00:31", "progress": 0.55 },
+    { "id": "c-2", "name": "Reservatório de Água", "kind": "water",  "fromLevel": 6, "toLevel": 7, "remaining": "00:14:07", "progress": 0.2 }
+  ]
+}

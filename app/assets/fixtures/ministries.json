@@ -1,0 +1,139 @@
+{
+  "treasury": {
+    "balanceFert": 184250.0,
+    "pib": 1240000.0,
+    "dailyRevenue": 8420.0,
+    "dailyExpense": 5130.0,
+    "lines": [
+      { "label": "Tributos do comércio informal", "amount": 3120.0, "inflow": true },
+      { "label": "Taxas de estacionamento de caminhões", "amount": 940.0, "inflow": true },
+      { "label": "Aluguel de cargueiros interplanetários", "amount": 2360.0, "inflow": true },
+      { "label": "Taxas do Mercado Central", "amount": 2000.0, "inflow": true },
+      { "label": "Salários de cargos públicos", "amount": 1850.0, "inflow": false },
+      { "label": "Recompensas de missões e eventos", "amount": 1480.0, "inflow": false },
+      { "label": "Manutenção das instituições da Capital", "amount": 1800.0, "inflow": false }
+    ]
+  },
+  "tributes": {
+    "primaryRate": 3,
+    "secondaryRate": 2,
+    "rareRate": 1,
+    "federationExemption": "Isento até 35% da produção diária entre membros da mesma federação.",
+    "collectedToday": 3120.0,
+    "redistributedToday": 2100.0,
+    "recent": [
+      { "trader": "Colono A — Setor F-07", "resource": "Água", "tier": "Primário", "rate": 3, "volume": "1.200", "tax": 36 },
+      { "trader": "Colono D — Setor K-14", "resource": "Ligas Metálicas", "tier": "Secundário", "rate": 2, "volume": "800", "tax": 16 },
+      { "trader": "Colono M — Setor B-22", "resource": "Biomassa", "tier": "Primário", "rate": 3, "volume": "2.400", "tax": 72 },
+      { "trader": "Colono R — Setor F-07", "resource": "Háfnio", "tier": "Raro", "rate": 1, "volume": "60", "tax": 1 },
+      { "trader": "Colono S — Setor H-09", "resource": "Energia", "tier": "Primário", "rate": 3, "volume": "1.500", "tax": 45 }
+    ]
+  },
+  "research": {
+    "gagarinActive": true,
+    "gagarinTrigger": "Ativa com 50 jogadores cadastrados OU 45 dias de jogo — o que ocorrer primeiro.",
+    "gagarinFrequency": "Publica observações a cada 2 a 4 dias.",
+    "feed": [
+      {
+        "category": "gagarin",
+        "title": "Anomalia atmosférica detectada sobre Tharsis",
+        "body": "O Telescópio Gagarin registrou queda de pressão e traços de gás raro na alta atmosfera. Recursos detectados em análise.",
+        "day": "Dia 1.248"
+      },
+      {
+        "category": "gagarin",
+        "title": "Leitura das 8 luas — ciclo orbital",
+        "body": "Dados atmosféricos das luas Ares e Fobos atualizados. Indícios de minerais raros compatíveis com bases T2.",
+        "day": "Dia 1.246"
+      },
+      {
+        "category": "event",
+        "title": "Evento: Tempestade Solar (48h)",
+        "body": "Produção de Energia recebe +15% durante o evento. Painéis solares operam em sobrecarga controlada.",
+        "day": "Dia 1.245"
+      },
+      {
+        "category": "official",
+        "title": "Comunicado oficial: nova rota ao planeta Solène",
+        "body": "Missão de reconhecimento da Administração Pública concluída. Rota liberada no Espaçoporto.",
+        "day": "Dia 1.243"
+      }
+    ]
+  },
+  "administration": {
+    "laws": [
+      { "title": "Lei de Comércio Justo", "detail": "Calote acima de 3 ocorrências em 7 dias gera restrição comercial automática." },
+      { "title": "Lei de Transparência Tributária", "detail": "Toda saída de recursos é tributada na origem (3% / 2% / 1%)." },
+      { "title": "Lei de Cargos Neutros", "detail": "Cargos públicos exigem status de Neutro Registrado e reputação mínima." }
+    ],
+    "punishments": [
+      { "target": "Colono #20194 — Setor J-03", "reason": "Calote confirmado (3 negociações)", "penalty": "Restrição comercial — 7 dias" },
+      { "target": "Colono #18820 — Setor C-11", "reason": "Spam de avaliações falsas", "penalty": "Persona Non Grata em leilões" }
+    ],
+    "rewards": [
+      { "target": "Federação Aurora Vermelha", "reason": "Top 35% em terraformação global", "reward": "Bônus de 1.200 Fert$ ao tesouro da federação" },
+      { "target": "Colono #18402 — Setor F-07", "reason": "10 missões diárias concluídas", "reward": "Elegível a cargo público" }
+    ],
+    "offices": [
+      { "title": "Conciliador", "institution": "Ministério das Reputações", "salary": "50 Fert$/dia + 3 Fert$/denúncia" },
+      { "title": "Fiscal de Mercado", "institution": "Mercado Central", "salary": "Salário fixo/dia + bônus por irregularidade" },
+      { "title": "Atendente do Espaçoporto", "institution": "Espaçoporto", "salary": "Salário fixo/dia + bônus por atendimento" },
+      { "title": "Repórter", "institution": "Central de Pesquisas e Notícias", "salary": "Salário fixo/dia + bônus por matéria" },
+      { "title": "Auxiliar de Tesouro", "institution": "Secretaria de Finanças e Tesouro", "salary": "Salário fixo/dia + bônus por inconsistência" }
+    ]
+  },
+  "security": {
+    "wars": [
+      { "attacker": "Federação Aurora Vermelha", "defender": "Federação Núcleo Frio", "status": "Em curso", "day": "Dia 1.245" },
+      { "attacker": "Colono #18402 — F-07", "defender": "Zona Neutra L-31", "status": "Cerco", "day": "Dia 1.247" }
+    ],
+    "treaties": [
+      { "parties": "Aurora Vermelha ✕ Bandeira Solar", "type": "Não-agressão", "status": "Validado" },
+      { "parties": "Núcleo Frio ✕ Rota das Forjas", "type": "Comércio livre", "status": "Em validação" }
+    ]
+  },
+  "parking": {
+    "totalSlots": 20,
+    "occupied": 13,
+    "hourlyFee": 12,
+    "slots": [
+      { "plate": "FW-07429-F", "owner": "Colono #18402 — F-07", "cargo": "Ligas Metálicas", "hoursWaiting": 4, "fee": 48 },
+      { "plate": "FW-03318-C", "owner": "Colono #20194 — J-03", "cargo": "Biomassa", "hoursWaiting": 2, "fee": 24 },
+      { "plate": "FW-11920-K", "owner": "Colono #15770 — K-14", "cargo": "Componentes", "hoursWaiting": 9, "fee": 108 },
+      { "plate": "FW-08841-B", "owner": "Colono #19002 — B-22", "cargo": "Água", "hoursWaiting": 1, "fee": 12 }
+    ]
+  },
+  "transport": {
+    "registry": [
+      { "plate": "FW-07429-F", "type": "Furgão de Comércio", "owner": "Colono #18402 — F-07", "buildDay": "Dia 1.247", "activeHours": 312, "condition": 78, "maintenances": 3, "resaleValue": 680, "status": "Disponível para venda" },
+      { "plate": "FW-03318-C", "type": "Caminhão de Carga", "owner": "Colono #20194 — J-03", "buildDay": "Dia 1.180", "activeHours": 940, "condition": 41, "maintenances": 6, "resaleValue": 1240, "status": "Manutenção recomendada" },
+      { "plate": "FW-22014-D", "type": "Drone de Exploração", "owner": "Colono #15770 — K-14", "buildDay": "Dia 1.230", "activeHours": 0, "condition": 100, "maintenances": 0, "resaleValue": 420, "status": "Sem desgaste por uso" },
+      { "plate": "FW-09980-A", "type": "Caminhão de Carga", "owner": "Colono #19002 — B-22", "buildDay": "Dia 1.255", "activeHours": 88, "condition": 92, "maintenances": 0, "resaleValue": 1980, "status": "Em operação" }
+    ]
+  },
+  "depot": {
+    "lines": [
+      { "resource": "Oxigênio", "stored": 4200, "capacity": 8000 },
+      { "resource": "Água", "stored": 6100, "capacity": 8000 },
+      { "resource": "Biomassa", "stored": 3300, "capacity": 8000 },
+      { "resource": "Energia", "stored": 7400, "capacity": 8000 },
+      { "resource": "Ligas Metálicas", "stored": 1900, "capacity": 5000 },
+      { "resource": "Componentes Eletrônicos", "stored": 720, "capacity": 5000 }
+    ]
+  },
+  "centralTransport": {
+    "currentLevel": 2,
+    "levels": [
+      { "level": 1, "trucks": 1, "energy": 22 },
+      { "level": 2, "trucks": 2, "energy": 33 },
+      { "level": 3, "trucks": 3, "energy": 50 },
+      { "level": 4, "trucks": 4, "energy": 74 },
+      { "level": 5, "trucks": 5, "energy": 111 },
+      { "level": 6, "trucks": 6, "energy": 167 },
+      { "level": 7, "trucks": 7, "energy": 251 },
+      { "level": 8, "trucks": 8, "energy": 376 },
+      { "level": 9, "trucks": 9, "energy": 564 },
+      { "level": 10, "trucks": 10, "energy": 847 }
+    ]
+  }
+}

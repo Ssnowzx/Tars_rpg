@@ -1,0 +1,23 @@
+{
+  "id": "colono-18402",
+  "displayName": "Cmdt. Vale",
+  "sector": "F-07",
+  "level": 14,
+  "title": "Pioneiro",
+  "rating": 4.7,
+  "ratingCount": 23,
+  "resources": {
+    "fertCoins": 14280,
+    "fertPerHour": 186,
+    "stocks": [
+      { "id": "oxygen", "label": "Oxigênio", "amount": 7820, "capacity": 12000, "perHour": 88, "tier": "primary" },
+      { "id": "water", "label": "Água", "amount": 6420, "capacity": 9000, "perHour": 54, "tier": "primary" },
+      { "id": "biomass", "label": "Biomassa", "amount": 4880, "capacity": 7500, "perHour": 22, "tier": "primary" },
+      { "id": "energy", "label": "Energia", "amount": 488, "capacity": 900, "perHour": 96, "tier": "primary" },
+      { "id": "metalore", "label": "Metal Bruto", "amount": 2640, "capacity": 5000, "perHour": 34, "tier": "secondary" },
+      { "id": "alloys", "label": "Ligas Metálicas", "amount": 3120, "capacity": 6000, "perHour": 38, "tier": "secondary" },
+      { "id": "biofuel", "label": "Biocombustível", "amount": 910, "capacity": 3000, "perHour": 30, "tier": "secondary" },
+      { "id": "electronics", "label": "Componentes Eletrônicos", "amount": 1940, "capacity": 3000, "perHour": 9, "tier": "secondary" }
+    ]
+  }
+}

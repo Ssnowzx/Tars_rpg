@@ -1,0 +1,111 @@
+{
+  "taxRates": { "primary": 3, "secondary": 2, "rare": 1 },
+  "federationExemption": "Isento até 35% da produção diária entre membros da mesma federação.",
+  "offers": [
+    {
+      "id": "of1",
+      "trader": "Colono B",
+      "sector": "K-14",
+      "rating": 4.7,
+      "ratings": 23,
+      "commercialTrust": 780,
+      "distanceSlots": 8,
+      "deals": 41,
+      "successRate": 98,
+      "scams": 0,
+      "give": { "resourceId": "alloys", "label": "Ligas Metálicas", "qty": 120, "tier": "secondary" },
+      "want": { "resourceId": "water", "label": "Água", "qty": 50, "tier": "primary" },
+      "federation": "Aurora Vermelha",
+      "sameFederation": true,
+      "note": "Troca rápida, envio na hora após receber."
+    },
+    {
+      "id": "of2",
+      "trader": "Colono H",
+      "sector": "B-22",
+      "rating": 4.2,
+      "ratings": 11,
+      "commercialTrust": 640,
+      "distanceSlots": 22,
+      "deals": 18,
+      "successRate": 94,
+      "scams": 1,
+      "give": { "resourceId": "biomass", "label": "Biomassa", "qty": 300, "tier": "primary" },
+      "want": { "resourceId": "energy", "label": "Energia", "qty": 180, "tier": "primary" },
+      "note": "Procuro energia para o reator. Aceito parcelar."
+    },
+    {
+      "id": "of3",
+      "trader": "Colono Z",
+      "sector": "J-03",
+      "rating": 2.1,
+      "ratings": 9,
+      "commercialTrust": 210,
+      "distanceSlots": 41,
+      "deals": 14,
+      "successRate": 57,
+      "scams": 4,
+      "give": { "resourceId": "electronics", "label": "Componentes Eletrônicos", "qty": 40, "tier": "secondary" },
+      "want": { "resourceId": "alloys", "label": "Ligas Metálicas", "qty": 90, "tier": "secondary" },
+      "note": "Preço abaixo do mercado. Envie primeiro."
+    },
+    {
+      "id": "of4",
+      "trader": "Colono M",
+      "sector": "H-09",
+      "rating": 5.0,
+      "ratings": 37,
+      "commercialTrust": 940,
+      "distanceSlots": 15,
+      "deals": 62,
+      "successRate": 100,
+      "scams": 0,
+      "give": { "resourceId": "chemicals", "label": "Compostos Químicos", "qty": 75, "tier": "secondary" },
+      "want": { "resourceId": "oxygen", "label": "Oxigênio", "qty": 220, "tier": "primary" },
+      "note": "Comerciante verificado. Histórico limpo."
+    },
+    {
+      "id": "of5",
+      "trader": "Colono R",
+      "sector": "F-07",
+      "rating": 3.1,
+      "ratings": 6,
+      "commercialTrust": 430,
+      "distanceSlots": 5,
+      "deals": 7,
+      "successRate": 71,
+      "scams": 2,
+      "give": { "resourceId": "water", "label": "Água", "qty": 200, "tier": "primary" },
+      "want": { "resourceId": "biomass", "label": "Biomassa", "qty": 140, "tier": "primary" },
+      "note": "Em construção de reputação."
+    }
+  ],
+  "history": [
+    {
+      "id": "h1",
+      "counterparty": "Colono B — K-14",
+      "outcome": "success",
+      "summary": "Você enviou 50 Água ↔ recebeu 120 Ligas Metálicas",
+      "rating": 5,
+      "day": "Dia 1.247"
+    },
+    {
+      "id": "h2",
+      "counterparty": "Colono M — H-09",
+      "outcome": "success",
+      "summary": "Você enviou 220 Oxigênio ↔ recebeu 75 Compostos Químicos",
+      "rating": 5,
+      "day": "Dia 1.246"
+    },
+    {
+      "id": "h3",
+      "counterparty": "Colono Z — J-03",
+      "outcome": "scam",
+      "summary": "Seu Furgão entregou 90 Ligas Metálicas; o veículo dele nunca foi despachado",
+      "rating": 1,
+      "day": "Dia 1.244",
+      "reported": true,
+      "agreementExpired": true
+    }
+  ]
+}

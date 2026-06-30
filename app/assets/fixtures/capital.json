@@ -1,0 +1,25 @@
+{
+  "capitalName": "Capital — Planície Central",
+  "slots": [
+    { "index": 1, "name": "Administração Pública", "category": "administration", "installed": true, "level": 5, "kind": "administration" },
+    { "index": 2, "name": "Central de Tributos", "category": "economy", "installed": true, "level": 4, "kind": "tributes" },
+    { "index": 3, "name": "Central de Pesquisas e Notícias", "category": "research", "installed": true, "level": 3, "kind": "research" },
+    { "index": 4, "name": "Secretaria de Finanças e Tesouro", "category": "economy", "installed": true, "level": 4, "kind": "treasury" },
+    { "index": 5, "name": "Ministério da Segurança e Guerra", "category": "military", "installed": true, "level": 2, "kind": "security" },
+    { "index": 6, "name": "Estacionamento de Caminhões", "category": "transport", "installed": true, "level": 3, "kind": "parking" },
+    { "index": 7, "name": "Ministério das Reputações", "category": "reputation", "installed": true, "level": 2, "kind": "reputation" },
+    { "index": 8, "name": "Ministério dos Transportes", "category": "transport", "installed": true, "level": 1, "kind": "transport" },
+    { "index": 9, "name": "Depósito Central", "category": "economy", "installed": true, "level": 6, "kind": "depot" },
+    { "index": 10, "name": "Central de Transportes", "category": "transport", "installed": true, "level": 2, "kind": "central_transport" },
+    { "index": 11, "category": "empty", "installed": false },
+    { "index": 12, "category": "empty", "installed": false },
+    { "index": 13, "category": "empty", "installed": false },
+    { "index": 14, "category": "empty", "installed": false },
+    { "index": 15, "category": "empty", "installed": false },
+    { "index": 16, "category": "empty", "installed": false },
+    { "index": 17, "category": "empty", "installed": false },
+    { "index": 18, "category": "empty", "installed": false },
+    { "index": 19, "category": "empty", "installed": false },
+    { "index": 20, "category": "empty", "installed": false }
+  ]
+}

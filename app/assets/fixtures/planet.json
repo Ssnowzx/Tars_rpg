@@ -1,0 +1,35 @@
+{
+  "name": "Fertways",
+  "ownSector": "F-07",
+  "regions": [
+    { "name": "Planície Central", "x": 0, "y": 250 },
+    { "name": "Calota Boreal", "x": -80, "y": -620 },
+    { "name": "Cinturão Ferrugem", "x": 880, "y": -60 },
+    { "name": "Planalto Solar", "x": 140, "y": 660 },
+    { "name": "Cinturão Verde", "x": -880, "y": 140 },
+    { "name": "Distrito das Forjas", "x": 600, "y": -460 }
+  ],
+  "nodes": [
+    { "id": "own-aresprime", "name": "Colônia Ares Prime", "type": "own", "relation": "self", "x": 0, "y": 0, "level": 14, "sector": "F-07", "owner": "Cmdt. Vale" },
+
+    { "id": "n-tharsis", "name": "Posto Tharsis", "type": "neighbor", "relation": "ally", "x": -380, "y": 250, "level": 11, "sector": "E-09", "owner": "Renata Sol" },
+    { "id": "n-solis", "name": "Colônia Solis", "type": "neighbor", "relation": "ally", "x": -120, "y": 470, "level": 13, "sector": "F-15", "owner": "J. Pereira" },
+    { "id": "n-lyot", "name": "Domo Lyot", "type": "neighbor", "relation": "neutral", "x": -560, "y": -260, "level": 8, "sector": "C-05", "owner": "K. Adeyemi" },
+    { "id": "n-hadriaca", "name": "Estância Hadriaca", "type": "neighbor", "relation": "neutral", "x": 300, "y": -260, "level": 9, "sector": "G-04", "owner": "M. Okafor" },
+    { "id": "n-kasei", "name": "Forte Kasei", "type": "neighbor", "relation": "hostile", "x": 470, "y": 300, "level": 17, "sector": "H-12", "owner": "Drax" },
+
+    { "id": "z-ferrosa", "name": "Jazida Ferrosa", "type": "zone", "resource": "metals", "x": 900, "y": 130, "level": 6 },
+    { "id": "z-boreal", "name": "Aquífero Boreal", "type": "zone", "resource": "water", "x": -200, "y": -560, "level": 5 },
+    { "id": "z-helio", "name": "Campo Heliotérmico", "type": "zone", "resource": "energy", "x": 280, "y": 560, "level": 4 },
+    { "id": "z-elysium", "name": "Viveiro Élysium", "type": "zone", "resource": "biomass", "x": -900, "y": 170, "level": 7 },
+
+    { "id": "spaceport", "name": "Espaçoporto Ares", "type": "spaceport", "x": 740, "y": 540, "level": 0 },
+
+    { "id": "free-1", "name": "Lote livre", "type": "free", "x": 250, "y": 230, "level": 0 },
+    { "id": "free-2", "name": "Lote livre", "type": "free", "x": -660, "y": -110, "level": 0 },
+
+
+    { "id": "lm-endurance", "name": "Destroços da Endurance", "type": "landmark", "x": -170, "y": 120, "level": 0, "note": "A nave-mãe que trouxe a humanidade a Fertways. Nunca mais voará — repousa onde pousou, na Planície Central." },
+    { "id": "lm-gagarin", "name": "Telescópio Gagarin", "type": "landmark", "x": 150, "y": -150, "level": 0, "note": "Instrumento do governo herdado da Endurance. Observa as 8 luas de Fertways — base da Temporada 2." }
+  ]
+}

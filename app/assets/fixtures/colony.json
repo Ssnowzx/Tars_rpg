@@ -1,0 +1,23 @@
+{
+  "name": "Colônia Ares Prime",
+  "specialization": "Hídrica",
+  "buildings": [
+    { "id": "b-habitat", "name": "Estrutura de Sobrevivência", "category": "habitat", "level": 5, "dx": 0, "dy": 0, "built": true },
+
+    { "id": "b-oxygen", "name": "Gerador de Atmosfera", "category": "oxygen", "level": 3, "dx": -350, "dy": -150, "perHour": 225, "built": true },
+    { "id": "b-spec", "name": "Aquífero Profundo", "category": "special", "level": 4, "dx": -560, "dy": -285, "perHour": 513, "built": true },
+    { "id": "b-biomass", "name": "Fazenda", "category": "biomass", "level": 4, "dx": 300, "dy": 215, "perHour": 202, "built": true },
+    { "id": "b-energy", "name": "Reator de Energia", "category": "energy", "level": 4, "dx": -270, "dy": 235, "perHour": 506, "built": true },
+    { "id": "b-metals", "name": "Oficina", "category": "metals", "level": 3, "dx": 360, "dy": -170, "perHour": 90, "built": true },
+    { "id": "b-rawmetal", "name": "Mina Local", "category": "rawmetal", "level": 3, "dx": 180, "dy": -340, "perHour": 34, "built": true },
+    { "id": "b-components", "name": "Refinaria Química", "category": "components", "level": 3, "dx": 0, "dy": -310, "perHour": 68, "built": true },
+    { "id": "b-biofuel", "name": "Destilaria", "category": "biofuel", "level": 2, "dx": -90, "dy": 340, "perHour": 30, "built": true },
+
+    { "id": "b-quartel", "name": "Quartel", "category": "military", "level": 2, "dx": -480, "dy": 95, "built": true },
+    { "id": "b-transp", "name": "Central de Transportes", "category": "transport", "level": 2, "dx": 470, "dy": 80, "built": true },
+    { "id": "b-pouso", "name": "Plataforma de Pouso", "category": "transport", "level": 1, "dx": 560, "dy": 300, "built": true },
+
+    { "id": "b-free1", "name": "Slot livre", "category": "empty", "level": 0, "dx": 175, "dy": 345, "built": false },
+    { "id": "b-free2", "name": "Slot livre", "category": "empty", "level": 0, "dx": -185, "dy": -345, "built": false }
+  ]
+}

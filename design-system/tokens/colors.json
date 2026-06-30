@@ -1,0 +1,288 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "Fertways brand color tokens — direção 'Solar Frontier' (claro/quente, light-first). Neutros areia→ink, primária rust, acento solar (âmbar/ouro) + teal frio, pos/neg para deltas. 3-tier (Primitive→Semantic→Component). Duplas obrigatórias verificadas WCAG 2.2 AA via scripts/validate_contrast.py, light e dark.",
+
+  "primitive": {
+    "$description": "Paleta Solar Frontier — nunca referenciar direto em componentes",
+
+    "gray": {
+      "$description": "Neutros quentes areia→ink (50 = areia clara, 900 = ink, 950 = ink profundo)",
+      "50":  { "$type": "color", "$value": "#fbfaf7" },
+      "100": { "$type": "color", "$value": "#f7f6f3" },
+      "200": { "$type": "color", "$value": "#efeae0" },
+      "300": { "$type": "color", "$value": "#e6decf" },
+      "400": { "$type": "color", "$value": "#bba98e" },
+      "500": { "$type": "color", "$value": "#917f66" },
+      "600": { "$type": "color", "$value": "#6e6151" },
+      "700": { "$type": "color", "$value": "#4b4034" },
+      "800": { "$type": "color", "$value": "#362c20" },
+      "900": { "$type": "color", "$value": "#2a2118" },
+      "950": { "$type": "color", "$value": "#1a140d" }
+    },
+    "rust": {
+      "$description": "Marca — Mars rust; 600 = #C1440E (GDD), 700 = #A53909",
+      "50":  { "$type": "color", "$value": "#fcf1ec" },
+      "100": { "$type": "color", "$value": "#fbe0d2" },
+      "200": { "$type": "color", "$value": "#f4bca3" },
+      "300": { "$type": "color", "$value": "#e1804e" },
+      "400": { "$type": "color", "$value": "#d2611f" },
+      "500": { "$type": "color", "$value": "#cf5214" },
+      "600": { "$type": "color", "$value": "#c1440e" },
+      "700": { "$type": "color", "$value": "#a53909" },
+      "800": { "$type": "color", "$value": "#7c2c0c" },
+      "900": { "$type": "color", "$value": "#5e230d" },
+      "950": { "$type": "color", "$value": "#371307" }
+    },
+    "solar": {
+      "$description": "Acento solar — âmbar/ouro (Marte ao amanhecer); 400 = #F2A33C, 500 = #E8941E",
+      "50":  { "$type": "color", "$value": "#fef5e7" },
+      "100": { "$type": "color", "$value": "#fce8c6" },
+      "200": { "$type": "color", "$value": "#f9d08c" },
+      "300": { "$type": "color", "$value": "#f6bc5e" },
+      "400": { "$type": "color", "$value": "#f2a33c" },
+      "500": { "$type": "color", "$value": "#e8941e" },
+      "600": { "$type": "color", "$value": "#c0780f" },
+      "700": { "$type": "color", "$value": "#97600d" },
+      "800": { "$type": "color", "$value": "#6e460b" },
+      "900": { "$type": "color", "$value": "#4a2f08" },
+      "950": { "$type": "color", "$value": "#2a1a04" }
+    },
+    "teal": {
+      "$description": "Acento frio/tech; 500 = #2C7E78, 300 = #6BACA6",
+      "50":  { "$type": "color", "$value": "#ecf6f4" },
+      "100": { "$type": "color", "$value": "#d2eae6" },
+      "200": { "$type": "color", "$value": "#a6d5ce" },
+      "300": { "$type": "color", "$value": "#6baca6" },
+      "400": { "$type": "color", "$value": "#3f938b" },
+      "500": { "$type": "color", "$value": "#2c7e78" },
+      "600": { "$type": "color", "$value": "#246661" },
+      "700": { "$type": "color", "$value": "#1e534f" },
+      "800": { "$type": "color", "$value": "#18403d" },
+      "900": { "$type": "color", "$value": "#122e2c" },
+      "950": { "$type": "color", "$value": "#0a1a19" }
+    },
+    "green": {
+      "$description": "Eco / sucesso / delta positivo; 500 = #2E9466",
+      "50":  { "$type": "color", "$value": "#ecf7f0" },
+      "100": { "$type": "color", "$value": "#d2eede" },
+      "200": { "$type": "color", "$value": "#a8dcbf" },
+      "300": { "$type": "color", "$value": "#74c79c" },
+      "400": { "$type": "color", "$value": "#46ab79" },
+      "500": { "$type": "color", "$value": "#2e9466" },
+      "600": { "$type": "color", "$value": "#257a55" },
+      "700": { "$type": "color", "$value": "#1f6246" },
+      "800": { "$type": "color", "$value": "#194d38" },
+      "900": { "$type": "color", "$value": "#133a2b" },
+      "950": { "$type": "color", "$value": "#082017" }
+    },
+    "red": {
+      "$description": "Guerra / perigo / delta negativo; 500 = #CE3B2E",
+      "50":  { "$type": "color", "$value": "#fdf0ee" },
+      "100": { "$type": "color", "$value": "#fadbd6" },
+      "200": { "$type": "color", "$value": "#f3b7ad" },
+      "300": { "$type": "color", "$value": "#e98979" },
+      "400": { "$type": "color", "$value": "#de5a47" },
+      "500": { "$type": "color", "$value": "#ce3b2e" },
+      "600": { "$type": "color", "$value": "#b22c22" },
+      "700": { "$type": "color", "$value": "#91241c" },
+      "800": { "$type": "color", "$value": "#731f19" },
+      "900": { "$type": "color", "$value": "#5a1b16" },
+      "950": { "$type": "color", "$value": "#350c09" }
+    },
+    "purple": {
+      "$description": "Federação",
+      "50":  { "$type": "color", "$value": "#f8f4fe" },
+      "100": { "$type": "color", "$value": "#eee4fd" },
+      "200": { "$type": "color", "$value": "#ddc9fb" },
+      "300": { "$type": "color", "$value": "#c4a3f6" },
+      "400": { "$type": "color", "$value": "#a578ee" },
+      "500": { "$type": "color", "$value": "#8b53e0" },
+      "600": { "$type": "color", "$value": "#7538c4" },
+      "700": { "$type": "color", "$value": "#602ca0" },
+      "800": { "$type": "color", "$value": "#4e2680" },
+      "900": { "$type": "color", "$value": "#3f2167" },
+      "950": { "$type": "color", "$value": "#281042" }
+    },
+    "white": { "$type": "color", "$value": "#ffffff" },
+    "black": { "$type": "color", "$value": "#000000" }
+  },
+
+  "semantic": {
+    "$description": "Tokens por propósito (tema LIGHT = Solar Frontier, padrão)",
+
+    "action": {
+      "primary":           { "$type": "color", "$value": "{primitive.rust.600}", "$description": "Rust — branco on-action = 5.12:1 (AA)" },
+      "primary-hover":     { "$type": "color", "$value": "{primitive.rust.700}" },
+      "primary-active":    { "$type": "color", "$value": "{primitive.rust.800}" },
+      "secondary":         { "$type": "color", "$value": "{primitive.gray.100}" },
+      "secondary-hover":   { "$type": "color", "$value": "{primitive.gray.200}" },
+      "secondary-active":  { "$type": "color", "$value": "{primitive.gray.300}" },
+      "destructive":       { "$type": "color", "$value": "{primitive.red.600}" },
+      "destructive-hover": { "$type": "color", "$value": "{primitive.red.700}" }
+    },
+
+    "feedback": {
+      "success-bg":      { "$type": "color", "$value": "{primitive.green.50}" },
+      "success-text":    { "$type": "color", "$value": "{primitive.green.800}" },
+      "success-border":  { "$type": "color", "$value": "{primitive.green.300}" },
+      "success-icon":    { "$type": "color", "$value": "{primitive.green.600}" },
+      "warning-bg":      { "$type": "color", "$value": "{primitive.solar.50}" },
+      "warning-text":    { "$type": "color", "$value": "{primitive.solar.800}" },
+      "warning-border":  { "$type": "color", "$value": "{primitive.solar.300}" },
+      "warning-icon":    { "$type": "color", "$value": "{primitive.solar.600}" },
+      "error-bg":        { "$type": "color", "$value": "{primitive.red.50}" },
+      "error-text":      { "$type": "color", "$value": "{primitive.red.800}" },
+      "error-border":    { "$type": "color", "$value": "{primitive.red.300}" },
+      "error-icon":      { "$type": "color", "$value": "{primitive.red.600}" },
+      "info-bg":         { "$type": "color", "$value": "{primitive.teal.50}" },
+      "info-text":       { "$type": "color", "$value": "{primitive.teal.800}" },
+      "info-border":     { "$type": "color", "$value": "{primitive.teal.300}" },
+      "info-icon":       { "$type": "color", "$value": "{primitive.teal.600}" }
+    },
+
+    "text": {
+      "primary":     { "$type": "color", "$value": "{primitive.gray.900}", "$description": "Ink #2A2118 — alto contraste em areia/paper" },
+      "secondary":   { "$type": "color", "$value": "{primitive.gray.600}", "$description": "ink-500 #6E6151" },
+      "tertiary":    { "$type": "color", "$value": "{primitive.gray.400}", "$description": "Hint only" },
+      "disabled":    { "$type": "color", "$value": "{primitive.gray.300}" },
+      "on-action":   { "$type": "color", "$value": "{primitive.white}" },
+      "on-dark":     { "$type": "color", "$value": "{primitive.gray.50}" },
+      "link":        { "$type": "color", "$value": "{primitive.teal.700}", "$description": "Teal escuro em areia" },
+      "link-hover":  { "$type": "color", "$value": "{primitive.teal.800}" }
+    },
+
+    "surface": {
+      "page":        { "$type": "color", "$value": "{primitive.gray.100}", "$description": "Areia #F7F6F3" },
+      "card":        { "$type": "color", "$value": "{primitive.gray.50}", "$description": "Paper #FBFAF7" },
+      "raised":      { "$type": "color", "$value": "{primitive.white}" },
+      "sunken":      { "$type": "color", "$value": "{primitive.gray.200}" },
+      "overlay":     { "$type": "color", "$value": "rgba(42, 33, 24, 0.5)", "$description": "Scrim ink" },
+      "disabled":    { "$type": "color", "$value": "{primitive.gray.200}" }
+    },
+
+    "border": {
+      "default":     { "$type": "color", "$value": "{primitive.gray.200}", "$description": "Decorativa (sub-3:1 por design)" },
+      "strong":      { "$type": "color", "$value": "{primitive.gray.600}", "$description": "Borda essencial — meets WCAG 1.4.11 (3:1)" },
+      "focus":       { "$type": "color", "$value": "{primitive.teal.500}" },
+      "error":       { "$type": "color", "$value": "{primitive.red.500}" },
+      "disabled":    { "$type": "color", "$value": "{primitive.gray.200}" }
+    },
+
+    "interactive": {
+      "hover-overlay":  { "$type": "color", "$value": "rgba(42, 33, 24, 0.04)" },
+      "active-overlay": { "$type": "color", "$value": "rgba(42, 33, 24, 0.08)" },
+      "selected-bg":    { "$type": "color", "$value": "{primitive.rust.50}" },
+      "selected-border":{ "$type": "color", "$value": "{primitive.rust.200}" },
+      "focus-ring":     { "$type": "color", "$value": "{primitive.teal.500}" }
+    },
+
+    "category": {
+      "$description": "Codificação de gameplay (sempre com ícone + rótulo, nunca cor sozinha)",
+      "brand":      { "$type": "color", "$value": "{primitive.rust.600}" },
+      "eco":        { "$type": "color", "$value": "{primitive.green.600}" },
+      "info":       { "$type": "color", "$value": "{primitive.teal.600}" },
+      "warning":    { "$type": "color", "$value": "{primitive.solar.500}" },
+      "war":        { "$type": "color", "$value": "{primitive.red.600}" },
+      "federation": { "$type": "color", "$value": "{primitive.purple.600}" },
+      "delta-up":   { "$type": "color", "$value": "{primitive.green.600}" },
+      "delta-down": { "$type": "color", "$value": "{primitive.red.500}" }
+    }
+  },
+
+  "component": {
+    "$description": "Tokens por componente",
+
+    "button": {
+      "primary-bg":           { "$type": "color", "$value": "{semantic.action.primary}" },
+      "primary-bg-hover":     { "$type": "color", "$value": "{semantic.action.primary-hover}" },
+      "primary-bg-active":    { "$type": "color", "$value": "{semantic.action.primary-active}" },
+      "primary-text":         { "$type": "color", "$value": "{semantic.text.on-action}" },
+      "secondary-bg":         { "$type": "color", "$value": "{semantic.action.secondary}" },
+      "secondary-bg-hover":   { "$type": "color", "$value": "{semantic.action.secondary-hover}" },
+      "secondary-text":       { "$type": "color", "$value": "{semantic.text.primary}" },
+      "ghost-bg":             { "$type": "color", "$value": "transparent" },
+      "ghost-bg-hover":       { "$type": "color", "$value": "{semantic.interactive.hover-overlay}" },
+      "ghost-text":           { "$type": "color", "$value": "{semantic.text.primary}" },
+      "destructive-bg":       { "$type": "color", "$value": "{semantic.action.destructive}" },
+      "destructive-bg-hover": { "$type": "color", "$value": "{semantic.action.destructive-hover}" },
+      "destructive-text":     { "$type": "color", "$value": "{semantic.text.on-action}" },
+      "disabled-bg":          { "$type": "color", "$value": "{semantic.surface.disabled}" },
+      "disabled-text":        { "$type": "color", "$value": "{semantic.text.disabled}" }
+    },
+
+    "input": {
+      "bg":            { "$type": "color", "$value": "{semantic.surface.card}" },
+      "bg-disabled":   { "$type": "color", "$value": "{semantic.surface.disabled}" },
+      "border":        { "$type": "color", "$value": "{semantic.border.default}" },
+      "border-hover":  { "$type": "color", "$value": "{semantic.border.strong}" },
+      "border-focus":  { "$type": "color", "$value": "{semantic.border.focus}" },
+      "border-error":  { "$type": "color", "$value": "{semantic.border.error}" },
+      "text":          { "$type": "color", "$value": "{semantic.text.primary}" },
+      "placeholder":   { "$type": "color", "$value": "{semantic.text.tertiary}" }
+    },
+
+    "card": {
+      "bg":     { "$type": "color", "$value": "{semantic.surface.card}" },
+      "border": { "$type": "color", "$value": "{semantic.border.default}" }
+    },
+
+    "badge": {
+      "neutral-bg":      { "$type": "color", "$value": "{primitive.gray.200}" },
+      "neutral-text":    { "$type": "color", "$value": "{primitive.gray.700}" },
+      "brand-bg":        { "$type": "color", "$value": "{primitive.rust.100}" },
+      "brand-text":      { "$type": "color", "$value": "{primitive.rust.700}" },
+      "success-bg":      { "$type": "color", "$value": "{primitive.green.100}" },
+      "success-text":    { "$type": "color", "$value": "{primitive.green.800}" },
+      "warning-bg":      { "$type": "color", "$value": "{primitive.solar.100}" },
+      "warning-text":    { "$type": "color", "$value": "{primitive.solar.800}" },
+      "error-bg":        { "$type": "color", "$value": "{primitive.red.100}" },
+      "error-text":      { "$type": "color", "$value": "{primitive.red.800}" },
+      "federation-bg":   { "$type": "color", "$value": "{primitive.purple.100}" },
+      "federation-text": { "$type": "color", "$value": "{primitive.purple.800}" }
+    },
+
+    "avatar": {
+      "bg":     { "$type": "color", "$value": "{primitive.gray.200}" },
+      "text":   { "$type": "color", "$value": "{primitive.gray.700}" },
+      "border": { "$type": "color", "$value": "{primitive.white}" }
+    },
+
+    "resource": {
+      "$description": "Chips de recurso do HUD (cor + ícone + rótulo)",
+      "currency-text": { "$type": "color", "$value": "{primitive.solar.600}" },
+      "primary-tier":  { "$type": "color", "$value": "{primitive.teal.600}" },
+      "secondary-tier":{ "$type": "color", "$value": "{primitive.green.600}" },
+      "rare-tier":     { "$type": "color", "$value": "{primitive.purple.600}" }
+    }
+  },
+
+  "dark": {
+    "$description": "Overrides dark (secundário). Light é o padrão do Solar Frontier.",
+
+    "text": {
+      "primary":   { "$type": "color", "$value": "{primitive.gray.50}" },
+      "secondary": { "$type": "color", "$value": "{primitive.gray.400}" },
+      "tertiary":  { "$type": "color", "$value": "{primitive.gray.500}" },
+      "disabled":  { "$type": "color", "$value": "{primitive.gray.600}" },
+      "on-action": { "$type": "color", "$value": "{primitive.white}" },
+      "link":      { "$type": "color", "$value": "{primitive.teal.300}" },
+      "link-hover":{ "$type": "color", "$value": "{primitive.teal.200}" }
+    },
+    "surface": {
+      "page":   { "$type": "color", "$value": "{primitive.gray.950}" },
+      "card":   { "$type": "color", "$value": "{primitive.gray.900}" },
+      "raised": { "$type": "color", "$value": "{primitive.gray.800}" },
+      "sunken": { "$type": "color", "$value": "{primitive.black}" }
+    },
+    "border": {
+      "default": { "$type": "color", "$value": "{primitive.gray.800}" },
+      "strong":  { "$type": "color", "$value": "{primitive.gray.500}" }
+    },
+    "action": {
+      "primary":        { "$type": "color", "$value": "{primitive.rust.600}" },
+      "primary-hover":  { "$type": "color", "$value": "{primitive.rust.700}" },
+      "secondary":      { "$type": "color", "$value": "{primitive.gray.800}" },
+      "secondary-hover":{ "$type": "color", "$value": "{primitive.gray.700}" }
+    }
+  }
+}
