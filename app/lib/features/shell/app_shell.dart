@@ -116,12 +116,15 @@ class _BottomBar extends StatelessWidget {
       ('Mensagens', Icons.mail_outline),
     ];
     void onAction(String label) {
-      if (label == 'Mensagens') {
-        context.go('/map/messages');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$label — em breve'), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
-        );
+      switch (label) {
+        case 'Mensagens':
+          context.go('/map/messages');
+        case 'Missões':
+          context.go('/map/missions');
+        default:
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$label — em breve'), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
+          );
       }
     }
 

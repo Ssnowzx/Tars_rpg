@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B6 (Missões/Conquistas/Eventos)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B6 — Progressão, Missões, Conquistas e Eventos (§5/§6)</h1>
+  <div class="sub">7 tipos de missão, conquistas Bronze→Platina e eventos ativos
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §6 (Missões) + §5 (progressão, no Perfil)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/missions</span>
+  </div>
+</div>
+
+<p class="lead">O §6 organiza o engajamento: missões de vários tipos (com divulgação progressiva no
+onboarding), conquistas em quatro medalhas e eventos vivos no servidor. A escada de progressão 1–100
+do §5 já vive no Perfil; B6 entrega a central de Missões, acessível pela ação "Missões" da barra inferior.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">7</div><div class="l">tipos de missão (§6)</div></div>
+  <div class="card"><div class="n">4</div><div class="l">medalhas (Bronze→Platina)</div></div>
+  <div class="card"><div class="n">3</div><div class="l">abas (Missões·Conquistas·Eventos)</div></div>
+  <div class="card"><div class="n">§5</div><div class="l">progressão 1–100 no Perfil</div></div>
+</div>
+
+<h2>Os 7 tipos de missão (§6)</h2>
+<table>
+  <thead><tr><th>Tipo</th><th>Regra do GDD</th></tr></thead>
+  <tbody>
+    <tr><td>Tutoria</td><td>5 missões, dias 1–3; divulgação progressiva (uma trava até a anterior).</td></tr>
+    <tr><td>Diária</td><td>3/dia de um pool 30+; 1 rejeição por dia ("Trocar").</td></tr>
+    <tr><td>Semanal</td><td>Janela Qua → Ter.</td></tr>
+    <tr><td>Narrativa</td><td>Missões de história (capítulos).</td></tr>
+    <tr><td>Federação</td><td>2 por semana.</td></tr>
+    <tr><td>Guerra</td><td>Pool contínuo (combate §27).</td></tr>
+    <tr><td>Evento</td><td>Tempo limitado, ligadas aos eventos ativos.</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Resumo</b> no topo: diárias X/3, sequência (streak), nº "para resgatar" e conquistas obtidas.</li>
+  <li><b>Aba Missões</b>: agrupadas pelos 7 tipos; cada cartão tem barra de progresso (atual/alvo),
+      recompensa (Fert\$/XP/itens), janela de tempo, e estado — <b>Disponível · Em progresso · Pronta
+      (Resgatar) · Resgatada · Bloqueada</b>. Diárias trazem o botão <b>Trocar</b> (1 rejeição/dia).</li>
+  <li><b>Aba Conquistas</b>: medalhas <b>Bronze · Prata · Ouro · Platina</b> com cor por tier; obtidas
+      mostram "Conquistada", as demais trazem cadeado + barra de progresso.</li>
+  <li><b>Aba Eventos</b>: eventos ativos com ícone/cor por tipo (Gagarin §12.1 · tempestade · guerra §27 ·
+      mercado) e tempo restante.</li>
+  <li><b>Acesso</b>: a ação "Missões" da barra inferior agora abre a tela (antes dava "em breve").</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/mission.dart</code> (Mission, Achievement, GameEvent, MissionBoard + enums Category/Status/Tier)</td></tr>
+    <tr><td>Seam</td><td><code>MissionRepository</code> → <code>MockMissionRepository</code> → <code>missions.json</code> → <code>missionBoardProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/missions/missions_screen.dart</code> (3 abas); rota <code>/map/missions</code>; ação no <code>app_shell.dart</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual (Chrome): resumo (1/3 · 6d · 2 resgatar · 3/6); Missões com Tutoria/Diárias/Semanais e barras
+      (Megaprodução 14200/25000); Conquistas Bronze→Ouro obtidas vs Construtor/Magnata em progresso;
+      4 eventos ativos; entrada pela ação "Missões" da barra inferior</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · resgatar/trocar = mock ·
+recompensas não creditam ainda. <b>Próximo:</b> B7 — Frota + Ministério dos Transportes (§16/§7).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B6 Missões/Conquistas/Eventos</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

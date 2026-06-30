@@ -1,0 +1,42 @@
+{
+  "dailyDone": 1,
+  "dailyTotal": 3,
+  "streak": 6,
+  "missions": [
+    { "id": "t1", "category": "tutorial", "title": "Primeiros passos", "description": "Construa sua Captação de Água nível 1.", "current": 1, "target": 1, "reward": "+200 Fert$ · +50 XP", "status": "claimed", "timeLabel": "Dias 1–3" },
+    { "id": "t2", "category": "tutorial", "title": "Sede de produção", "description": "Eleve a Fazenda ao nível 2.", "current": 1, "target": 1, "reward": "+250 Fert$ · +60 XP", "status": "completed", "timeLabel": "Dias 1–3" },
+    { "id": "t3", "category": "tutorial", "title": "Primeira troca", "description": "Faça 1 negociação no Mercado Central.", "current": 0, "target": 1, "reward": "+200 Fert$ · +50 XP", "status": "inProgress", "timeLabel": "Dias 1–3" },
+    { "id": "t4", "category": "tutorial", "title": "Boa vizinhança", "description": "Envie 1 mensagem no Chat de Vizinhança.", "current": 0, "target": 1, "reward": "+150 Fert$ · +40 XP", "status": "available", "timeLabel": "Dias 1–3" },
+    { "id": "t5", "category": "tutorial", "title": "Rumo à Capital", "description": "Abra um ministério na Capital.", "current": 0, "target": 1, "reward": "+300 Fert$ · +80 XP", "status": "locked", "timeLabel": "Dia 3" },
+
+    { "id": "d1", "category": "daily", "title": "Linha de produção", "description": "Produza 2.000 de Biomassa hoje.", "current": 1240, "target": 2000, "reward": "+400 Fert$ · +80 XP", "status": "inProgress", "timeLabel": "Expira em 9h", "rejectable": true },
+    { "id": "d2", "category": "daily", "title": "Mãos ao negócio", "description": "Realize 2 negociações.", "current": 1, "target": 2, "reward": "+350 Fert$ · +70 XP", "status": "inProgress", "timeLabel": "Expira em 9h", "rejectable": true },
+    { "id": "d3", "category": "daily", "title": "Logística diária", "description": "Despache 1 entrega com veículo.", "current": 1, "target": 1, "reward": "+300 Fert$ · +60 XP", "status": "completed", "timeLabel": "Expira em 9h", "rejectable": true },
+
+    { "id": "w1", "category": "weekly", "title": "Megaprodução", "description": "Produza 25.000 de Energia na semana.", "current": 14200, "target": 25000, "reward": "+2.500 Fert$ · +400 XP", "status": "inProgress", "timeLabel": "Qua → Ter" },
+    { "id": "w2", "category": "weekly", "title": "Comerciante da semana", "description": "Feche 15 negociações.", "current": 9, "target": 15, "reward": "+2.000 Fert$ · +350 XP", "status": "inProgress", "timeLabel": "Qua → Ter" },
+
+    { "id": "n1", "category": "narrative", "title": "O Sinal de Gagarin", "description": "Investigue a leitura anômala do Telescópio Gagarin.", "current": 0, "target": 1, "reward": "+1.000 Fert$ · Fragmento de Dados", "status": "inProgress", "timeLabel": "Capítulo 2" },
+
+    { "id": "f1", "category": "federation", "title": "Aporte ao Pacto", "description": "Contribua 3.000 Fert$ ao fundo do Pacto Boreal.", "current": 1240, "target": 3000, "reward": "+500 Fert$ · +Status Cívico", "status": "inProgress", "timeLabel": "Semana · 2 restantes" },
+    { "id": "f2", "category": "federation", "title": "Operação conjunta", "description": "Participe de 1 operação da federação.", "current": 0, "target": 1, "reward": "+600 Fert$ · +Honra Militar", "status": "available", "timeLabel": "Semana · 2 restantes" },
+
+    { "id": "g1", "category": "war", "title": "Defesa do setor", "description": "Vença 1 combate territorial (§27).", "current": 0, "target": 1, "reward": "+800 Fert$ · +Honra Militar", "status": "inProgress", "timeLabel": "Pool contínuo" },
+
+    { "id": "e1", "category": "event", "title": "Antes da tempestade", "description": "Estoque 5.000 de Energia antes da tempestade solar.", "current": 3100, "target": 5000, "reward": "+1.200 Fert$ · Célula de Reserva", "status": "inProgress", "timeLabel": "Evento · 6h" }
+  ],
+  "achievements": [
+    { "id": "a1", "title": "Primeira Colheita", "description": "Produza seu primeiro recurso.", "tier": "bronze", "current": 1, "target": 1, "unlocked": true },
+    { "id": "a2", "title": "Negociante", "description": "Feche 50 negociações no Mercado.", "tier": "silver", "current": 50, "target": 50, "unlocked": true },
+    { "id": "a3", "title": "Construtor", "description": "Eleve 10 construções ao nível 3.", "tier": "silver", "current": 7, "target": 10, "unlocked": false },
+    { "id": "a4", "title": "Conquistador", "description": "Vença 100 combates territoriais.", "tier": "gold", "current": 100, "target": 100, "unlocked": true },
+    { "id": "a5", "title": "Magnata", "description": "Acumule 100.000 Fert$ em caixa.", "tier": "gold", "current": 62000, "target": 100000, "unlocked": false },
+    { "id": "a6", "title": "Lenda de Fertways", "description": "Alcance o nível 100 da progressão (§5).", "tier": "platinum", "current": 14, "target": 100, "unlocked": false }
+  ],
+  "events": [
+    { "id": "ev1", "type": "gagarin", "title": "Leitura anômala — Gagarin", "description": "O Telescópio Gagarin captou um sinal incomum no cinturão de ferrugem (§12.1).", "timeLabel": "Termina em 2d", "active": true },
+    { "id": "ev2", "type": "storm", "title": "Tempestade solar", "description": "Picos de radiação reduzem a captação de energia. Estoquem reservas.", "timeLabel": "Começa em 6h", "active": true },
+    { "id": "ev3", "type": "war", "title": "Guerra do Meridiano", "description": "Conflito territorial aberto entre federações no setor J (§27).", "timeLabel": "Em curso · 1d", "active": true },
+    { "id": "ev4", "type": "market", "title": "Alta do Metal Bruto", "description": "Demanda elevada dispara o preço do Metal Bruto no Mercado.", "timeLabel": "Termina em 18h", "active": true }
+  ]
+}

@@ -8,6 +8,7 @@ import '../../../domain/models/institution_slot.dart';
 import '../../../domain/models/ministry.dart';
 import 'ministry_panels.dart';
 import 'ministry_widgets.dart';
+import 'reputation_panel.dart';
 
 /// Tela de detalhe de uma instituição da Capital (GDD §2.1). Recebe o slot
 /// tocado por `state.extra` e despacha para o painel do ministério conforme
@@ -28,8 +29,9 @@ class MinistryScreen extends ConsumerWidget {
   }
 
   Widget _body(BuildContext context, WidgetRef ref, MinistryKind kind) {
+    // Reputações/Justiça (§9) carrega sua própria fonte de dados (disputesProvider).
+    if (kind == MinistryKind.reputation) return const ReputationPanel();
     // Painéis que não dependem de dados assíncronos.
-    if (kind == MinistryKind.reputation) return const ReputationStubPanel();
     if (kind == MinistryKind.unknown) return const GenericPanel();
 
     final async = ref.watch(ministriesProvider);

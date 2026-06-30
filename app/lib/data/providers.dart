@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/chat.dart';
 import '../domain/models/colony_buildings.dart';
 import '../domain/models/combat.dart';
+import '../domain/models/dispute.dart';
+import '../domain/models/federation.dart';
 import '../domain/models/institution_slot.dart';
 import '../domain/models/informal_trade.dart';
 import '../domain/models/market.dart';
 import '../domain/models/ministry.dart';
+import '../domain/models/mission.dart';
 import '../domain/models/planet_models.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/models/resources.dart';
@@ -16,19 +19,25 @@ import '../domain/models/world_models.dart';
 import '../domain/repositories/capital_repository.dart';
 import '../domain/repositories/chat_repository.dart';
 import '../domain/repositories/combat_repository.dart';
+import '../domain/repositories/federation_repository.dart';
 import '../domain/repositories/market_repository.dart';
 import '../domain/repositories/ministry_repository.dart';
+import '../domain/repositories/mission_repository.dart';
 import '../domain/repositories/profile_repository.dart';
 import '../domain/repositories/ranking_repository.dart';
+import '../domain/repositories/reputation_repository.dart';
 import '../domain/repositories/spaceport_repository.dart';
 import '../domain/repositories/world_repository.dart';
 import 'mock/mock_capital_repository.dart';
 import 'mock/mock_chat_repository.dart';
 import 'mock/mock_combat_repository.dart';
+import 'mock/mock_federation_repository.dart';
 import 'mock/mock_market_repository.dart';
 import 'mock/mock_ministry_repository.dart';
+import 'mock/mock_mission_repository.dart';
 import 'mock/mock_profile_repository.dart';
 import 'mock/mock_ranking_repository.dart';
+import 'mock/mock_reputation_repository.dart';
 import 'mock/mock_spaceport_repository.dart';
 import 'mock/mock_world_repository.dart';
 
@@ -120,5 +129,29 @@ final chatRepositoryProvider = Provider<ChatRepository>(
 
 final chatProvider = FutureProvider<ChatState>(
   (ref) => ref.watch(chatRepositoryProvider).loadChat(),
+);
+
+final federationRepositoryProvider = Provider<FederationRepository>(
+  (ref) => const MockFederationRepository(),
+);
+
+final federationProvider = FutureProvider<Federation>(
+  (ref) => ref.watch(federationRepositoryProvider).loadFederation(),
+);
+
+final reputationRepositoryProvider = Provider<ReputationRepository>(
+  (ref) => const MockReputationRepository(),
+);
+
+final disputesProvider = FutureProvider<DisputeBoard>(
+  (ref) => ref.watch(reputationRepositoryProvider).loadDisputes(),
+);
+
+final missionRepositoryProvider = Provider<MissionRepository>(
+  (ref) => const MockMissionRepository(),
+);
+
+final missionBoardProvider = FutureProvider<MissionBoard>(
+  (ref) => ref.watch(missionRepositoryProvider).loadBoard(),
 );
 

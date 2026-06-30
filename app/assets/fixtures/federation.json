@@ -1,0 +1,35 @@
+{
+  "name": "Pacto Boreal",
+  "tag": "PBO",
+  "motto": "Do gelo do norte, a forja do futuro.",
+  "maxMembers": 12,
+  "fundBalance": 52480,
+  "contributionRate": 3,
+  "contributionMin": 1,
+  "contributionMax": 10,
+  "fundLocation": "Capital — Tesouro da Federação",
+  "internalFreeThreshold": 35,
+  "internalTributeRate": 35,
+  "allyDiscount": 50,
+  "antiMonopolyMax": 20,
+  "antiMonopolyMin": 10,
+  "yourContributionToday": 1240,
+  "members": [
+    { "id": "m01", "name": "Drax", "sector": "H-12", "role": "leader", "level": 78, "dailyContribution": 3120, "online": true },
+    { "id": "m02", "name": "R. Khan", "sector": "J-11", "role": "diplomat", "level": 71, "dailyContribution": 2480, "online": true },
+    { "id": "m03", "name": "Cmdt. Vale", "sector": "F-07", "role": "member", "level": 64, "dailyContribution": 1240, "online": true, "isYou": true },
+    { "id": "m04", "name": "L. Tanaka", "sector": "B-03", "role": "member", "level": 69, "dailyContribution": 1980, "online": true },
+    { "id": "m05", "name": "Renata Sol", "sector": "E-09", "role": "member", "level": 58, "dailyContribution": 1460, "online": false },
+    { "id": "m06", "name": "K. Adeyemi", "sector": "C-05", "role": "member", "level": 62, "dailyContribution": 1610, "online": true },
+    { "id": "m07", "name": "J. Pereira", "sector": "F-15", "role": "member", "level": 47, "dailyContribution": 820, "online": false },
+    { "id": "m08", "name": "C. Mendes", "sector": "D-08", "role": "member", "level": 53, "dailyContribution": 1075, "online": false },
+    { "id": "m09", "name": "A. Costa", "sector": "F-07", "role": "member", "level": 41, "dailyContribution": 640, "online": true },
+    { "id": "m10", "name": "Ingrid V.", "sector": "G-02", "role": "member", "level": 55, "dailyContribution": 1190, "online": false },
+    { "id": "m11", "name": "Otto Reis", "sector": "H-04", "role": "member", "level": 38, "dailyContribution": 510, "online": false },
+    { "id": "m12", "name": "Yara Lin", "sector": "I-10", "role": "member", "level": 49, "dailyContribution": 905, "online": true }
+  ],
+  "allies": [
+    { "name": "Liga do Meridiano", "tag": "LDM", "memberCount": 11, "tradeDiscount": 50 },
+    { "name": "Coalizão Âmbar", "tag": "CAM", "memberCount": 9, "tradeDiscount": 50 }
+  ]
+}

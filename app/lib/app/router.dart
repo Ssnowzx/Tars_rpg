@@ -6,9 +6,11 @@ import '../domain/models/planet_models.dart';
 import '../features/capital/capital_screen.dart';
 import '../features/capital/ministries/ministry_screen.dart';
 import '../features/colony/colony_screen.dart';
+import '../features/federation/federation_screen.dart';
 import '../features/market/informal_trade_screen.dart';
 import '../features/market/market_screen.dart';
 import '../features/messages/messages_screen.dart';
+import '../features/missions/missions_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/rankings/rankings_screen.dart';
 import '../features/shell/app_shell.dart';
@@ -40,6 +42,7 @@ final GoRouter appRouter = GoRouter(
                   builder: (_, state) => ZoneScreen(zone: state.extra as MapNode?),
                 ),
                 GoRoute(path: 'messages', builder: (_, __) => const MessagesScreen()),
+                GoRoute(path: 'missions', builder: (_, __) => const MissionsScreen()),
               ],
             ),
           ],
@@ -77,7 +80,13 @@ final GoRouter appRouter = GoRouter(
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
+            GoRoute(
+              path: '/profile',
+              builder: (_, __) => const ProfileScreen(),
+              routes: [
+                GoRoute(path: 'federation', builder: (_, __) => const FederationScreen()),
+              ],
+            ),
           ],
         ),
       ],

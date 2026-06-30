@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/ds_colors.dart';
@@ -144,7 +145,17 @@ class _HeaderCard extends StatelessWidget {
                         _Chip(text: profile.title, color: FwPalette.rust600),
                         _Chip(text: 'Setor ${profile.sector}', color: FwPalette.gray500),
                         if (profile.federation.isNotEmpty)
-                          _Chip(text: profile.federation, color: FwPalette.purple600, icon: Icons.groups_outlined),
+                          InkWell(
+                            onTap: () => context.go('/profile/federation'),
+                            borderRadius: BorderRadius.circular(6),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _Chip(text: profile.federation, color: FwPalette.purple600, icon: Icons.groups_outlined),
+                                const Icon(Icons.chevron_right, size: 14, color: FwPalette.purple600),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ],

@@ -1,0 +1,161 @@
+{
+  "disputes": [
+    {
+      "id": "d481",
+      "code": "DEN-0481",
+      "reporter": "Colono H",
+      "accused": "J. Pereira",
+      "summary": "Calote: enviei 180 de Energia, mas a Biomassa combinada nunca foi despachada.",
+      "severity": "simple",
+      "status": "analyzing",
+      "affectedIndex": "Confiança Comercial",
+      "penalty": "none",
+      "openedDay": "Dia 12",
+      "deadline": "Resta 31h",
+      "value": 480,
+      "conciliator": "Mara Tó",
+      "fromExpiredAgreement": true,
+      "evidence": [
+        { "kind": "history", "label": "Acordo de Troca expirado sem entrega (§26.5)" },
+        { "kind": "screenshot", "label": "Captura da MP combinando a troca" },
+        { "kind": "log", "label": "Log de logística: caminhão não despachado" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 12 · 09:14", "note": "Pré-preenchida por Acordo de Troca expirado (§26.5)." },
+        { "label": "Triagem automática", "time": "Dia 12 · 09:14", "note": "Caso simples → encaminhado a conciliador (§9.2)." },
+        { "label": "Em análise do Conciliador", "time": "Dia 12 · 11:40", "note": "Mara Tó revisando texto, capturas e logs." }
+      ]
+    },
+    {
+      "id": "d479",
+      "code": "DEN-0479",
+      "reporter": "Renata Sol",
+      "accused": "Drax",
+      "summary": "Ofensa grave e ameaça direcionada no Chat de Região.",
+      "severity": "grave",
+      "status": "triage",
+      "affectedIndex": "Conduta Social",
+      "penalty": "none",
+      "openedDay": "Dia 12",
+      "deadline": "Resta 44h",
+      "value": 0,
+      "conciliator": "",
+      "fromExpiredAgreement": false,
+      "evidence": [
+        { "kind": "screenshot", "label": "Captura do Chat de Região" },
+        { "kind": "log", "label": "Log de moderação automática (§10.2)" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 12 · 13:02", "note": "Denúncia por mensagem (§10.2)." },
+        { "label": "Triagem automática", "time": "Dia 12 · 13:02", "note": "Caso grave → encaminhado à equipe Fertways (§9.2)." }
+      ]
+    },
+    {
+      "id": "d475",
+      "code": "DEN-0475",
+      "reporter": "K. Adeyemi",
+      "accused": "Otto Reis",
+      "summary": "Recebeu o pagamento e não entregou a carga de Metal Bruto.",
+      "severity": "simple",
+      "status": "punished",
+      "affectedIndex": "Confiança Comercial",
+      "penalty": "tradeRestriction",
+      "openedDay": "Dia 10",
+      "deadline": "Encerrado",
+      "value": 920,
+      "conciliator": "Yuki N.",
+      "fromExpiredAgreement": false,
+      "evidence": [
+        { "kind": "text", "label": "Relato detalhado do denunciante" },
+        { "kind": "screenshot", "label": "Comprovante de pagamento" },
+        { "kind": "log", "label": "Log de entrega não concluída" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 10 · 08:30", "note": "" },
+        { "label": "Triagem automática", "time": "Dia 10 · 08:30", "note": "Caso simples → conciliador." },
+        { "label": "Análise do Conciliador", "time": "Dia 10 · 16:05", "note": "Yuki N. confirmou o não cumprimento." },
+        { "label": "Decisão: Restrição comercial", "time": "Dia 11 · 09:00", "note": "Restrição comercial por 7 dias (§9.4)." }
+      ]
+    },
+    {
+      "id": "d470",
+      "code": "DEN-0470",
+      "reporter": "L. Tanaka",
+      "accused": "C. Mendes",
+      "summary": "Atraso reincidente na rota de biomassa partilhada.",
+      "severity": "simple",
+      "status": "judged",
+      "affectedIndex": "Conduta Social",
+      "penalty": "warning",
+      "openedDay": "Dia 9",
+      "deadline": "Encerrado",
+      "value": 0,
+      "conciliator": "Mara Tó",
+      "fromExpiredAgreement": false,
+      "evidence": [
+        { "kind": "text", "label": "Relato do denunciante" },
+        { "kind": "history", "label": "Histórico de rotas compartilhadas" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 9 · 10:12", "note": "" },
+        { "label": "Triagem automática", "time": "Dia 9 · 10:12", "note": "Caso simples → conciliador." },
+        { "label": "Análise do Conciliador", "time": "Dia 9 · 14:48", "note": "Mara Tó avaliou histórico e logs." },
+        { "label": "Decisão: Advertência", "time": "Dia 9 · 18:20", "note": "Advertência formal registrada (§9.4)." }
+      ]
+    },
+    {
+      "id": "d468",
+      "code": "DEN-0468",
+      "reporter": "J. Pereira",
+      "accused": "Ingrid V.",
+      "summary": "Acusação de preço abusivo no Comércio Informal.",
+      "severity": "simple",
+      "status": "dismissed",
+      "affectedIndex": "Confiança Comercial",
+      "penalty": "none",
+      "openedDay": "Dia 8",
+      "deadline": "Encerrado",
+      "value": 0,
+      "conciliator": "Yuki N.",
+      "fromExpiredAgreement": false,
+      "evidence": [
+        { "kind": "screenshot", "label": "Captura da oferta informal" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 8 · 11:00", "note": "" },
+        { "label": "Triagem automática", "time": "Dia 8 · 11:00", "note": "Caso simples → conciliador." },
+        { "label": "Decisão: Improcedente", "time": "Dia 8 · 15:30", "note": "Preço dentro da faixa de mercado; sem infração (§9.4)." }
+      ]
+    },
+    {
+      "id": "d462",
+      "code": "DEN-0462",
+      "reporter": "Otto Reis",
+      "accused": "K. Adeyemi",
+      "summary": "Apelação contra bloqueio de leilões (Persona Non Grata).",
+      "severity": "grave",
+      "status": "appealed",
+      "affectedIndex": "Confiança Comercial",
+      "penalty": "auctionBan",
+      "openedDay": "Dia 6",
+      "deadline": "Resta 18h",
+      "value": 0,
+      "conciliator": "Equipe Fertways",
+      "fromExpiredAgreement": false,
+      "evidence": [
+        { "kind": "text", "label": "Petição de apelação" },
+        { "kind": "history", "label": "Histórico de negociações dos últimos 30 dias" }
+      ],
+      "timeline": [
+        { "label": "Abertura da denúncia", "time": "Dia 6 · 07:45", "note": "" },
+        { "label": "Decisão: Bloqueio de leilões", "time": "Dia 7 · 12:00", "note": "Persona Non Grata (§9.4)." },
+        { "label": "Apelação aberta", "time": "Dia 8 · 09:10", "note": "Revisão pela equipe Fertways (§9.3)." }
+      ]
+    }
+  ],
+  "conciliators": [
+    { "name": "Mara Tó", "casesResolved": 38, "reversals": 1, "openCases": 2, "suspended": false },
+    { "name": "Yuki N.", "casesResolved": 51, "reversals": 0, "openCases": 1, "suspended": false },
+    { "name": "R. Sales", "casesResolved": 12, "reversals": 3, "openCases": 0, "suspended": true }
+  ]
+}

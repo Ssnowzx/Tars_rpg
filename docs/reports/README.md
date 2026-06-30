@@ -39,6 +39,9 @@ repositório, arquivos, Definition of Done validada e dívidas/futuro.
 | 08 | E1 — Economia §24 (Metal Bruto, Mina, Destilaria, subsídio, preços) | `08-e1-economia-v29.pdf` |
 | 09 | E2 — Combate Territorial §27 (Sentinela, rodadas, saque) | `09-e2-combate-v29.pdf` |
 | 10 | B3 — Sistema de Mensagens (§10, 5 canais) | `10-b3-mensagens.pdf` |
+| 11 | B4 — Federações (§4, tesouro/cargos/tributação/membros) | `11-b4-federacoes.pdf` |
+| 12 | B5 — Reputações/Justiça (§9, denúncia→decisão, estados auditáveis) | `12-b5-reputacoes.pdf` |
+| 13 | B6 — Missões/Conquistas/Eventos (§6, 7 tipos + 4 medalhas) | `13-b6-missoes.pdf` |
 
 > Requisito: Google Chrome instalado (`/Applications/Google Chrome.app`). Sem dependência de
 > pandoc/wkhtmltopdf.

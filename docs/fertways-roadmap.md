@@ -147,19 +147,47 @@ Três lugares distintos (3 níveis):
 - Seam: `ChatRepository`/`MockChatRepository`/`chat.json`/`chatProvider`. Relatório `docs/reports/10-...pdf`.
 - Futuro: enviar/denunciar reais, tradução automática (§10.4), histórico de MP como evidência (§10.3).
 
-### B4 — Federações  ⬜  · GDD §4
-- Tela da federação: membros, papéis, tesouro/contribuições, comunicação.
-- Repo: `FederationRepository`.
+### B4 — Federações  ✅  · GDD §4
+- ✅ Tela `/profile/federation` (drill-in do Perfil; chip da federação no Perfil ficou clicável com chevron).
+  **Identidade**: emblema + nome/tag `[PBO]` + lema + chip "12/12 membros" + cargos (Líder/Diplomata).
+- ✅ **Tesouro**: saldo do fundo (Fert$) "mantido na Capital (§4)", **barra da taxa de contribuição** na
+  faixa **1–10%** (padrão **3%**) e aporte do jogador no dia. **Tributação & Mercado (§4)**: interna
+  grátis até **35%**/35% acima · **50%** entre aliadas · antimonopólio dinâmico **20%→10%**.
+- ✅ **Membros (até 12)**: avatar + presença, "VOCÊ", badge de cargo, setor·nível e aporte diário,
+  ordenados por cargo→contribuição; **aliadas** com badge "−50% troca"; atalho "Abrir chat" (§10).
+- Seam: `FederationRepository`/`MockFederationRepository`/`federation.json`/`federationProvider`;
+  `federation.dart` (Federation/FederationMember/FederationAlly/FederationRole). Ações = futuras.
+  Relatório `docs/reports/11-b4-federacoes.pdf`.
+- Futuro: entrar/sair/fundar, contribuir/sacar do fundo, diplomacia (propor/aceitar aliança), admin do Líder.
 
-### B5 — Ministério das Reputações (Justiça)  ⬜  · GDD §9
-- Fluxo de justiça: denúncia → upload de evidência (screenshot/logs) → julgamento do Conciliador → punição.
-- Estados auditáveis: "em análise", "julgado", "punido", "apelado".
-- Repo: `ReputationRepository` (completo) / `DisputeRepository`.
+### B5 — Ministério das Reputações (Justiça)  ✅  · GDD §9
+- ✅ Slot Reputações do `/capital/ministry` (antes stub) virou o painel completo: **dashboard** (KPIs em
+  aberto/resolvidas/apeladas/conciliadores + fila com filtro Abertas/Resolvidas/Apeladas/Todas) e **detalhe
+  inline** do caso. **Fluxo §9.2** de 5 passos (Abertura→Triagem automática→Conciliador→Decisão→IA futura)
+  com o passo atual destacado.
+- ✅ **Estados auditáveis** (status pill): em triagem · em análise · julgado · punido · apelado · improcedente.
+  Detalhe traz **evidências** (texto/captura/log/histórico, mín. obrigatória §26.8), **conciliador** (ou
+  equipe nos graves), **decisão/punição §9.4** (advertência·redução·silêncio·restrição·bloqueio/Persona Non
+  Grata) com selo de apelação, **histórico auditável** (timeline) e **ações admin** mock. **Conciliadores
+  §9.3/§26.7**: casos/reversões + Ativo/Suspenso. Denúncia pré-preenchida por Acordo de Troca expirado (§26.5).
+- Seam: `ReputationRepository`/`MockReputationRepository`/`disputes.json`/`disputesProvider`; `dispute.dart`
+  (Dispute/DisputeBoard/Conciliator/Evidence/DisputeEvent + enums). Painel em `reputation_panel.dart`
+  (stub `ReputationStubPanel`+`_FlowStep` removidos). Relatório `docs/reports/12-b5-reputacoes.pdf`.
+- Futuro: ações reais (atribuir/decidir/punir), upload de evidência, triagem por IA (§9.2 passo 5).
 
-### B6 — Progressão, Missões, Conquistas e Eventos  ⬜  · GDD §5 + §6
-- Trilha de progressão 1–100/títulos; onboarding por missões (divulgação progressiva).
-- Lista de conquistas e eventos ativos.
-- Repos: `ProgressionRepository`, `MissionRepository`.
+### B6 — Progressão, Missões, Conquistas e Eventos  ✅  · GDD §5 + §6
+- ✅ Tela `/map/missions` (drill-in; acessível pela ação "Missões" da barra inferior). **3 abas**
+  (Missões · Conquistas · Eventos) + **resumo** (diárias X/3, sequência, nº para resgatar, conquistas).
+- ✅ **Missões** agrupadas pelos **7 tipos §6** (Tutoria 5×dias 1–3 com divulgação progressiva · Diária 3/dia
+  pool 30+ com **1 rejeição** "Trocar" · Semanal Qua→Ter · Narrativa · Federação 2/sem · Guerra pool contínuo ·
+  Evento): barra de progresso, recompensa (Fert$/XP/itens), janela, estados Disponível/Em progresso/Pronta
+  (Resgatar)/Resgatada/Bloqueada.
+- ✅ **Conquistas** Bronze/Prata/Ouro/Platina (cor por tier; obtida vs cadeado+barra). **Eventos** ativos
+  (Gagarin §12.1 · tempestade · guerra §27 · mercado) com tipo/cor e tempo restante. Progressão 1–100 (§5)
+  permanece no Perfil (não duplicada).
+- Seam: `MissionRepository`/`MockMissionRepository`/`missions.json`/`missionBoardProvider`; `mission.dart`
+  (Mission/Achievement/GameEvent/MissionBoard + enums). Ações = mock. Relatório `docs/reports/13-b6-missoes.pdf`.
+- Futuro: resgatar/trocar reais (creditar recompensa), pool dinâmico de diárias, capítulos de narrativa.
 
 ### B7 — Frota + Ministério dos Transportes  ⬜  · GDD §16 + §7
 - Registro de frota (placas), depreciação por horas de uso, manutenção, limite crítico.

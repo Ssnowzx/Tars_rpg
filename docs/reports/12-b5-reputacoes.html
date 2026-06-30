@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B5 (Reputações / Justiça)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B5 — Ministério das Reputações / Justiça (§9)</h1>
+  <div class="sub">Denúncia → triagem → conciliação → decisão/punição, com estados auditáveis
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §9 (+ §26.5/§26.7/§26.8)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /capital/ministry (slot Reputações)</span>
+  </div>
+</div>
+
+<p class="lead">O §9 define a justiça do servidor: denúncias entre colonos passam por triagem automática,
+são analisadas por um Conciliador (Neutro Registrado) e terminam em decisão — improcedente, advertência
+ou punição — com direito de apelação. Tudo registrado em um histórico auditável. O slot Reputações da
+Capital, antes um stub, virou o painel completo do ministério.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">5</div><div class="l">passos do fluxo (§9.2)</div></div>
+  <div class="card"><div class="n">6</div><div class="l">estados auditáveis</div></div>
+  <div class="card"><div class="n">5</div><div class="l">punições (§9.4)</div></div>
+  <div class="card"><div class="n">48h</div><div class="l">prazo de decisão (§26.8)</div></div>
+</div>
+
+<h2>Fluxo de justiça (§9.2)</h2>
+<table>
+  <thead><tr><th>Passo</th><th>O que acontece</th></tr></thead>
+  <tbody>
+    <tr><td>1 · Abertura</td><td>Denúncia com texto, capturas e o denunciado (pode vir pré-preenchida de Acordo de Troca expirado, §26.5).</td></tr>
+    <tr><td>2 · Triagem automática</td><td>Logs avaliados: caso <b>simples</b> → conciliador; caso <b>grave</b> → equipe Fertways.</td></tr>
+    <tr><td>3 · Conciliador analisa</td><td>Texto, capturas, logs e histórico (Neutro Registrado, §9.3).</td></tr>
+    <tr><td>4 · Decisão</td><td>Improcedente · advertência · redução · silêncio · restrição · bloqueio (§9.4); apelável.</td></tr>
+    <tr><td>5 · Futuro</td><td>Triagem assistida por IA (placeholder do GDD).</td></tr>
+  </tbody>
+</table>
+
+<h2>Estados auditáveis e punições</h2>
+<table>
+  <thead><tr><th>Estados (status pill)</th><th>Punições §9.4</th></tr></thead>
+  <tbody>
+    <tr><td>Em triagem · Em análise · Julgado · Punido · Apelado · Improcedente</td>
+        <td>Advertência · Redução de reputação · Silêncio temporário · Restrição comercial · Bloqueio de leilões (Persona Non Grata)</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Dashboard</b>: KPIs (em aberto · resolvidas · apeladas · conciliadores) + fila de denúncias com
+      <b>filtro</b> (Abertas/Resolvidas/Apeladas/Todas).</li>
+  <li><b>Cartão de denúncia</b>: código, denunciante → denunciado, resumo, índice de reputação afetado (§26),
+      gravidade, status auditável, prazo (§26.8) e selo "Acordo §26.5" quando aplicável.</li>
+  <li><b>Detalhe do caso</b>: cabeçalho com partes/valor/índice; <b>fluxo de 5 passos</b> com o passo atual
+      destacado; <b>evidências</b> (texto/captura/log/histórico, com nota de evidência mínima §26.8);
+      <b>conciliador</b> (ou "equipe Fertways" nos graves); <b>decisão/punição</b> (§9.4) com selo de apelação;
+      <b>histórico auditável</b> (linha do tempo) e <b>ações administrativas</b> mock.</li>
+  <li><b>Conciliadores (§9.3 / §26.7)</b>: lista com casos resolvidos, em aberto, reversões e status
+      Ativo/Suspenso (suspensão por reversões, §26.7).</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/dispute.dart</code> (Dispute, DisputeBoard, Conciliator, Evidence, DisputeEvent + enums Status/Severity/Penalty/EvidenceKind)</td></tr>
+    <tr><td>Seam</td><td><code>ReputationRepository</code> → <code>MockReputationRepository</code> → <code>disputes.json</code> → <code>disputesProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/capital/ministries/reputation_panel.dart</code> (dashboard + detalhe inline); ligado em <code>ministry_screen.dart</code> (substitui o antigo <code>ReputationStubPanel</code>)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual (Chrome): KPIs (2/3/1/2); fila filtrável; detalhe do DEN-0481 com passo "Conciliador analisa = Atual";
+      caso apelado DEN-0462 com punição "Bloqueio de leilões / Persona Non Grata" + selo "Em apelação";
+      conciliador R. Sales "Suspenso" (3 reversões)</li>
+  <li>Seam de repositório · widgets do kit de ministérios reutilizados · sem emoji · estados loading/error/empty;
+      stub e <code>_FlowStep</code> antigos removidos</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · ações administrativas
+(atribuir conciliador / registrar decisão / aplicar punição) = mock · IA de triagem (§9.2 passo 5) é futura.
+<b>Próximo:</b> B6 — Progressão, Missões, Conquistas e Eventos (§5/§6).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B5 Reputações/Justiça</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

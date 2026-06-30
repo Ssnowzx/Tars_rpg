@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B4 (Federações)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B4 — Federações (§4)</h1>
+  <div class="sub">Identidade, tesouro, cargos, tributação e membros <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §4</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /profile/federation</span>
+  </div>
+</div>
+
+<p class="lead">O §4 define a federação como a aliança do colono: até 12 membros, dois cargos (Líder com
+voto de Minerva + Diplomata), um fundo coletivo mantido na Capital, regras de tributação interna e
+um limite antimonopólio que se ajusta à concentração de mercado. A tela reúne tudo isso em um
+drill-in do Perfil, mantendo HUD e navegação do shell.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">12</div><div class="l">membros máx. (§4)</div></div>
+  <div class="card"><div class="n">3%</div><div class="l">fundo padrão (faixa 1–10%)</div></div>
+  <div class="card"><div class="n">35%</div><div class="l">isenção interna · 35% acima</div></div>
+  <div class="card"><div class="n">50%</div><div class="l">desconto entre aliadas</div></div>
+</div>
+
+<h2>Regras do §4 modeladas</h2>
+<table>
+  <thead><tr><th>Regra</th><th>Valor</th><th>Onde aparece</th></tr></thead>
+  <tbody>
+    <tr><td>Membros</td><td>Máximo <b>12</b></td><td>Chip "X/12" + lista completa</td></tr>
+    <tr><td>Cargos</td><td><b>Líder</b> (voto de Minerva) + <b>Diplomata</b></td><td>Chips de identidade + badges na lista</td></tr>
+    <tr><td>Fundo</td><td><b>1–10%</b> da produção diária (padrão <b>3%</b>), fica na Capital</td><td>Card Tesouro + barra de faixa</td></tr>
+    <tr><td>Tributação interna</td><td>Grátis até <b>35%</b> da produção; acima, <b>35%</b> de tributo</td><td>Card Tributação & Mercado</td></tr>
+    <tr><td>Entre aliadas</td><td><b>50%</b> de desconto</td><td>Regra + badge "−50% troca" nas aliadas</td></tr>
+    <tr><td>Antimonopólio</td><td>Limite dinâmico <b>20% → 10%</b></td><td>Card Tributação & Mercado</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Cartão de identidade</b>: emblema (inicial), nome + tag <code>[PBO]</code>, lema, chip "12/12 membros"
+      e chips de cargo (Líder: Drax · Diplomata: R. Khan).</li>
+  <li><b>Tesouro da Federação</b>: saldo do fundo em Fert$, nota "mantido na Capital (§4)", <b>barra da taxa
+      de contribuição</b> posicionada na faixa 1–10% (padrão 3%) e o aporte do jogador no dia.</li>
+  <li><b>Tributação & Mercado (§4)</b>: três regras com ícone, valor e explicação — tributação interna
+      (35%), desconto entre aliadas (50%) e limite antimonopólio dinâmico (20% → 10%).</li>
+  <li><b>Membros (12/12)</b>: avatar com ponto de presença, "VOCÊ" destacado, badge de cargo, setor·nível e
+      aporte diário; ordenados por cargo e depois por contribuição; contador "online".</li>
+  <li><b>Federações aliadas</b>: lista com tag, nº de membros e badge "−50% troca".</li>
+  <li><b>Comunicação</b>: card com atalho "Abrir chat" → canal de Federação (§10, <code>/map/messages</code>).</li>
+  <li><b>Acesso</b>: o chip da federação no Perfil ficou clicável (com chevron) e abre a tela.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/federation.dart</code> (Federation, FederationMember, FederationAlly, FederationRole)</td></tr>
+    <tr><td>Seam</td><td><code>FederationRepository</code> → <code>MockFederationRepository</code> → <code>federation.json</code> → <code>federationProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/federation/federation_screen.dart</code>; rota <code>/profile/federation</code>; entrada no chip do <code>profile_screen.dart</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built</li>
+  <li>Visual (Chrome): identidade, tesouro (52.480 Fert$ · 3% na faixa 1–10%), regras §4, 12 membros
+      ordenados com "VOCÊ", 2 aliadas "−50%", atalho de chat; entrada pelo chip do Perfil</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded (consistente com as demais
+telas) · ações de federação (entrar/sair/contribuir/diplomacia) = futuras · valores são mock. <b>Próximo:</b>
+B5 — Ministério das Reputações / Justiça (§9).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B4 Federações</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>
