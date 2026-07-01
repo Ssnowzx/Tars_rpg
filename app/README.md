@@ -18,8 +18,7 @@ flutter pub get        # baixa flame, riverpod, go_router, google_fonts, intl
                        # e gera lib/l10n/app_localizations.dart (gen-l10n)
 flutter analyze        # análise estática (esperado: No issues found!)
 flutter test           # testes de parsing dos mocks (esperado: All tests passed!)
-flutter run -d chrome  # web desktop (alvo primário)
-# ou: flutter run -d <android-device>
+flutter run -d chrome  # web (única plataforma; empacotamento nativo via WebView depois)
 ```
 
 > `google_fonts` busca Inter na primeira execução (precisa de rede). Para produção,
@@ -36,7 +35,7 @@ flutter run -d chrome  # web desktop (alvo primário)
 - **Costura de mock data** — `domain/repositories/` (interfaces) → `data/mock/`
   (lê `assets/fixtures/*.json` com latência simulada) → `data/providers.dart`
   (Riverpod). Trocar mock por API num só lugar.
-- **Shell adaptativo** — `NavigationRail` (desktop) / `NavigationBar` (Android),
+- **Shell adaptativo** — `NavigationRail` (largo) / `NavigationBar` (estreito/mobile),
   via `go_router` `StatefulShellRoute`.
 - **Capital** — grid dos 20 slots de instituição com estados loading/erro.
 - **i18n** — pt (default) / es / en em `lib/l10n/*.arb`.
@@ -68,5 +67,5 @@ assets/fixtures/              # player.json · capital.json (mock)
 - **Tokens**: verificados na fonte por `design-system/scripts/validate_tokens.py`,
   `validate_contrast.py` (AA, light+dark) e `check_no_emoji.py` — todos passam.
 - **Dart/Flutter** (Flutter 3.44.4): `flutter analyze` → No issues found; `flutter test`
-  → 3/3; `flutter build web` → ✓ Built build/web (compatível com Wasm). Plataformas
-  web + android adicionadas via `flutter create . --platforms web,android`.
+  → 3/3; `flutter build web` → ✓ Built build/web (compatível com Wasm). **Plataforma única:
+  web** (a pasta `android/` foi removida; empacotamento mobile será via WebView do web build).
