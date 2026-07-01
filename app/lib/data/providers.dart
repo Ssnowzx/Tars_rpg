@@ -54,10 +54,10 @@ import 'mock/mock_profile_repository.dart';
 import 'mock/mock_public_office_repository.dart';
 import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
-import 'mock/mock_spaceport_repository.dart';
 import 'mock/mock_terraform_repository.dart';
 import 'api/api_client.dart';
 import 'api/api_capital_repository.dart';
+import 'api/api_spaceport_repository.dart';
 import 'api/api_world_repository.dart';
 
 /// Ponto único de binding interface → implementação. Para usar a API real,
@@ -81,7 +81,7 @@ final rankingRepositoryProvider = Provider<RankingRepository>(
 );
 
 final spaceportRepositoryProvider = Provider<SpaceportRepository>(
-  (ref) => const MockSpaceportRepository(),
+  (ref) => ApiSpaceportRepository(ref.watch(dioProvider)),
 );
 
 final profileRepositoryProvider = Provider<ProfileRepository>(
