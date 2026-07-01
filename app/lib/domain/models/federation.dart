@@ -78,6 +78,7 @@ class FederationAlly {
 @immutable
 class Federation {
   const Federation({
+    this.inFederation = true,
     required this.name,
     required this.tag,
     required this.motto,
@@ -97,6 +98,7 @@ class Federation {
     required this.allies,
   });
 
+  final bool inFederation; // false = colono sem federação (estado vazio §4)
   final String name;
   final String tag;
   final String motto;
@@ -124,6 +126,7 @@ class Federation {
       members.where((m) => m.role == FederationRole.diplomat).firstOrNull;
 
   factory Federation.fromJson(Map<String, dynamic> j) => Federation(
+        inFederation: j['inFederation'] as bool? ?? true,
         name: j['name'] as String? ?? '',
         tag: j['tag'] as String? ?? '',
         motto: j['motto'] as String? ?? '',

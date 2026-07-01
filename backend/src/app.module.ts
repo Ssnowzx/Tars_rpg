@@ -6,9 +6,13 @@ import { AuthModule } from './auth/auth.module';
 import { BuildQueueModule } from './build-queue/build-queue.module';
 import { ColonyModule } from './colony/colony.module';
 import { LedgerModule } from './common/ledger/ledger.module';
+import { AuctionModule } from './auctions/auction.module';
 import { ContentModule } from './content/content.module';
+import { FederationModule } from './federation/federation.module';
+import { FleetModule } from './fleet/fleet.module';
 import { HealthController } from './health/health.controller';
 import { MarketModule } from './market/market.module';
+import { MissionModule } from './missions/mission.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PlayerModule } from './player/player.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -27,6 +31,10 @@ import { ResourcesModule } from './resources/resources.module';
     MarketModule,
     ContentModule,
     NotificationsModule,
+    FleetModule,
+    MissionModule,
+    FederationModule,
+    AuctionModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

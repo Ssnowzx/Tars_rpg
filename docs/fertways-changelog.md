@@ -4,6 +4,27 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
 ## 2026-07-01
 
+### Etapa 22 — De-mock POR JOGADOR + Mercado transacional + ações reais
+- **Frota/Missões/Federação agora por jogador** (não mais config compartilhado): colono recém-registrado
+  começa limpo; o jogador de demonstração (Vale) mantém o conteúdo rico via seed.
+  - Frota: registros `Vehicle` por dono + `Colony.fleetSlots`; `GET /fleet`; frota inicial no registro
+    (Furgão + Robô Minerador). Ações reais: **Manutenção** (cobra Fert$, restaura condição) e **Sucateamento**.
+  - Missões: board em `Player.missionState` (JSON); novo = board fresco (streak 0, conquistas travadas);
+    **resgate real** `POST /missions/:id/claim` credita Fert$ pelo livro-razão.
+  - Federação: filiação = `FederationMember`; não-membro vê estado vazio ("Você ainda não está em uma
+    federação"); `GET /federation`.
+- **Mercado Central transacional**: `GET /market/board` (ordens reais com ids reais) + botão **Comprar**
+  (`POST /market/listings/:id/buy`, diálogo de quantidade, escrow, taxa 3%, livro-razão) + botão **Vender**
+  (`POST /market/listings`). Vendedores NPC semeados. HUD/board atualizam após a operação.
+- **Perfil/Leilões por jogador**: `/me` traz federação+setor (chip da federação real); `GET /auctions` mostra
+  o nível real do jogador.
+- **Limpeza**: `app/lib/data/mock/*` removido (código morto).
+- Migração Prisma `per_player_fleet_missions_federation`; novos módulos NestJS fleet/missions/federation/auctions.
+- **Validação**: `jest` 11/11 · `flutter analyze` limpo · `build web` ✓ · clique-a-clique de TODAS as telas OK
+  (sem erro de fromJson) · isolamento por jogador confirmado via API e no Chrome (Vale vs. NovatoTest).
+- Relatório: `docs/reports/22-backend-per-player.{html,pdf}`.
+- Dívidas: ações do Comércio Informal (Acordo/Negociar) e lances de Leilão seguem board/preview.
+
 ### Integração frontend ↔ backend — FRONTEND TOTALMENTE DES-MOCKADO
 - Cliente Flutter conectado ao backend NestJS: `dio` + auth (JWT/refresh, LoginScreen, gate no roteador),
   token em SharedPreferences. `providers.dart` binda **todos** os repositórios a implementações `Api…` —

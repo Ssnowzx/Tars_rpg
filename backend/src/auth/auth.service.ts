@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { LedgerService } from '../common/ledger/ledger.service';
+import { backendKind, backendStatus, starterFleet } from '../common/fleet-catalog';
 import { STARTER_BUILDINGS, STARTER_STOCKS } from '../common/starter-data';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthTokens, LoginDto, RegisterDto } from './dto/auth.dto';
@@ -50,6 +51,22 @@ export class AuthService {
       });
       await tx.resourceStock.createMany({
         data: STARTER_STOCKS.map((s) => ({ ...s, playerId: created.id })),
+      });
+      await tx.vehicle.createMany({
+        data: starterFleet(dto.nickname).map((v) => ({
+          ownerId: created.id,
+          kind: backendKind(v.kindLabel),
+          status: backendStatus(v.statusLabel),
+          plate: v.plate,
+          kindLabel: v.kindLabel,
+          statusLabel: v.statusLabel,
+          capacityM3: v.capacityM3,
+          condition: v.condition,
+          activeHours: v.activeHours,
+          maintenanceCost: v.maintenanceCost,
+          assignment: v.assignment,
+          buildDayLabel: v.buildDayLabel,
+        })),
       });
       await this.ledger.apply(
         { playerId: created.id, amount: 50, reason: 'subsidy', refType: 'onboarding' },

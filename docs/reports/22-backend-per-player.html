@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório 22 (Backend por jogador + Mercado transacional)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>22 — Backend por jogador + Mercado transacional</h1>
+  <div class="sub">Frota/Missões/Federação por jogador (Prisma) · Mercado real (comprar/vender) · ações vivas
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (Flutter web + NestJS/Prisma/MariaDB)</span>
+    <span><b>GDD:</b> v33 — §4/§6/§13/§16/§21</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Escopo:</b> de-mock real por jogador + fechamento de pendências</span>
+  </div>
+</div>
+
+<p class="lead">O frontend já vinha des-mockado, mas três domínios (<b>Frota</b>, <b>Missões</b>, <b>Federação</b>) eram
+servidos de config compartilhado — um colono recém-registrado via os dados do jogador de demonstração. Esta etapa
+tornou esses domínios <b>por jogador</b> (registros Prisma), ligou o <b>Mercado Central</b> a transações reais
+(escrow + livro-razão Fert$), transformou várias <b>ações mock (SnackBar)</b> em chamadas reais de backend e fez a
+<b>verificação clique-a-clique</b> de todas as telas recém-ligadas. Um jogador novo agora começa limpo; o jogador de
+demonstração (Vale) mantém o conteúdo rico.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">3</div><div class="l">domínios por jogador (frota/missões/federação)</div></div>
+  <div class="card"><div class="n">real</div><div class="l">Mercado: comprar + vender (escrow/tax)</div></div>
+  <div class="card"><div class="n">4</div><div class="l">novos módulos NestJS (fleet/missions/federation/auctions)</div></div>
+  <div class="card"><div class="n">0</div><div class="l">mocks restantes · analyze/build limpos</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Frota por jogador</b>: registros <code>Vehicle</code> por dono + vagas de hangar (<code>Colony.fleetSlots</code>).
+      <code>GET /fleet</code>; colono novo recebe frota inicial (Furgão + Robô Minerador) no registro; Vale mantém 10
+      veículos (seed do fixture). Ações reais: <b>Manutenção</b> (cobra Fert$, restaura condição) e <b>Sucateamento</b>.</li>
+  <li><b>Missões por jogador</b>: board em <code>Player.missionState</code> (JSON). Colono novo recebe board
+      <b>fresco</b> (progresso zerado, sem streak, conquistas travadas); Vale mantém o board avançado. <b>Resgate real</b>
+      (<code>POST /missions/:id/claim</code>) credita a recompensa em Fert$ pelo livro-razão.</li>
+  <li><b>Federação por jogador</b>: filiação = registro <code>FederationMember</code>. Membro vê o Pacto Boreal;
+      não-membro recebe estado vazio <i>"Você ainda não está em uma federação"</i> (nova UI). <code>GET /federation</code>.</li>
+  <li><b>Mercado Central transacional</b>: <code>GET /market/board</code> monta o board a partir de anúncios reais
+      (ids reais). Botão <b>Comprar</b> → <code>POST /market/listings/:id/buy</code> (diálogo de quantidade, escrow,
+      taxa 3%, livro-razão) e novo botão <b>Vender</b> → <code>POST /market/listings</code>. Vendedores NPC semeados
+      dão o que comprar. HUD e board atualizam após a operação.</li>
+  <li><b>Perfil por jogador</b>: <code>/me</code> agora traz federação e setor; o chip da federação aparece só para
+      quem tem federação. Leilões passam a mostrar o <b>nível real</b> do jogador (<code>GET /auctions</code>).</li>
+  <li><b>Limpeza</b>: removidos <code>app/lib/data/mock/*</code> (código morto, sem imports).</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Schema</td><td><code>prisma</code>: <code>Vehicle</code> (+8 colunas de exibição) · <code>Colony.fleetSlots</code> · <code>Player.missionState</code> (migração <code>per_player_fleet_missions_federation</code>)</td></tr>
+    <tr><td>Módulos NestJS</td><td><code>fleet/</code> · <code>missions/</code> · <code>federation/</code> · <code>auctions/</code> (+ <code>market</code> ganhou <code>/board</code>)</td></tr>
+    <tr><td>Registro</td><td><code>auth.service</code> cria frota inicial · <code>seed.ts</code> semeia Vale (frota/missões/federação) + NPCs vendedores</td></tr>
+    <tr><td>Cliente</td><td>repos <code>api_{fleet,mission,federation,market,auction,profile}_repository.dart</code> apontam para os endpoints por jogador</td></tr>
+    <tr><td>UI</td><td><code>market_screen</code> (comprar/vender) · <code>fleet_screen</code> (manutenção/sucatear) · <code>missions_screen</code> (resgatar) · <code>federation_screen</code> (estado vazio)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li>Backend: <code>prisma migrate</code> + <code>seed</code> + <code>start:dev</code> limpos; <code>jest</code> 11/11 (3 suítes)</li>
+  <li>App: <code>flutter analyze</code> — No issues found · <code>flutter build web</code> — ✓ Built</li>
+  <li>Isolamento por jogador (API): colono novo → frota inicial (2), <code>inFederation:false</code>, board fresco (streak 0, 0 resgatadas), <code>playerLevel</code> real; Vale → 10 veículos, Pacto Boreal, streak 6</li>
+  <li>Mercado (Chrome): comprar de NPC fecha (Fert$ 74→70, estoque +240, ordem some, board 8→7) · Vender abre diálogo e cria anúncio</li>
+  <li>Resgate de missão (Chrome): "Sede de produção" Pronta→Resgatada, Fert$ 70→320 · Sucatear (Chrome): Hangar 2/4→1/4</li>
+  <li>Clique-a-clique OK: Capital/Ministério/Rankings/Cargos/Leilões/Chat/Informal/Espaçoporto/Lunar/Terraformação/Notificações/Mercado/Frota/Federação/Perfil — sem erro de <code>fromJson</code></li>
+</ul>
+
+<div class="note"><b>Dívidas / backlog:</b> ações do <b>Comércio Informal</b> (Acordo/Negociar) e <b>lances de Leilão</b>
+seguem como board/preview (dependem de contraparte real / sistema de leilão vivo, fora do escopo desta etapa). A
+produção por hora ainda não é agendada (aplicada de forma preguiçosa). Persistência de idioma e extração de strings
+do corpo das telas seguem no backlog i18n.</div>
+
+<footer><span>Fertways — Relatório de Entrega · 22 Backend por jogador + Mercado transacional</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

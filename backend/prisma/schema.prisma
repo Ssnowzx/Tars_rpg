@@ -324,6 +324,7 @@ model Player {
   xp                Int      @default(0)
   fertBalance       Decimal  @default(50) @db.Decimal(18, 4) // saldo Fert$ (cache; ledger é fonte)
   neutralRegistered Boolean  @default(false) // Neutro Registrado (Conciliador, §14)
+  missionState      Json? // painel de Missões/Conquistas por jogador (§6); null = novato (board fresco)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -440,6 +441,7 @@ model Colony {
   name           String
   sector         String   @default("")
   specialization String? // 1 de 15 (§17.3); null = nenhuma
+  fleetSlots     Int      @default(4) // vagas de hangar da frota (§0/§28.5 Central de Transportes)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -790,6 +792,16 @@ model Vehicle {
   status    VehicleStatus @default(idle)
   integrity Float         @default(1.0) // 0..1 (depreciação §16.4)
   createdAt DateTime      @default(now())
+
+  // Campos de apresentação da frota do colono (§21) — servidos ao cliente como-são.
+  kindLabel       String @default("van") // string de kind do frontend (van/truck/drone/miningRobot/…)
+  statusLabel     String @default("idle") // string de status do frontend (idle/inTransit/loading/maintenance/critical)
+  capacityM3      Int    @default(0)
+  condition       Int    @default(100) // 0–100 (%)
+  activeHours     Int    @default(0)
+  maintenanceCost Int    @default(0) // Fert$
+  assignment      String @default("") @db.Text
+  buildDayLabel   String @default("")
 
   owner Player @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 

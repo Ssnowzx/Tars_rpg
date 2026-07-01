@@ -10,7 +10,7 @@ class ApiAuctionRepository implements AuctionRepository {
 
   @override
   Future<AuctionHouse> loadAuctions() async {
-    final res = await _dio.get<Map<String, dynamic>>('/config/auctions');
+    final res = await _dio.get<Map<String, dynamic>>('/auctions');
     return AuctionHouse.fromJson(res.data!);
   }
 }

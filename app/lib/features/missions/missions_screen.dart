@@ -71,6 +71,29 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen> {
         SnackBar(content: Text(m), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
       );
 
+  /// Resgata a recompensa da missão no backend (credita Fert$) e atualiza o
+  /// board e o HUD de recursos.
+  Future<void> _claim(Mission m) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await ref.read(missionRepositoryProvider).claim(m.id);
+      ref.invalidate(missionBoardProvider);
+      ref.invalidate(resourcesProvider);
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Recompensa resgatada: ${m.reward}'),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ));
+    } catch (_) {
+      if (!mounted) return;
+      messenger.showSnackBar(const SnackBar(
+        content: Text('Não foi possível resgatar a recompensa agora.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
@@ -99,7 +122,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 840),
                   child: switch (_tab) {
-                    _Tab.missions => _MissionsTab(board: data, onClaim: _toast, onReject: _toast),
+                    _Tab.missions => _MissionsTab(board: data, onClaim: _claim, onReject: _toast),
                     _Tab.achievements => _AchievementsTab(board: data),
                     _Tab.events => _EventsTab(board: data),
                   },
@@ -227,7 +250,7 @@ class _Tabs extends StatelessWidget {
 class _MissionsTab extends StatelessWidget {
   const _MissionsTab({required this.board, required this.onClaim, required this.onReject});
   final MissionBoard board;
-  final ValueChanged<String> onClaim;
+  final ValueChanged<Mission> onClaim;
   final ValueChanged<String> onReject;
 
   @override
@@ -246,7 +269,7 @@ class _MissionsTab extends StatelessWidget {
           for (final m in g.items)
             _MissionCard(
               mission: m,
-              onClaim: () => onClaim('Recompensa resgatada: ${m.reward} — em breve'),
+              onClaim: () => onClaim(m),
               onReject: () => onReject('Missão trocada (1 rejeição/dia, §6) — em breve'),
             ),
           SizedBox(height: t.space3),

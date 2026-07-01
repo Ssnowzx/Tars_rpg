@@ -13,8 +13,14 @@ completo (47 modelos), auth JWT, loop core + Mercado (escrow + livro-razão Fert
 TOTALMENTE DES-MOCKADO**: `providers.dart` binda todos os repos a implementações `Api…`. Dados dinâmicos vêm
 de endpoints próprios; a config estática do jogo (Capital, ministérios, mapa, boards) vem de `/config/:key`
 (seed lê os 14 fixtures → ServerConfig). **Tudo em `origin/main`.** Ver `backend/README.md` e [[fertways-backend]].
-Pendências (próxima sessão): verificar visualmente as telas recém-ligadas; refinar fleet/missions/federation
-p/ dados por-jogador (hoje config compartilhado); ligar as ações de trade a `/market/buy`. GDD §14/§23 superados.
+**Etapa 22 (01/07): DE-MOCK POR JOGADOR + MERCADO REAL.** Frota/Missões/Federação agora são **por jogador**
+(registros Prisma) — colono novo começa limpo, Vale mantém o conteúdo de demonstração. **Mercado Central
+transacional** (comprar de anúncios reais via `/market/listings/:id/buy` + vender via `/market/listings`,
+escrow + taxa 3% + livro-razão). Ações reais: resgate de missão, manutenção/sucateamento de veículo.
+Leilões/Perfil por jogador (nível real, chip de federação). Mocks (`app/lib/data/mock/*`) removidos.
+Verificação clique-a-clique de TODAS as telas OK (sem erro de fromJson). Novos módulos NestJS: fleet/missions/
+federation/auctions. Relatório: `docs/reports/22-backend-per-player.{html,pdf}`. GDD §14/§23 superados.
+Dívidas: ações do Comércio Informal e lances de Leilão seguem board/preview (precisam de contraparte/sistema vivo).
 **Como abrir do zero:** `cd backend && pnpm db:up && pnpm prisma:migrate && pnpm seed && pnpm start:dev` (usar
 node v20 do fnm, NÃO o /opt/homebrew node quebrado) · `cd app && flutter run -d chrome` · login vale@fertways.test / colonia123.
 

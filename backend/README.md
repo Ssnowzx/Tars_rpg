@@ -54,12 +54,21 @@ Auth por Bearer JWT (obtido em register/login). `*` = exige token.
 | POST | `/api/build-queue/:id/cancel` * | cancela obra |
 | POST | `/api/build-queue/:id/complete` * | conclui obra na hora (mock) |
 | GET | `/api/market/prices` | preços-base (§22) |
+| GET | `/api/market/board` * | board do Mercado (tickers + ordens reais com ids reais) |
 | GET | `/api/market/listings` * | anúncios abertos |
 | POST | `/api/market/listings` * | cria anúncio (escrow reserva o recurso) |
 | POST | `/api/market/listings/:id/buy` * | compra (Fert$ via ledger + taxa 3% + transfere recurso) |
 | POST | `/api/market/listings/:id/cancel` * | cancela e devolve o escrow |
+| GET | `/api/fleet` * | frota do jogador (registros `Vehicle` + vagas de hangar) |
+| POST | `/api/fleet/:id/maintain` * | manutenção (cobra Fert$, restaura condição) |
+| POST | `/api/fleet/:id/scrap` * | sucateia o veículo |
+| GET | `/api/missions/board` * | board de missões/conquistas/eventos por jogador |
+| POST | `/api/missions/:id/claim` * | resgata a recompensa de uma missão concluída |
+| GET | `/api/federation` * | federação do jogador (`inFederation:false` se não filiado) |
+| GET | `/api/auctions` * | casa de leilões (nível real do jogador) |
 | GET | `/api/lunar` · `/api/terraform` · `/api/spaceport` · `/api/missions` | dados de referência semeados |
 | GET | `/api/notifications` * | notificações do jogador |
+| GET | `/api/config/:key` | config canônica compartilhada (capital, ministérios, mapa, boards etc.) |
 
 Scripts úteis: `pnpm db:down` (derruba o banco), `pnpm prisma:studio`
 (explorador visual), `pnpm build`, `pnpm test`.

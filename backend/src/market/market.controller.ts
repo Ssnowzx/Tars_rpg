@@ -14,6 +14,13 @@ export class MarketController {
     return this.market.getPrices();
   }
 
+  /// Board completo (tickers + ordens reais) para o Mercado Central.
+  @Get('board')
+  @UseGuards(JwtAuthGuard)
+  board() {
+    return this.market.getBoard();
+  }
+
   @Get('listings')
   @UseGuards(JwtAuthGuard)
   listings() {

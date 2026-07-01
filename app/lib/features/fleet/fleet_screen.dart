@@ -56,6 +56,59 @@ class _FleetScreenState extends ConsumerState<FleetScreen> {
         SnackBar(content: Text(m), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
       );
 
+  /// Manutenção real (§16.4): cobra o custo no backend e restaura a condição.
+  Future<void> _maintain(Vehicle v) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await ref.read(fleetRepositoryProvider).maintain(v.id);
+      ref.invalidate(fleetProvider);
+      ref.invalidate(resourcesProvider);
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('${v.plate}: manutenção concluída (Fert\$ ${v.maintenanceCost}).'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    } catch (_) {
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Não foi possível fazer a manutenção de ${v.plate} (saldo insuficiente?).'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
+  /// Sucateamento real: remove o veículo e libera a vaga do hangar.
+  Future<void> _scrap(Vehicle v) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Sucatear ${v.plate}?'),
+        content: const Text('O veículo será removido permanentemente da frota, liberando a vaga do hangar.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Sucatear')),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await ref.read(fleetRepositoryProvider).scrap(v.id);
+      ref.invalidate(fleetProvider);
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('${v.plate} foi sucateado.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    } catch (_) {
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Não foi possível sucatear ${v.plate}.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
@@ -91,9 +144,9 @@ class _FleetScreenState extends ConsumerState<FleetScreen> {
                         for (final v in vehicles)
                           _VehicleCard(
                             vehicle: v,
-                            onMaintain: () => _toast('Manutenção de ${v.plate} (Fert\$ ${v.maintenanceCost}) — em breve'),
-                            onDispatch: () => _toast('Despachar ${v.plate} — em breve'),
-                            onScrap: () => _toast('Sucatear ${v.plate} — em breve'),
+                            onMaintain: () => _maintain(v),
+                            onDispatch: () => _toast('Despacho de carga entra com o sistema de logística (§25).'),
+                            onScrap: () => _scrap(v),
                           ),
                         SizedBox(height: t.space2),
                         const _DepreciationNote(),

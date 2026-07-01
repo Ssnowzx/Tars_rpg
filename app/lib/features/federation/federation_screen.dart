@@ -87,6 +87,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
     final money = NumberFormat.decimalPattern(Localizations.localeOf(context).languageCode);
+    if (!fed.inFederation) return const _EmptyFederation();
     return Align(
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
@@ -108,6 +109,44 @@ class _Body extends StatelessWidget {
             ],
             const _CommunicationCard(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Estado vazio: colono ainda não pertence a uma federação (§4). Fundar exige
+/// Status Cívico + Honra Militar; entrar depende de convite.
+class _EmptyFederation extends StatelessWidget {
+  const _EmptyFederation();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).extension<DsTokens>()!;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 460),
+        child: Padding(
+          padding: EdgeInsets.all(t.space6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.groups_outlined, size: 56, color: t.textSecondary.withValues(alpha: 0.5)),
+              SizedBox(height: t.space4),
+              Text(
+                'Você ainda não está em uma federação',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.rajdhani(fontWeight: FontWeight.w700, fontSize: 20, color: FwPalette.gray900),
+              ),
+              SizedBox(height: t.space2),
+              Text(
+                'Federações (§4) reúnem até 12 colonos: fundo comum, tributação interna com isenção e alianças com 50% de desconto. '
+                'Funde uma (exige Status Cívico e Honra Militar) ou aguarde um convite de vizinhos.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, height: 1.4, color: t.textSecondary),
+              ),
+            ],
+          ),
         ),
       ),
     );

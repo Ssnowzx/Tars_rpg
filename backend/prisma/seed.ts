@@ -3,10 +3,14 @@ import { resolve } from 'node:path';
 import {
   MissionCategory,
   MoonAtmosphere,
+  Prisma,
   PrismaClient,
   ResourceKey,
   RouteRisk,
 } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
+import { backendKind, backendStatus } from '../src/common/fleet-catalog';
+import { STARTER_BUILDINGS, STARTER_STOCKS } from '../src/common/starter-data';
 
 const prisma = new PrismaClient();
 
@@ -97,6 +101,202 @@ const MISSIONS: { key: string; title: string; description: string; category: Mis
   { key: 'civic-terraform', title: 'Contribuir à terraformação', description: 'Faça sua primeira contribuição à terraformação global.', category: 'civic', rewardFert: 0, rewardXp: 60 },
 ];
 
+interface ReputationSeed {
+  commercialTrust: number;
+  socialConduct: number;
+  civicStatus: number;
+  militaryHonor: number;
+}
+
+/// Garante um jogador com colônia, construções essenciais, estoques e reputação.
+/// Idempotente: preserva a senha existente e só cria o que faltar.
+async function ensurePlayer(opts: {
+  email: string;
+  nickname: string;
+  passwordHash: string;
+  sector: string;
+  level: number;
+  xp: number;
+  fertBalance: number;
+  reputation: ReputationSeed;
+  fleetSlots?: number;
+}): Promise<string> {
+  const player = await prisma.player.upsert({
+    where: { email: opts.email },
+    update: { level: opts.level, xp: opts.xp, fertBalance: opts.fertBalance },
+    create: {
+      email: opts.email,
+      nickname: opts.nickname,
+      passwordHash: opts.passwordHash,
+      level: opts.level,
+      xp: opts.xp,
+      fertBalance: opts.fertBalance,
+    },
+  });
+  const colony = await prisma.colony.upsert({
+    where: { playerId: player.id },
+    update: { sector: opts.sector, fleetSlots: opts.fleetSlots ?? 4 },
+    create: {
+      playerId: player.id,
+      name: `Colônia ${opts.nickname}`,
+      sector: opts.sector,
+      fleetSlots: opts.fleetSlots ?? 4,
+    },
+  });
+  if ((await prisma.building.count({ where: { colonyId: colony.id } })) === 0) {
+    await prisma.building.createMany({
+      data: STARTER_BUILDINGS.map((b) => ({ ...b, colonyId: colony.id })),
+    });
+  }
+  if ((await prisma.resourceStock.count({ where: { playerId: player.id } })) === 0) {
+    await prisma.resourceStock.createMany({
+      data: STARTER_STOCKS.map((s) => ({ ...s, playerId: player.id })),
+    });
+  }
+  await prisma.reputation.upsert({
+    where: { playerId: player.id },
+    update: opts.reputation,
+    create: { playerId: player.id, ...opts.reputation },
+  });
+  return player.id;
+}
+
+interface FleetFixtureVehicle {
+  plate: string;
+  kind: string;
+  capacityM3?: number;
+  condition?: number;
+  activeHours?: number;
+  status: string;
+  assignment?: string;
+  maintenanceCost?: number;
+  buildDay?: string;
+}
+
+/// Cria a frota de demonstração de um jogador a partir do fixture (idempotente).
+async function seedVehicles(ownerId: string, file: string): Promise<void> {
+  if ((await prisma.vehicle.count({ where: { ownerId } })) > 0) return;
+  const data = JSON.parse(readFileSync(resolve(FIXTURES_DIR, file), 'utf8')) as {
+    vehicles: FleetFixtureVehicle[];
+  };
+  for (const v of data.vehicles) {
+    await prisma.vehicle.create({
+      data: {
+        ownerId,
+        kind: backendKind(v.kind),
+        status: backendStatus(v.status),
+        plate: v.plate,
+        integrity: (v.condition ?? 100) / 100,
+        kindLabel: v.kind,
+        statusLabel: v.status,
+        capacityM3: v.capacityM3 ?? 0,
+        condition: v.condition ?? 100,
+        activeHours: v.activeHours ?? 0,
+        maintenanceCost: v.maintenanceCost ?? 0,
+        assignment: v.assignment ?? '',
+        buildDayLabel: v.buildDay ?? '',
+      },
+    });
+  }
+}
+
+/// Vendedores NPC + anúncios abertos no Mercado Central, para o board ter ordens
+/// reais compráveis (§13). Idempotente: só semeia se não houver anúncios abertos.
+async function seedMarketNpcs(passwordHash: string): Promise<void> {
+  const npcs: {
+    email: string;
+    nickname: string;
+    sector: string;
+    trust: number;
+    listings: { key: ResourceKey; quantity: number; unitPrice: number }[];
+  }[] = [
+    { email: 'renata@fertways.test', nickname: 'Renata Sol', sector: 'E-09', trust: 780, listings: [
+      { key: 'water', quantity: 600, unitPrice: 0.0064 },
+      { key: 'biomass', quantity: 900, unitPrice: 0.0088 },
+    ] },
+    { email: 'adeyemi@fertways.test', nickname: 'K. Adeyemi', sector: 'C-05', trust: 850, listings: [
+      { key: 'alloys', quantity: 320, unitPrice: 0.0131 },
+      { key: 'metalore', quantity: 450, unitPrice: 0.19 },
+    ] },
+    { email: 'tanaka@fertways.test', nickname: 'L. Tanaka', sector: 'B-03', trust: 900, listings: [
+      { key: 'energy', quantity: 1200, unitPrice: 0.0035 },
+      { key: 'oxygen', quantity: 700, unitPrice: 0.0052 },
+    ] },
+    { email: 'drax@fertways.test', nickname: 'Drax', sector: 'H-12', trust: 640, listings: [
+      { key: 'chemicals', quantity: 240, unitPrice: 0.0173 },
+      { key: 'componentBasic', quantity: 40, unitPrice: 1.31 },
+    ] },
+  ];
+  for (const npc of npcs) {
+    const id = await ensurePlayer({
+      email: npc.email,
+      nickname: npc.nickname,
+      passwordHash,
+      sector: npc.sector,
+      level: 20,
+      xp: 20000,
+      fertBalance: 10000,
+      reputation: { commercialTrust: npc.trust, socialConduct: 600, civicStatus: 600, militaryHonor: 500 },
+    });
+    if ((await prisma.marketListing.count({ where: { sellerId: id, status: 'open' } })) > 0) continue;
+    for (const l of npc.listings) {
+      await prisma.marketListing.create({
+        data: {
+          sellerId: id,
+          key: l.key,
+          quantity: l.quantity,
+          unitPrice: new Prisma.Decimal(l.unitPrice),
+          status: 'open',
+        },
+      });
+    }
+  }
+}
+
+/// Conteúdo de demonstração por jogador (§ pendência: dados por jogador): frota,
+/// missões e federação de Cmdt. Vale + vendedores NPC do Mercado.
+async function seedDemo(): Promise<void> {
+  const passwordHash = await bcrypt.hash('colonia123', 10);
+
+  const fedContent = JSON.parse(readFileSync(resolve(FIXTURES_DIR, 'federation.json'), 'utf8')) as {
+    name: string;
+    tag: string;
+    fundBalance: number;
+  };
+  const federation = await prisma.federation.upsert({
+    where: { name: fedContent.name },
+    update: { tag: fedContent.tag, treasury: new Prisma.Decimal(fedContent.fundBalance) },
+    create: { name: fedContent.name, tag: fedContent.tag, treasury: new Prisma.Decimal(fedContent.fundBalance) },
+  });
+
+  const valeId = await ensurePlayer({
+    email: 'vale@fertways.test',
+    nickname: 'CmdtVale',
+    passwordHash,
+    sector: 'F-07',
+    level: 14,
+    xp: 8420,
+    fertBalance: 62000,
+    reputation: { commercialTrust: 812, socialConduct: 690, civicStatus: 745, militaryHonor: 430 },
+    fleetSlots: 12,
+  });
+
+  const missionContent = JSON.parse(readFileSync(resolve(FIXTURES_DIR, 'missions.json'), 'utf8')) as object;
+  await prisma.player.update({
+    where: { id: valeId },
+    data: { missionState: missionContent as Prisma.InputJsonValue },
+  });
+
+  await prisma.federationMember.upsert({
+    where: { playerId: valeId },
+    update: { federationId: federation.id, role: 'member' },
+    create: { playerId: valeId, federationId: federation.id, role: 'member' },
+  });
+
+  await seedVehicles(valeId, 'fleet.json');
+  await seedMarketNpcs(passwordHash);
+}
+
 async function main(): Promise<void> {
   // Preços-base (§22)
   for (const [key, basePrice] of Object.entries(PRICES)) {
@@ -181,7 +381,10 @@ async function main(): Promise<void> {
     });
   }
 
-  console.log(`Seed concluído: preços, luas, boletins, planetas, terraformação, missões, +${CONFIG_FIXTURES.length} configs de referência.`);
+  // Conteúdo de demonstração por jogador (frota/missões/federação + NPCs).
+  await seedDemo();
+
+  console.log(`Seed concluído: preços, luas, boletins, planetas, terraformação, missões, +${CONFIG_FIXTURES.length} configs de referência + demo por jogador.`);
 }
 
 main()

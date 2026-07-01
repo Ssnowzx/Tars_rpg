@@ -36,14 +36,14 @@ class ApiProfileRepository implements ProfileRepository {
     final rep = me['reputation'] as Map<String, dynamic>?;
     return PlayerProfile(
       displayName: me['nickname'] as String? ?? 'Colono',
-      sector: 'F-07',
+      sector: (me['sector'] as String?)?.isNotEmpty == true ? me['sector'] as String : 'F-07',
       title: _titleForLevel(level),
       level: level,
       xp: (me['xp'] as num?)?.toInt() ?? 0,
       xpMax: level * 1000,
       rating: 0,
       ratingCount: 0,
-      federation: '',
+      federation: me['federation'] as String? ?? '',
       stats: const [],
       progression: _kMarcos,
       reviews: const [],

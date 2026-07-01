@@ -1,12 +1,18 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { LedgerService } from '../common/ledger/ledger.service';
+import { resourceLabel } from '../common/resource-label';
 import { PrismaService } from '../prisma/prisma.service';
 import { ResourcesService } from '../resources/resources.service';
 import { CreateListingDto } from './dto/market.dto';
 
 /// Taxa de mercado (§13/§8.3) — incidência única no fechamento.
 const MARKET_TAX_RATE = 0.03;
+
+/// Reputação Confiança Comercial (0–1000) → estrelas 0–5 exibidas no board.
+function ratingFromTrust(trust: number): number {
+  return Math.round(Math.min(5, Math.max(0, trust / 200)) * 10) / 10;
+}
 
 @Injectable()
 export class MarketService {
@@ -18,6 +24,47 @@ export class MarketService {
 
   getPrices() {
     return this.prisma.marketPrice.findMany({ orderBy: { key: 'asc' } });
+  }
+
+  /// Board do Mercado Central no formato que o cliente consome (§13): tickers de
+  /// preço (§22) + ordens reais a partir dos anúncios abertos (escrow). Os ids
+  /// das ordens são os ids reais dos `MarketListing` (usados no /buy).
+  async getBoard() {
+    const [prices, listings] = await Promise.all([
+      this.prisma.marketPrice.findMany({ orderBy: { key: 'asc' } }),
+      this.prisma.marketListing.findMany({
+        where: { status: 'open' },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          seller: {
+            select: {
+              nickname: true,
+              reputation: { select: { commercialTrust: true } },
+              colony: { select: { sector: true } },
+            },
+          },
+        },
+      }),
+    ]);
+    return {
+      tickers: prices.map((p) => ({
+        resourceId: p.key,
+        resourceLabel: resourceLabel(p.key),
+        lastPrice: Number(p.basePrice),
+        changePct: 0,
+      })),
+      orders: listings.map((l) => ({
+        id: l.id,
+        side: 'sell',
+        resourceId: l.key,
+        resourceLabel: resourceLabel(l.key),
+        quantity: l.quantity,
+        unitPrice: Number(l.unitPrice),
+        trader: l.seller.nickname,
+        traderSector: l.seller.colony?.sector ?? '',
+        traderRating: ratingFromTrust(l.seller.reputation?.commercialTrust ?? 500),
+      })),
+    };
   }
 
   async getListings() {
