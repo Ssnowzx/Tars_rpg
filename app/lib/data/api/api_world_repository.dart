@@ -4,14 +4,12 @@ import '../../domain/models/colony_buildings.dart';
 import '../../domain/models/planet_models.dart';
 import '../../domain/models/world_models.dart';
 import '../../domain/repositories/world_repository.dart';
-import '../mock/mock_world_repository.dart';
 
-/// Implementação de API: a Colônia (slot) e o cabeçalho vêm do backend
-/// (/colony + /me). O mapa-planeta ainda não tem endpoint — cai no fixture.
+/// Implementação de API: a Colônia (slot) e o cabeçalho vêm de /colony + /me;
+/// o mapa-planeta (config canônica) vem de /config/planet.
 class ApiWorldRepository implements WorldRepository {
-  ApiWorldRepository(this._dio, {this.fallback = const MockWorldRepository()});
+  ApiWorldRepository(this._dio);
   final Dio _dio;
-  final MockWorldRepository fallback;
 
   @override
   Future<ColonyBase> loadColonyBase() async {
@@ -38,5 +36,8 @@ class ApiWorldRepository implements WorldRepository {
   }
 
   @override
-  Future<PlanetState> loadPlanet() => fallback.loadPlanet();
+  Future<PlanetState> loadPlanet() async {
+    final res = await _dio.get<Map<String, dynamic>>('/config/planet');
+    return PlanetState.fromJson(res.data!);
+  }
 }

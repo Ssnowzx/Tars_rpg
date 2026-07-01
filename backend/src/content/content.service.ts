@@ -133,4 +133,11 @@ export class ContentService {
   getMissions() {
     return this.prisma.mission.findMany({ orderBy: { key: 'asc' } });
   }
+
+  /// Config estático do servidor por chave (ex.: layout da Capital, painéis dos
+  /// ministérios, mapa-planeta). É a config canônica do jogo servida do banco.
+  async getConfig(key: string): Promise<unknown> {
+    const row = await this.prisma.serverConfig.findUnique({ where: { key } });
+    return row?.value ?? null;
+  }
 }

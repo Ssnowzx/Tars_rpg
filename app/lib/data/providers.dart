@@ -40,30 +40,32 @@ import '../domain/repositories/reputation_repository.dart';
 import '../domain/repositories/spaceport_repository.dart';
 import '../domain/repositories/terraform_repository.dart';
 import '../domain/repositories/world_repository.dart';
-import 'mock/mock_auction_repository.dart';
-import 'mock/mock_chat_repository.dart';
-import 'mock/mock_combat_repository.dart';
-import 'mock/mock_federation_repository.dart';
-import 'mock/mock_fleet_repository.dart';
-import 'mock/mock_market_repository.dart';
-import 'mock/mock_ministry_repository.dart';
-import 'mock/mock_mission_repository.dart';
-import 'mock/mock_public_office_repository.dart';
-import 'mock/mock_ranking_repository.dart';
-import 'mock/mock_reputation_repository.dart';
-import 'api/api_client.dart';
+import 'api/api_auction_repository.dart';
 import 'api/api_capital_repository.dart';
+import 'api/api_chat_repository.dart';
+import 'api/api_client.dart';
+import 'api/api_combat_repository.dart';
+import 'api/api_federation_repository.dart';
+import 'api/api_fleet_repository.dart';
 import 'api/api_lunar_repository.dart';
+import 'api/api_market_repository.dart';
+import 'api/api_ministry_repository.dart';
+import 'api/api_mission_repository.dart';
 import 'api/api_notification_repository.dart';
 import 'api/api_profile_repository.dart';
+import 'api/api_public_office_repository.dart';
+import 'api/api_ranking_repository.dart';
+import 'api/api_reputation_repository.dart';
 import 'api/api_spaceport_repository.dart';
 import 'api/api_terraform_repository.dart';
 import 'api/api_world_repository.dart';
 
-/// Ponto único de binding interface → implementação. Para usar a API real,
-/// troque os mocks por implementações `Api...` aqui.
-// Reais (backend): recursos + colônia. Slots da Capital e mapa-planeta ainda
-// caem no fixture dentro das implementações de API (sem endpoint próprio).
+/// Ponto único de binding interface → implementação. **Todos** os repositórios
+/// usam implementações `Api...` (backend NestJS) — não há mais mock em runtime.
+/// Dados dinâmicos vêm de endpoints próprios (/resources, /colony, /build-queue,
+/// /me, /spaceport, /lunar, /terraform); a config canônica do jogo (Capital,
+/// ministérios, mapa-planeta, boards de mercado/leilões/frota/etc.) vem de
+/// /config/:key.
 final capitalRepositoryProvider = Provider<CapitalRepository>(
   (ref) => ApiCapitalRepository(ref.watch(dioProvider)),
 );
@@ -73,11 +75,11 @@ final worldRepositoryProvider = Provider<WorldRepository>(
 );
 
 final marketRepositoryProvider = Provider<MarketRepository>(
-  (ref) => const MockMarketRepository(),
+  (ref) => ApiMarketRepository(ref.watch(dioProvider)),
 );
 
 final rankingRepositoryProvider = Provider<RankingRepository>(
-  (ref) => const MockRankingRepository(),
+  (ref) => ApiRankingRepository(ref.watch(dioProvider)),
 );
 
 final spaceportRepositoryProvider = Provider<SpaceportRepository>(
@@ -89,7 +91,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 );
 
 final ministryRepositoryProvider = Provider<MinistryRepository>(
-  (ref) => const MockMinistryRepository(),
+  (ref) => ApiMinistryRepository(ref.watch(dioProvider)),
 );
 
 final resourcesProvider = FutureProvider<Resources>(
@@ -137,7 +139,7 @@ final ministriesProvider = FutureProvider<MinistriesData>(
 );
 
 final combatRepositoryProvider = Provider<CombatRepository>(
-  (ref) => const MockCombatRepository(),
+  (ref) => ApiCombatRepository(ref.watch(dioProvider)),
 );
 
 final combatProvider = FutureProvider<CombatState>(
@@ -145,7 +147,7 @@ final combatProvider = FutureProvider<CombatState>(
 );
 
 final chatRepositoryProvider = Provider<ChatRepository>(
-  (ref) => const MockChatRepository(),
+  (ref) => ApiChatRepository(ref.watch(dioProvider)),
 );
 
 final chatProvider = FutureProvider<ChatState>(
@@ -153,7 +155,7 @@ final chatProvider = FutureProvider<ChatState>(
 );
 
 final federationRepositoryProvider = Provider<FederationRepository>(
-  (ref) => const MockFederationRepository(),
+  (ref) => ApiFederationRepository(ref.watch(dioProvider)),
 );
 
 final federationProvider = FutureProvider<Federation>(
@@ -161,7 +163,7 @@ final federationProvider = FutureProvider<Federation>(
 );
 
 final reputationRepositoryProvider = Provider<ReputationRepository>(
-  (ref) => const MockReputationRepository(),
+  (ref) => ApiReputationRepository(ref.watch(dioProvider)),
 );
 
 final disputesProvider = FutureProvider<DisputeBoard>(
@@ -169,7 +171,7 @@ final disputesProvider = FutureProvider<DisputeBoard>(
 );
 
 final missionRepositoryProvider = Provider<MissionRepository>(
-  (ref) => const MockMissionRepository(),
+  (ref) => ApiMissionRepository(ref.watch(dioProvider)),
 );
 
 final missionBoardProvider = FutureProvider<MissionBoard>(
@@ -177,7 +179,7 @@ final missionBoardProvider = FutureProvider<MissionBoard>(
 );
 
 final fleetRepositoryProvider = Provider<FleetRepository>(
-  (ref) => const MockFleetRepository(),
+  (ref) => ApiFleetRepository(ref.watch(dioProvider)),
 );
 
 final fleetProvider = FutureProvider<FleetBoard>(
@@ -185,7 +187,7 @@ final fleetProvider = FutureProvider<FleetBoard>(
 );
 
 final publicOfficeRepositoryProvider = Provider<PublicOfficeRepository>(
-  (ref) => const MockPublicOfficeRepository(),
+  (ref) => ApiPublicOfficeRepository(ref.watch(dioProvider)),
 );
 
 final publicOfficeProvider = FutureProvider<PublicOfficeBoard>(
@@ -193,7 +195,7 @@ final publicOfficeProvider = FutureProvider<PublicOfficeBoard>(
 );
 
 final auctionRepositoryProvider = Provider<AuctionRepository>(
-  (ref) => const MockAuctionRepository(),
+  (ref) => ApiAuctionRepository(ref.watch(dioProvider)),
 );
 
 final auctionHouseProvider = FutureProvider<AuctionHouse>(

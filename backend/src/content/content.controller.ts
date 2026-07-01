@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ContentService } from './content.service';
 
 /// Dados de referência públicos (não exigem login).
@@ -24,5 +24,11 @@ export class ContentController {
   @Get('missions')
   missions() {
     return this.content.getMissions();
+  }
+
+  /// Config estático por chave (Capital, ministérios, mapa-planeta, etc.).
+  @Get('config/:key')
+  config(@Param('key') key: string): Promise<unknown> {
+    return this.content.getConfig(key);
   }
 }

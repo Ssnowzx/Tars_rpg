@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import {
   MissionCategory,
   MoonAtmosphere,
@@ -7,6 +9,27 @@ import {
 } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+/// Conteúdo de referência do jogo (config canônica) servido do banco via
+/// /config/:key. Lê os JSONs de referência e guarda em ServerConfig, para o
+/// frontend consumir do servidor (fim dos mocks client-side).
+const FIXTURES_DIR = resolve(process.cwd(), '../app/assets/fixtures');
+const CONFIG_FIXTURES: { key: string; file: string }[] = [
+  { key: 'market', file: 'market.json' },
+  { key: 'informal', file: 'informal.json' },
+  { key: 'auctions', file: 'auctions.json' },
+  { key: 'missionsBoard', file: 'missions.json' },
+  { key: 'fleet', file: 'fleet.json' },
+  { key: 'federation', file: 'federation.json' },
+  { key: 'disputes', file: 'disputes.json' },
+  { key: 'rankings', file: 'rankings.json' },
+  { key: 'offices', file: 'offices.json' },
+  { key: 'chat', file: 'chat.json' },
+  { key: 'capital', file: 'capital.json' },
+  { key: 'ministries', file: 'ministries.json' },
+  { key: 'planet', file: 'planet.json' },
+  { key: 'combat', file: 'combat.json' },
+];
 
 /// Preços-base do Mercado Central (§22).
 const PRICES: Record<ResourceKey, number> = {
@@ -147,7 +170,18 @@ async function main(): Promise<void> {
     create: { key: 'gagarin', value: gagarin },
   });
 
-  console.log('Seed concluído: preços, luas, boletins, planetas, terraformação, missões.');
+  // Config de referência (lê os JSONs canônicos → ServerConfig).
+  for (const { key, file } of CONFIG_FIXTURES) {
+    const raw = readFileSync(resolve(FIXTURES_DIR, file), 'utf8');
+    const value = JSON.parse(raw) as unknown;
+    await prisma.serverConfig.upsert({
+      where: { key },
+      update: { value: value as object },
+      create: { key, value: value as object },
+    });
+  }
+
+  console.log(`Seed concluído: preços, luas, boletins, planetas, terraformação, missões, +${CONFIG_FIXTURES.length} configs de referência.`);
 }
 
 main()

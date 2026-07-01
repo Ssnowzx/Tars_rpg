@@ -3,14 +3,12 @@ import 'package:dio/dio.dart';
 import '../../domain/models/institution_slot.dart';
 import '../../domain/models/resources.dart';
 import '../../domain/repositories/capital_repository.dart';
-import '../mock/mock_capital_repository.dart';
 
-/// Implementação de API: recursos vêm do backend (/resources). Os 20 slots da
-/// Capital ainda não têm endpoint — caem no fixture por enquanto.
+/// Implementação de API: recursos vêm de /resources; os 20 slots da Capital
+/// (config canônica do jogo) vêm de /config/capital.
 class ApiCapitalRepository implements CapitalRepository {
-  ApiCapitalRepository(this._dio, {this.fallback = const MockCapitalRepository()});
+  ApiCapitalRepository(this._dio);
   final Dio _dio;
-  final MockCapitalRepository fallback;
 
   @override
   Future<Resources> loadResources() async {
@@ -35,7 +33,11 @@ class ApiCapitalRepository implements CapitalRepository {
   }
 
   @override
-  Future<List<InstitutionSlot>> loadSlots() => fallback.loadSlots();
+  Future<List<InstitutionSlot>> loadSlots() async {
+    final res = await _dio.get<Map<String, dynamic>>('/config/capital');
+    final slots = res.data?['slots'] as List<dynamic>? ?? const [];
+    return slots.map((e) => InstitutionSlot.fromJson(e as Map<String, dynamic>)).toList();
+  }
 }
 
 ResourceTier _tier(String backend) => switch (backend) {
