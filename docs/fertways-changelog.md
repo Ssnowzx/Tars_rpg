@@ -4,6 +4,18 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
 ## 2026-07-01
 
+### Etapa 25 — Entrega de prêmio de leilão + receita de Biocombustível (§24.5)
+- **Entrega do prêmio de leilão (§13)**: ao encerrar, além de cobrar o vencedor, cria uma **notificação**
+  (`kind: auction`) de entrega do item no Centro de Notificações.
+- **Receita de produção (§24.5)**: o acúmulo de `/resources` virou duas fases — primários acumulam direto e
+  os secundários com receita consomem insumos. Implementada a **única receita definitiva do GDD**: Destilaria =
+  **2 Biomassa + 3 Energia → 1 Biocombustível** (limitada pela disponibilidade). As demais secundárias dependem
+  de minerais/planilha não auto-produzíveis na T1 — ficam de fora (o GDD proíbe inventar números).
+- **Testes**: `production.spec` (receita), e2e do fechamento+entrega de leilão. Suite **19 unit + 9 e2e** verdes.
+- Verificado via API: biofuel +perHour consumindo Biomassa/Energia (biomass +14 = +22−8, energy +28 = +40−12 em 1h).
+- Specs OpenSpec atualizadas (backend-integration, auctions, construction-queue, informal-trade, i18n-locale).
+  Relatório: `docs/reports/25-leilao-prize-e-receita.{html,pdf}`.
+
 ### Etapa 24 — Economia completa (obra/custo/produção) + e2e + i18n
 - **Construção autoritativa com custo (§20)**: enfileirar debita recursos (Metal Bruto + Energia, curva 1.5×) e
   devolve ao cancelar; concluir eleva nível + perHour do prédio (§19) e recalcula `ResourceStock.perHour` da

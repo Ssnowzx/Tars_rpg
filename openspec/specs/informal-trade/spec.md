@@ -31,3 +31,12 @@ calote com acordo expirado como denúncia pré-preenchida.
 #### Scenario: Histórico de calote
 - **WHEN** uma troca terminou em calote com acordo expirado
 - **THEN** mostra "Acordo de Troca expirado — denúncia pré-preenchida (§26.5)"
+
+### Requirement: Troca transacional (backend, §8)
+O sistema SHALL lastrear as ofertas em registros reais (`InformalOffer`) servidos por `GET /informal` e, ao
+aceitar (`POST /informal/:id/accept`), fazer a **troca atômica** de recursos — o jogador envia o `want` e
+recebe o `give`; o ofertante faz o inverso — sem escrow. A oferta é encerrada após a troca.
+
+#### Scenario: Aceitar oferta
+- **WHEN** o jogador aceita uma oferta e tem os recursos do `want`
+- **THEN** o backend troca os recursos atomicamente, atualiza o HUD e encerra a oferta

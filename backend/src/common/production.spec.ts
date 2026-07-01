@@ -1,5 +1,5 @@
 import { ResourceKey } from '@prisma/client';
-import { baseProduction, buildCost, buildingResource, nextProduction } from './production';
+import { baseProduction, buildCost, buildingResource, nextProduction, productionRecipe } from './production';
 
 describe('production', () => {
   describe('buildingResource', () => {
@@ -46,6 +46,18 @@ describe('production', () => {
     it('não deve custar nada para habitat / slot vazio', () => {
       expect(buildCost('habitat', 2)).toEqual({});
       expect(buildCost('empty', 1)).toEqual({});
+    });
+  });
+
+  describe('productionRecipe', () => {
+    it('Biocombustível = 2 Biomassa + 3 Energia (§24.5)', () => {
+      const recipe = productionRecipe(ResourceKey.biofuel);
+      expect(recipe).toEqual({ [ResourceKey.biomass]: 2, [ResourceKey.energy]: 3 });
+    });
+
+    it('recursos sem receita definitiva retornam null', () => {
+      expect(productionRecipe(ResourceKey.oxygen)).toBeNull();
+      expect(productionRecipe(ResourceKey.alloys)).toBeNull();
     });
   });
 });

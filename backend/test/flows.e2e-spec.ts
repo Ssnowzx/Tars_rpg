@@ -177,4 +177,38 @@ describe('Fluxos-chave (e2e)', () => {
     const updated = await prisma.auction.findUniqueOrThrow({ where: { id: auction.id } });
     expect(Number(updated.currentBid)).toBe(1100);
   });
+
+  it('Leilão: encerra no prazo, cobra o vencedor e entrega o prêmio (notificação)', async () => {
+    const auction = await prisma.auction.create({
+      data: {
+        name: `E2E Prêmio ${stamp}`,
+        description: 'lote de teste',
+        rarity: 'rare',
+        status: 'live',
+        currentBid: new Prisma.Decimal(1000),
+        minIncrement: new Prisma.Decimal(100),
+        endsAt: new Date(Date.now() + 3_600_000),
+      },
+    });
+    tempAuctionIds.push(auction.id);
+
+    await prisma.player.update({ where: { id: idA }, data: { level: 100, fertBalance: new Prisma.Decimal(50000) } });
+    await request(http).post(`/api/auctions/${auction.id}/bid`).set(...bearer(tokenA)).send({ amount: 1100 }).expect(201);
+
+    // Vence o prazo e dispara o fechamento na leitura.
+    await prisma.auction.update({ where: { id: auction.id }, data: { endsAt: new Date(Date.now() - 60_000) } });
+    const before = await prisma.player.findUniqueOrThrow({ where: { id: idA } });
+    await request(http).get('/api/auctions').set(...bearer(tokenA)).expect(200);
+
+    const closed = await prisma.auction.findUniqueOrThrow({ where: { id: auction.id } });
+    expect(closed.status).toBe('ended');
+
+    const after = await prisma.player.findUniqueOrThrow({ where: { id: idA } });
+    expect(Number(before.fertBalance) - Number(after.fertBalance)).toBe(1100); // vencedor cobrado
+
+    const notifs = await request(http).get('/api/notifications').set(...bearer(tokenA)).expect(200);
+    expect(
+      notifs.body.some((n: { kind: string; title: string }) => n.kind === 'auction' && n.title.includes('Leilão vencido')),
+    ).toBe(true);
+  });
 });

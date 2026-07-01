@@ -41,3 +41,13 @@ de aceleração — §13 veda pay-to-win).
 #### Scenario: Cancelar obra
 - **WHEN** o jogador toca o X de uma obra
 - **THEN** a obra sai da fila e libera a vaga
+
+### Requirement: Backend autoritativo com custo e produção (§19/§20)
+A fila é autoritativa no backend (`/build-queue`, `/colony/build|upgrade`). Enfileirar SHALL debitar o custo
+em recursos (Metal Bruto + Energia, curva 1.5×) e devolvê-lo ao cancelar; concluir SHALL elevar o nível e a
+produção por hora do recurso (recalculando o `ResourceStock.perHour`). A mensagem de erro exibida SHALL ser a
+real do servidor (recurso insuficiente ≠ fila cheia).
+
+#### Scenario: Obra sobe a produção
+- **WHEN** o jogador conclui a evolução de uma construção de produção
+- **THEN** o nível e o perHour do recurso aumentam e o HUD passa a acumular mais rápido

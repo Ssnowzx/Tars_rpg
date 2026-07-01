@@ -41,8 +41,9 @@ export class AuctionService {
     private readonly ledger: LedgerService,
   ) {}
 
-  /// Encerra leilões vencidos: marca `ended` e cobra o vencedor (maior lance)
-  /// via livro-razão. Se o vencedor estiver insolvente, encerra sem cobrança.
+  /// Encerra leilões vencidos: marca `ended`, cobra o vencedor (maior lance)
+  /// via livro-razão e **entrega o item** (notificação ao vencedor). Se o
+  /// vencedor estiver insolvente, encerra sem cobrança nem entrega.
   async closeExpired(): Promise<void> {
     const due = await this.prisma.auction.findMany({
       where: { status: { not: 'ended' }, endsAt: { lte: new Date() } },
@@ -58,8 +59,19 @@ export class AuctionService {
               { playerId: top.playerId, amount: a.currentBid.negated(), reason: 'auction', refType: 'auction', refId: a.id },
               tx,
             );
+            // Entrega do item ao vencedor (§13) — via Centro de Notificações.
+            await tx.notification.create({
+              data: {
+                playerId: top.playerId,
+                kind: 'auction',
+                severity: 'success',
+                title: `Leilão vencido: ${a.name}`,
+                body: `Você arrematou "${a.name}" por ${a.currentBid.toFixed(0)} Fert$. O item foi entregue à sua conta.`,
+                route: '/market/auctions',
+              },
+            });
           } catch {
-            // Vencedor insolvente — leilão encerra sem cobrança.
+            // Vencedor insolvente — leilão encerra sem cobrança nem entrega.
           }
         }
       });

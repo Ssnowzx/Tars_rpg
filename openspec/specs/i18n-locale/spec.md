@@ -26,6 +26,14 @@ O sistema SHALL fornecer, em PT-BR/ES/EN, os rótulos da navegação, das açõe
 - **WHEN** o idioma ativo é ES
 - **THEN** a navegação mostra "Mapa/Capital/Mercado/Espaciopuerto/Perfil"
 
+### Requirement: Persistência do idioma
+O sistema SHALL persistir o idioma escolhido entre sessões (SharedPreferences) e restaurá-lo no boot. A tela
+de login/registro SHALL ser localizada (PT/ES/EN) com seletor de idioma acessível antes de entrar.
+
+#### Scenario: Idioma sobrevive ao reload
+- **WHEN** o jogador escolhe English e recarrega o app
+- **THEN** a tela de login volta em inglês (idioma persistido no storage)
+
 ### Requirement: Roteamento independe do rótulo traduzido
 O sistema SHALL rotear as ações por chave estável (não pelo texto traduzido), de modo que a navegação
 funcione em qualquer idioma.

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório 25 (Prêmio de leilão + receita de Biocombustível)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>25 — Entrega de prêmio de leilão + receita §24.5</h1>
+  <div class="sub">Notificação de vitória no leilão · Destilaria consome Biomassa + Energia
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (Flutter web + NestJS/Prisma/MariaDB)</span>
+    <span><b>GDD:</b> v33 — §13/§24.5</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Escopo:</b> fechamento dos últimos itens de economia</span>
+  </div>
+</div>
+
+<p class="lead">Fecha os dois itens que faltavam do backlog econômico: o <b>leilão entrega o prêmio</b> ao vencedor
+(notificação no Centro de Notificações, além da cobrança), e a produção passa a ter <b>receita</b> — a única
+definitiva do GDD, a <b>Destilaria</b> (2 Biomassa + 3 Energia → 1 Biocombustível). As demais receitas
+secundárias dependem de minerais que o jogador não auto-produz na Temporada 1, então ficam de fora (o GDD proíbe
+inventar números).</p>
+
+<div class="cards">
+  <div class="card"><div class="n">§13</div><div class="l">leilão entrega o prêmio (notificação)</div></div>
+  <div class="card"><div class="n">§24.5</div><div class="l">Destilaria: 2 Biomassa + 3 Energia → 1 Biocombustível</div></div>
+  <div class="card"><div class="n">2 fases</div><div class="l">acúmulo: primários → secundários com receita</div></div>
+  <div class="card"><div class="n">19+9</div><div class="l">unit + e2e verdes</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Entrega do prêmio de leilão (§13)</b>: <code>closeExpired()</code> agora, além de encerrar o lote e
+      cobrar o vencedor pelo livro-razão, cria uma <b>notificação</b> (<code>kind: auction</code>, severidade
+      sucesso) de entrega do item — que aparece no Centro de Notificações do jogador.</li>
+  <li><b>Receita de produção (§24.5)</b>: o acúmulo "compute-on-read" de <code>/resources</code> passou a ter
+      <b>duas fases</b> — (1) os primários/brutos acumulam por hora; (2) os secundários com <b>receita</b>
+      consomem seus insumos, limitados pela disponibilidade. Implementada a receita definitiva do GDD: a
+      <b>Destilaria</b> converte <b>2 Biomassa + 3 Energia em 1 Biocombustível</b>.</li>
+  <li><b>Fidelidade ao GDD</b>: ligas/compostos/componentes dependem de minerais eletrônicos comprados do
+      governo (não auto-produzíveis na T1) e de ratios não definidos em planilha — por isso <b>não</b> foram
+      inventados. A estrutura de receitas é extensível quando esses números existirem.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Receita</td><td><code>common/production.ts</code> — <code>PRODUCTION_RECIPES</code> / <code>productionRecipe()</code></td></tr>
+    <tr><td>Acúmulo</td><td><code>resources.service</code> — <code>accrueProduction()</code> em duas fases (consome insumos)</td></tr>
+    <tr><td>Leilão</td><td><code>auctions/auction.service</code> — <code>closeExpired()</code> cria a notificação de entrega</td></tr>
+    <tr><td>Testes</td><td><code>common/production.spec</code> (receita) · <code>test/flows.e2e-spec</code> (fechamento+entrega)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li>Backend: <code>start:dev</code> limpo (0 erros TS); <code>jest</code> <b>19 unit + 9 e2e</b> verdes</li>
+  <li>Receita (API): com o relógio 1h atrás → Biocombustível +perHour, Biomassa +14 (=+22−8), Energia +28 (=+40−12)</li>
+  <li>Leilão (e2e): lote vence → encerra, vencedor cobrado (−1100 Fert$) e recebe notificação "Leilão vencido"</li>
+  <li>Specs OpenSpec atualizadas (backend-integration/auctions/construction-queue/informal-trade/i18n-locale)</li>
+</ul>
+
+<div class="note"><b>Backlog remanescente:</b> receitas de Ligas/Compostos/Componentes (dependem de minerais
+comprados §24.5, sem ratio de auto-produção na T1); o prêmio do leilão como <b>inventário</b> real (hoje entregue
+via notificação); extração i18n do corpo das demais telas. O ciclo econômico principal está fechado:
+<b>construir (custa) → produzir (com insumos) → comerciar/leiloar</b>.</div>
+
+<footer><span>Fertways — Relatório de Entrega · 25 Prêmio de leilão + receita §24.5</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

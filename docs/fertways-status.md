@@ -33,6 +33,12 @@ histórico). **Testes e2e** dos fluxos (isolamento/mercado/informal/leilão) —
 colisão de placa na frota inicial; suite 17 unit + 8 e2e verdes. **i18n**: idioma **persiste** (SharedPreferences)
 + tela de login trilíngue com seletor. Relatório: `docs/reports/24-economia-completa-i18n.{html,pdf}`.
 Backlog: extração i18n do corpo das demais telas (incremental); receitas §24.5 completas. Tudo em `origin/main`.
+**Etapa 25 (01/07):** **entrega do prêmio de leilão** (notificação ao vencedor ao encerrar) + **receita de
+Biocombustível** (§24.5 — Destilaria: 2 Biomassa + 3 Energia → 1 Biocombustível; o acúmulo de `/resources`
+virou duas fases e os secundários com receita consomem insumos). Suite **19 unit + 9 e2e** verdes; specs
+OpenSpec atualizadas (backend-integration/auctions/construction-queue/informal-trade/i18n-locale). Relatório:
+`docs/reports/25-leilao-prize-e-receita.{html,pdf}`. As demais receitas secundárias dependem de minerais não
+auto-produzíveis na T1 (GDD proíbe inventar). Tudo em `origin/main`.
 **Como abrir do zero:** `cd backend && pnpm db:up && pnpm prisma:migrate && pnpm seed && pnpm start:dev` (usar
 node v20 do fnm, NÃO o /opt/homebrew node quebrado) · `cd app && flutter run -d chrome` · login vale@fertways.test / colonia123.
 

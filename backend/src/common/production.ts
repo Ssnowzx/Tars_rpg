@@ -33,6 +33,19 @@ export function baseProduction(category: BuildingCategory): number {
   return BASE_PER_HOUR[category] ?? 0;
 }
 
+/// Receitas de conversão (§24.5): recurso → insumos por unidade produzida.
+/// Só o **Biocombustível** tem receita fixa definitiva no GDD (a Destilaria
+/// converte 2 Biomassa + 3 Energia em 1 Biocombustível). As demais secundárias
+/// dependem de minerais/planilha não auto-produzíveis na T1 — ficam de fora até
+/// terem razão explícita (o GDD proíbe inventar números).
+export const PRODUCTION_RECIPES: Partial<Record<ResourceKey, Partial<Record<ResourceKey, number>>>> = {
+  [ResourceKey.biofuel]: { [ResourceKey.biomass]: 2, [ResourceKey.energy]: 3 },
+};
+
+export function productionRecipe(key: ResourceKey): Partial<Record<ResourceKey, number>> | null {
+  return PRODUCTION_RECIPES[key] ?? null;
+}
+
 /// Novo perHour ao evoluir uma construção (§19 — curva 1.5× por nível).
 export function nextProduction(current: number): number {
   return Math.round(current * 1.5);

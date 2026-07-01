@@ -31,3 +31,13 @@ nº de lances e líder (destacando "Você lidera"); e um histórico de encerrado
 #### Scenario: Lote liderado pelo jogador
 - **WHEN** o lance líder é do jogador
 - **THEN** o lote mostra "Você lidera"
+
+### Requirement: Lances e fechamento reais (backend, §13)
+O sistema SHALL registrar lances (`Bid`) validando gate Nível 100, incremento mínimo e saldo, elevando o
+lance atual do lote (`Auction`). Ao vencer o prazo, o lote SHALL encerrar, cobrar o vencedor no livro-razão
+e entregar o prêmio via notificação; o histórico reflete os encerrados reais. Lotes/nível vêm por jogador
+(`GET /auctions`, `POST /auctions/:id/bid`).
+
+#### Scenario: Lance vence e é entregue
+- **WHEN** um jogador Nível 100 lidera um lote e o prazo vence
+- **THEN** o lote encerra, o vencedor é cobrado e recebe a notificação de entrega do item
