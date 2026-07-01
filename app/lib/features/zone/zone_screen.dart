@@ -5,12 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
-import '../../data/build_queue_controller.dart';
 import '../../data/providers.dart';
-import '../../domain/models/build_queue.dart';
 import '../../domain/models/combat.dart';
 import '../../domain/models/planet_models.dart';
-import '../../domain/models/world_models.dart' show PlotKind;
 import '../world_map/game/fertways_world_game.dart' show zoneResourceColor, zoneResourceIcon;
 
 String _resourceLabel(ZoneResource k) => switch (k) {
@@ -179,20 +176,8 @@ class ZoneScreen extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: t.space2),
               child: _StructureRow(
                 s: s,
-                onTap: () {
-                  final seconds = buildSeconds(s.level + 1);
-                  final ok = ref.read(buildQueueProvider.notifier).enqueue(
-                        name: s.name,
-                        kind: PlotKind.empty,
-                        fromLevel: s.level,
-                        toLevel: s.level + 1,
-                        seconds: seconds,
-                      );
-                  final verb = s.level == 0 ? 'Construção' : 'Melhoria';
-                  toast(ok
-                      ? '$verb de ${s.name} adicionada à fila (~${seconds}s)'
-                      : 'Fila cheia — aguarde uma obra concluir');
-                },
+                onTap: () => toast(
+                    '${s.level == 0 ? 'Construir' : 'Melhorar'} ${s.name} — disponível quando a Zona for conectada ao servidor'),
               ),
             )),
         SizedBox(height: t.space4),

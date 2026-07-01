@@ -8,9 +8,7 @@ import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
 import '../../data/build_queue_controller.dart';
 import '../../data/providers.dart';
-import '../../domain/models/build_queue.dart';
 import '../../domain/models/colony_buildings.dart';
-import '../../domain/models/world_models.dart' show PlotKind;
 import '../world_map/view/construction_panel.dart';
 import 'colony_building_panel.dart';
 import 'game/colony_game.dart';
@@ -71,61 +69,33 @@ class _ColonyViewState extends ConsumerState<_ColonyView> {
     } else if (b.isFree) {
       _showBuildSheet();
     } else {
-      _enqueue(name: b.name, kind: _kindFor(b.category), fromLevel: b.level, toLevel: b.level + 1);
+      _upgrade(b);
     }
   }
 
-  /// Enfileira uma obra na fila de construção (§17/§20) em vez do antigo mock.
-  void _enqueue({
-    required String name,
-    required PlotKind kind,
-    required int fromLevel,
-    required int toLevel,
-  }) {
-    final seconds = buildSeconds(toLevel);
-    final ok = ref.read(buildQueueProvider.notifier).enqueue(
-          name: name,
-          kind: kind,
-          fromLevel: fromLevel,
-          toLevel: toLevel,
-          seconds: seconds,
-        );
-    final verb = fromLevel == 0 ? 'Construção' : 'Melhoria';
+  /// Enfileira uma evolução no backend (/colony/buildings/:id/upgrade). O nível
+  /// exato é decidido pelo servidor (fonte autoritativa).
+  Future<void> _upgrade(ColonyBuilding b) async {
+    final ok = await ref.read(buildQueueProvider.notifier).enqueueUpgrade(b.id);
     _toast(ok
-        ? '$verb de $name adicionada à fila (~${seconds}s)'
+        ? 'Melhoria de ${b.name} adicionada à fila'
         : 'Fila cheia — aguarde uma obra concluir');
   }
 
-  PlotKind _kindFor(BuildingCategory c) => switch (c) {
-        BuildingCategory.water => PlotKind.water,
-        BuildingCategory.metals || BuildingCategory.rawmetal => PlotKind.metals,
-        BuildingCategory.biomass => PlotKind.biomass,
-        BuildingCategory.energy => PlotKind.energy,
-        BuildingCategory.components || BuildingCategory.biofuel => PlotKind.factory,
-        _ => PlotKind.empty,
-      };
-
-  PlotKind _kindForName(String name) {
-    if (name.contains('Água')) return PlotKind.water;
-    if (name.contains('Energia')) return PlotKind.energy;
-    if (name.contains('Fazenda')) return PlotKind.biomass;
-    if (name.contains('Oficina') || name.contains('Refinaria')) return PlotKind.factory;
-    return PlotKind.empty;
-  }
-
   /// Fluxo de construir: escolher a estrutura para o slot livre (GDD v21 §17).
+  /// Cada opção = (rótulo, ícone, kind, categoria do backend).
   void _showBuildSheet() {
-    const options = <(String, IconData)>[
-      ('Fazenda', Icons.eco_outlined),
-      ('Captação de Água', Icons.water_drop_outlined),
-      ('Reator de Energia', Icons.bolt_outlined),
-      ('Oficina', Icons.build_outlined),
-      ('Refinaria Química', Icons.science_outlined),
-      ('Laboratório', Icons.biotech_outlined),
-      ('Quartel', Icons.shield_outlined),
-      ('Plataforma de Pouso', Icons.flight_land_outlined),
-      ('Torre de Defesa', Icons.security_outlined),
-      ('Mercado Local', Icons.storefront_outlined),
+    const options = <(String, IconData, String, String)>[
+      ('Fazenda', Icons.eco_outlined, 'farm', 'biomass'),
+      ('Captação de Água', Icons.water_drop_outlined, 'water', 'water'),
+      ('Reator de Energia', Icons.bolt_outlined, 'reactor', 'energy'),
+      ('Oficina', Icons.build_outlined, 'workshop', 'components'),
+      ('Refinaria Química', Icons.science_outlined, 'refinery', 'components'),
+      ('Laboratório', Icons.biotech_outlined, 'lab', 'research'),
+      ('Quartel', Icons.shield_outlined, 'barracks', 'military'),
+      ('Plataforma de Pouso', Icons.flight_land_outlined, 'landing', 'transport'),
+      ('Torre de Defesa', Icons.security_outlined, 'defense', 'military'),
+      ('Mercado Local', Icons.storefront_outlined, 'localmarket', 'special'),
     ];
     final t = Theme.of(context).extension<DsTokens>()!;
     showModalBottomSheet<void>(
@@ -152,9 +122,14 @@ class _ColonyViewState extends ConsumerState<_ColonyView> {
                     avatar: Icon(o.$2, size: 16, color: FwPalette.rust600),
                     label: Text(o.$1),
                     side: BorderSide(color: t.borderDefault),
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.of(sheetCtx).pop();
-                      _enqueue(name: o.$1, kind: _kindForName(o.$1), fromLevel: 0, toLevel: 1);
+                      final ok = await ref
+                          .read(buildQueueProvider.notifier)
+                          .enqueueNew(kind: o.$3, name: o.$1, category: o.$4);
+                      _toast(ok
+                          ? 'Construção de ${o.$1} adicionada à fila'
+                          : 'Fila cheia ou sem slot livre');
                     },
                   ),
               ],
