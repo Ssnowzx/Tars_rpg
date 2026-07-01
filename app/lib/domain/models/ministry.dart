@@ -52,7 +52,7 @@ extension MinistryKindMeta on MinistryKind {
         MinistryKind.depot =>
           'Armazenamento central de recursos da Capital, com capacidade por recurso.',
         MinistryKind.centralTransport =>
-          'Produção de caminhões-base (10 níveis). Caminhões extras são permanentes.',
+          'Libera vagas de frota (10 níveis); veículos são fabricados/adquiridos à parte (§0).',
         MinistryKind.unknown => 'Instituição da Capital.',
       };
 }
@@ -423,17 +423,21 @@ class DepotData {
       );
 }
 
-/// Um nível da Central de Transportes (GDD §19.5).
+/// Um nível da Central de Transportes. O nível libera VAGAS de frota (uma por
+/// nível), não caminhões grátis — decisão vigente do §0 (supera "caminhões
+/// base" de §19.5/§28.5); veículo é fabricado/adquirido à parte e ocupa a vaga.
 @immutable
 class TransportLevel {
-  const TransportLevel({required this.level, required this.trucks, required this.energy});
+  const TransportLevel({required this.level, required this.slots, required this.energy});
   final int level;
-  final int trucks;
+
+  /// Vagas de frota liberadas neste nível (capacidade de manter veículos ativos).
+  final int slots;
   final int energy;
 
   factory TransportLevel.fromJson(Map<String, dynamic> j) => TransportLevel(
         level: j['level'] as int,
-        trucks: j['trucks'] as int,
+        slots: (j['slots'] ?? j['trucks']) as int,
         energy: j['energy'] as int,
       );
 }

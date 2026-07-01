@@ -8,9 +8,11 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 - **`FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES.html`** supera a v29. Edição **aditiva**: v3.0
   integral (Parte II) + v3.2 sanitizada (Parte I) + **§0 tabela de precedência** (12 conflitos resolvidos)
   + **§28** correções. Implementar sempre as **decisões vigentes do §0**, não o registro antigo.
-- Deltas v33 sobre telas existentes (**reconciliação pendente, fora do C1**): §28.1 Gagarin em órbita
-  (não no casco da Endurance) · §28.5 Central de Transportes definitiva · §28.8 Mercado Local (dedup
-  Biomassa) · **Predador = Módulos Operacionais** (não captura pessoas).
+- Deltas v33 sobre telas existentes — **reconciliados**: §28.1 Gagarin em órbita (no C1) · **Central de
+  Transportes** reframada de "caminhões-base incluídos" para **"vagas de frota"** (o nível libera vagas;
+  veículo é fabricado/adquirido à parte — §0 supera §19.5/§28.5; `TransportLevel.trucks`→`slots`) ·
+  **Proteção de novato = 8 dias** (§28.4 supera §27.11 "20 dias"; `combat.dart` + `zone_screen.dart`).
+  **N/A:** §28.8 Mercado Local (tabela de custo não exibida) · Predador (unidade não modelada).
 
 ### Bloco C — C1 Exploração Lunar / Telescópio Gagarin CONCLUÍDO
 - Vertical slice completo (modelo → repo → mock → `lunar.json` → provider → tela → rota drill-in

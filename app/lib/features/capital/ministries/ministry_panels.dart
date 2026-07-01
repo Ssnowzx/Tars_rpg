@@ -836,7 +836,7 @@ class DepotPanel extends StatelessWidget {
   }
 }
 
-// ── Central de Transportes (§19.5) ──────────────────────────────────────────
+// ── Central de Transportes (§0 supera §19.5/§28.5) ──────────────────────────
 class CentralTransportPanel extends StatelessWidget {
   const CentralTransportPanel({super.key, required this.data});
   final CentralTransportData data;
@@ -846,7 +846,7 @@ class CentralTransportPanel extends StatelessWidget {
     final t = Theme.of(context).extension<DsTokens>()!;
     final current = data.levels.firstWhere(
       (l) => l.level == data.currentLevel,
-      orElse: () => data.levels.isNotEmpty ? data.levels.first : const TransportLevel(level: 1, trucks: 1, energy: 22),
+      orElse: () => data.levels.isNotEmpty ? data.levels.first : const TransportLevel(level: 1, slots: 1, energy: 22),
     );
     return ListView(
       padding: _bodyPadding(t),
@@ -854,8 +854,8 @@ class CentralTransportPanel extends StatelessWidget {
         StatGrid(tiles: [
           StatTile(label: 'Nível atual', value: '${current.level} / 10', icon: Icons.stairs_outlined, color: t.info),
           StatTile(
-              label: 'Caminhões-base',
-              value: '${current.trucks}',
+              label: 'Vagas de frota',
+              value: '${current.slots}',
               icon: Icons.local_shipping_outlined,
               color: FwPalette.rust600),
           StatTile(
@@ -866,8 +866,9 @@ class CentralTransportPanel extends StatelessWidget {
         ]),
         SizedBox(height: t.space3),
         MinistrySection(
-          title: 'Níveis (§19.5)',
-          subtitle: 'Caminhões-base produzidos são permanentes; caminhões extras são produzíveis.',
+          title: 'Níveis — vagas de frota',
+          subtitle: 'O nível libera vagas (capacidade de manter veículos ativos); não entrega '
+              'caminhões grátis. Cada veículo é fabricado/adquirido à parte e ocupa uma vaga (§0).',
           child: Column(
             children: [
               for (final lvl in data.levels)
@@ -891,7 +892,7 @@ class CentralTransportPanel extends StatelessWidget {
                                   color: isCurrent ? t.info : FwPalette.gray700)),
                         ),
                         Expanded(
-                          child: Text('${lvl.trucks} caminhões-base',
+                          child: Text('${lvl.slots} ${lvl.slots == 1 ? 'vaga' : 'vagas'} de frota',
                               style: TextStyle(
                                   fontSize: 12.5,
                                   fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w400,

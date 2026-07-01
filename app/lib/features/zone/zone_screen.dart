@@ -332,7 +332,7 @@ class _StructureRow extends StatelessWidget {
 }
 
 /// Defesa & Combate territorial da zona (GDD v29 §27): guarnição, forças,
-/// previsão de ataque (§27.5), manutenção (§27.12), proteção de novatos (§27.11).
+/// previsão de ataque (§27.5), manutenção (§27.12), proteção de novatos (§28.4, 8 dias).
 class _CombatSection extends ConsumerWidget {
   const _CombatSection();
 
@@ -562,8 +562,8 @@ class _MaintenanceBlock extends StatelessWidget {
             Expanded(
               child: Text(
                   combat.noviceProtected
-                      ? 'Protegida (novato, ${combat.noviceDaysLeft} dias restantes) — §27.11'
-                      : 'Sem proteção de novato — pode ser atacada (§27.11)',
+                      ? 'Protegida (novato, ${combat.noviceDaysLeft}/8 dias restantes) — §28.4'
+                      : 'Sem proteção de novato — vulnerável após 8 dias (§28.4)',
                   style: TextStyle(fontSize: 11.5, color: t.textSecondary)),
             ),
             if (combat.cooldownHours > 0)

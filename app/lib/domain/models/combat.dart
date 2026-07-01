@@ -126,7 +126,7 @@ class CombatState {
   final double constructionBonusPct; // bônus de Muralha/Bastião/Torre (§27.3)
   final MaintenanceCost maintenance;
   final bool maintenancePaid;
-  final bool noviceProtected; // dono nos primeiros 20 dias (§27.11)
+  final bool noviceProtected; // zona de novato protegida por 8 dias completos (§28.4; §0 supera §27.11)
   final int noviceDaysLeft;
   final int cooldownHours; // 0 = pode atacar; >0 = cooldown ativo (§27.10)
   final int lootPct; // saque ao vencer (§27.8)

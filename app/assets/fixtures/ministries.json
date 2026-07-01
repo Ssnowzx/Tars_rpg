@@ -124,16 +124,16 @@
   "centralTransport": {
     "currentLevel": 2,
     "levels": [
-      { "level": 1, "trucks": 1, "energy": 22 },
-      { "level": 2, "trucks": 2, "energy": 33 },
-      { "level": 3, "trucks": 3, "energy": 50 },
-      { "level": 4, "trucks": 4, "energy": 74 },
-      { "level": 5, "trucks": 5, "energy": 111 },
-      { "level": 6, "trucks": 6, "energy": 167 },
-      { "level": 7, "trucks": 7, "energy": 251 },
-      { "level": 8, "trucks": 8, "energy": 376 },
-      { "level": 9, "trucks": 9, "energy": 564 },
-      { "level": 10, "trucks": 10, "energy": 847 }
+      { "level": 1, "slots": 1, "energy": 22 },
+      { "level": 2, "slots": 2, "energy": 33 },
+      { "level": 3, "slots": 3, "energy": 50 },
+      { "level": 4, "slots": 4, "energy": 74 },
+      { "level": 5, "slots": 5, "energy": 111 },
+      { "level": 6, "slots": 6, "energy": 167 },
+      { "level": 7, "slots": 7, "energy": 251 },
+      { "level": 8, "slots": 8, "energy": 376 },
+      { "level": 9, "slots": 9, "energy": 564 },
+      { "level": 10, "slots": 10, "energy": 847 }
     ]
   }
 }

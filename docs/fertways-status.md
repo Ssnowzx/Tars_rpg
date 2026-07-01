@@ -104,8 +104,11 @@ de precedência** que resolve 12 conflitos. Ler as decisões vigentes do §0, N�
 - **Predador** = apreende **Módulos Operacionais** (NÃO captura pessoas) — §0 supera §28.7/§28.10.
 - Reputação = 4 índices isolados · Tributação = 1 incidência por fato · Ranking = percentil empírico.
 
-**Reconciliação v33 pendente (fora do C1, para próxima etapa):** §28.5 Central de Transportes definitiva ·
-§28.8 Mercado Local (dedup Biomassa) · Predador=Módulos. As telas atuais herdam v29 (§24–§27 já integrados).
+**Reconciliação v33 (feita):** ✅ **Central de Transportes** = "vagas de frota" (não caminhões grátis;
+veículo fabricado/adquirido à parte — §0 supera §19.5/§28.5): painel `CentralTransportPanel` + modelo
+`TransportLevel.slots` + `ministries.json`. ✅ **Proteção de novato = 8 dias** (§28.4 supera §27.11 "20
+dias"): `combat.dart` + `zone_screen.dart`. **N/A:** §28.8 Mercado Local (tabela de custo não é exibida
+na UI) · Predador (unidade não modelada — combate só tem Sentinela/Robô). Telas herdam v29 (§24–§27).
 
 ### v29 (herdado) — 4 capítulos que afetam o que já existe:
 - **§24 Sanitização Econômica:** Metal Bruto (novo recurso), Mina Local/Governamental, receitas de
