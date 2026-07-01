@@ -9,6 +9,7 @@ import '../domain/models/federation.dart';
 import '../domain/models/fleet.dart';
 import '../domain/models/institution_slot.dart';
 import '../domain/models/informal_trade.dart';
+import '../domain/models/lunar.dart';
 import '../domain/models/market.dart';
 import '../domain/models/ministry.dart';
 import '../domain/models/mission.dart';
@@ -26,6 +27,7 @@ import '../domain/repositories/chat_repository.dart';
 import '../domain/repositories/combat_repository.dart';
 import '../domain/repositories/federation_repository.dart';
 import '../domain/repositories/fleet_repository.dart';
+import '../domain/repositories/lunar_repository.dart';
 import '../domain/repositories/market_repository.dart';
 import '../domain/repositories/ministry_repository.dart';
 import '../domain/repositories/mission_repository.dart';
@@ -42,6 +44,7 @@ import 'mock/mock_chat_repository.dart';
 import 'mock/mock_combat_repository.dart';
 import 'mock/mock_federation_repository.dart';
 import 'mock/mock_fleet_repository.dart';
+import 'mock/mock_lunar_repository.dart';
 import 'mock/mock_market_repository.dart';
 import 'mock/mock_ministry_repository.dart';
 import 'mock/mock_mission_repository.dart';
@@ -197,5 +200,13 @@ final notificationRepositoryProvider = Provider<NotificationRepository>(
 
 final notificationsProvider = FutureProvider<NotificationCenter>(
   (ref) => ref.watch(notificationRepositoryProvider).loadNotifications(),
+);
+
+final lunarRepositoryProvider = Provider<LunarRepository>(
+  (ref) => const MockLunarRepository(),
+);
+
+final lunarProvider = FutureProvider<LunarExploration>(
+  (ref) => ref.watch(lunarRepositoryProvider).loadLunar(),
 );
 

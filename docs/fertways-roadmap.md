@@ -242,8 +242,14 @@ Três lugares distintos (3 níveis):
 ---
 
 ## BLOCO C — Temporada 2 / Bloqueados
-### C1 — Exploração Lunar / Telescópio Gagarin (previews T2)  ⬜  · GDD §12
-- Apenas previews/teasers e estrutura — conteúdo jogável é T2.
+### C1 — Exploração Lunar / Telescópio Gagarin (previews T2)  ✅  · GDD v33 §12 + §28.1–28.2
+- **Construído** — `/spaceport/lunar` (drill-in do Espaçoporto). `LunarRepository`/`lunar.json` →
+  `lunarProvider`; tela `features/lunar/lunar_screen.dart`.
+- Cartão do **Telescópio Gagarin** (satélite do Governo em órbita baixa — §28.1; gatilho 50 jogadores
+  OU 45 dias; boletins 2–4 dias; canal Central de Pesquisas). **Boletins** por categoria. **Catálogo
+  das 8 luas** (homenagem ↔ atmosfera ↔ recurso raro; 8 raros adicionados a `resource_visual.dart`).
+  **Marco de 75% de terraformação** = gatilho T2 + evento "Janela de Órbita Lunar". **Prévia bloqueada**
+  das bases lunares (§12.4). Entradas: Espaçoporto + Central de Pesquisas e Notícias.
 
 ### C2 — Ranking de Guerras  ✅  · GDD §15 (preenchido no v24)
 - **Desbloqueado e construído** — ver "§15 — Ranking de Guerras" no Bloco A4 acima. (Era bloqueio de design; o v24 §15.1–15.3 definiu 6 sub-rankings + pesos do Ranking Geral.)

@@ -1,13 +1,14 @@
 # Fertways — Estado do Projeto (handoff para nova sessão)
 
 > **Leia este arquivo primeiro.** É o ponto único de entrada para retomar o trabalho.
-> Atualizado: 2026-06-30.
+> Atualizado: 2026-07-01.
 
 ## 1. O que é
 **Fertways: The Next Colony** — MMO de **estratégia/gestão de colônia** (NÃO RPG; §24.1),
-Marte 2387. **Fonte de verdade: `FERTWAYS_GDD_v29.html`** (raiz; supera v24 — §1–§22 mantêm os
-números, v29 adiciona §24–§27). Escopo atual: **frontend/visual only**, tudo com **mock data** atrás
-de interfaces de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
+Marte 2387. **Fonte de verdade: `FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES.html`** (raiz;
+edição mestre integral — supera v29: §1–§27 herdados + §0 tabela de precedência de 12 conflitos +
+§28 correções). Escopo atual: **frontend/visual only**, tudo com **mock data** atrás de interfaces
+de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
 
 ## 2. Stack
 - **Cliente:** Flutter **web-only**, código em `app/` (a pasta `android/` foi removida —
@@ -62,14 +63,15 @@ de interfaces de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
 | `/map/fleet` | Frota do colono (§21/§16.4) | `FleetRepository` / `fleet.json` | ✅ |
 | `/profile/federation` | Federação (§4, tesouro/cargos/membros) | `FederationRepository` / `federation.json` | ✅ |
 | `/spaceport` | Espaçoporto (§3, 5 planetas NPC) | `SpaceportRepository` / `spaceport.json` | ✅ |
+| `/spaceport/lunar` | Exploração Lunar / Telescópio Gagarin (§12) | `LunarRepository` / `lunar.json` | ✅ |
 | `/profile` | Perfil (§5/§8) | `ProfileRepository` / `profile.json` | ✅ |
 | `/map/notifications` | Centro de Notificações (transversal) | `NotificationRepository` / `notifications.json` | ✅ |
 | HUD (shell) | Barra de recursos + sino (badge não-lidas) | `colonyProvider` + `resourcesProvider` + `notificationsProvider` | ✅ |
 
 Sub-rotas (`/map/colony`, `/map/zone`, `/map/messages`, `/map/missions`, `/map/fleet`, `/map/notifications`,
 `/capital/ministry`, `/capital/rankings`, `/capital/offices`, `/market/informal`, `/market/auctions`,
-`/profile/federation`) são **drill-ins** dentro do shell → mantêm HUD + nav rail. Providers em
-`app/lib/data/providers.dart`.
+`/spaceport/lunar`, `/profile/federation`) são **drill-ins** dentro do shell → mantêm HUD + nav rail.
+Providers em `app/lib/data/providers.dart`.
 
 ## 6. Arquitetura / convenções
 - **Seam de repositório:** `domain/repositories/*` (interface) → `data/mock/mock_*` (impl,
@@ -94,8 +96,18 @@ flutter run -d chrome --web-port=8080                        # dev (hot restart 
   **uma porta nova** por mudança de fixture (e mate a anterior — só uma viva). No `flutter
   run` (8080) o `R` pega tudo, sem esse problema.
 
-## 8. GDD v29 — novidades (NÃO inventar; reconciliar)
-v29 mantém §1–§22 (números do v24) e ADICIONA 4 capítulos que afetam o que já existe:
+## 8. GDD v33 — Mestre Integral (fonte de verdade atual)
+v33 é **aditiva**: v3.0 integral (Parte II §2.1–§28.10) + v3.2 sanitizada (Parte I §01–§17) + **§0 tabela
+de precedência** que resolve 12 conflitos. Ler as decisões vigentes do §0, NÃO o registro antigo:
+- **Gagarin** = satélite orbital do Governo em órbita baixa (NÃO no casco da Endurance). Endurance em solo.
+- **Central de Transportes** (§0 vs §28.5): upgrade libera vagas de frota; veículo é fabricado/comprado à parte.
+- **Predador** = apreende **Módulos Operacionais** (NÃO captura pessoas) — §0 supera §28.7/§28.10.
+- Reputação = 4 índices isolados · Tributação = 1 incidência por fato · Ranking = percentil empírico.
+
+**Reconciliação v33 pendente (fora do C1, para próxima etapa):** §28.5 Central de Transportes definitiva ·
+§28.8 Mercado Local (dedup Biomassa) · Predador=Módulos. As telas atuais herdam v29 (§24–§27 já integrados).
+
+### v29 (herdado) — 4 capítulos que afetam o que já existe:
 - **§24 Sanitização Econômica:** Metal Bruto (novo recurso), Mina Local/Governamental, receitas de
   Componentes (3), Biocombustível (Destilaria), subsídio (50 Fert$ + essenciais até nv3), nova fórmula
   de preço; **Identidade do Colono** (nickname/avatar) + **Diário do Colono**.
@@ -125,7 +137,12 @@ Reputações é stub→B5). ~~B2 Comércio Informal + antifraude~~ ✅ (`/market
 Administração Pública). ~~B9 Leilões~~ ✅ (`/market/auctions`; `AuctionRepository`/`auctions.json`; botão
 "Leilões" no Mercado; gate Nível 100). ~~B10 Centro de Notificações~~ ✅ (`/map/notifications`;
 `NotificationRepository`/`notifications.json`; sino do HUD com badge). **BLOCO B CONCLUÍDO (B0–B10).**
-Próximo: **C1 Exploração Lunar / Telescópio Gagarin** (previews T2, §12).
+
+**Bloco C (Temporada 2 — previews):** ~~C1 Exploração Lunar / Telescópio Gagarin~~ ✅ (`/spaceport/lunar`;
+`LunarRepository`/`lunar.json`; §12 + §28.1–28.2: status do Gagarin + gatilho de ativação, boletins,
+catálogo das 8 luas ↔ recursos raros, marco de 75% de terraformação e prévia bloqueada das bases T2;
+entradas no Espaçoporto e na Central de Pesquisas; 8 recursos raros em `resource_visual.dart`).
+**Próximo: C2 (Bloco C)** — ver roadmap. Antes/junto: reconciliação v33 (§28.5/§28.8/Predador=Módulos).
 Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; ações mock
 (SnackBar) → fluxos reais. Ver `docs/fertways-roadmap.md`.
 

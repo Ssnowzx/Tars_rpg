@@ -2,6 +2,26 @@
 
 Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
+## 2026-07-01
+
+### GDD v33 Mestre Integral adotado como fonte de verdade
+- **`FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES.html`** supera a v29. Edição **aditiva**: v3.0
+  integral (Parte II) + v3.2 sanitizada (Parte I) + **§0 tabela de precedência** (12 conflitos resolvidos)
+  + **§28** correções. Implementar sempre as **decisões vigentes do §0**, não o registro antigo.
+- Deltas v33 sobre telas existentes (**reconciliação pendente, fora do C1**): §28.1 Gagarin em órbita
+  (não no casco da Endurance) · §28.5 Central de Transportes definitiva · §28.8 Mercado Local (dedup
+  Biomassa) · **Predador = Módulos Operacionais** (não captura pessoas).
+
+### Bloco C — C1 Exploração Lunar / Telescópio Gagarin CONCLUÍDO
+- Vertical slice completo (modelo → repo → mock → `lunar.json` → provider → tela → rota drill-in
+  `/spaceport/lunar` → 2 entradas) + validação (analyze limpo, build web ✓) + **relatório PDF**
+  `docs/reports/18-c1-exploracao-lunar.html/.pdf` + spec OpenSpec `lunar-exploration`.
+- Conteúdo (§12 + §28.1–28.2): status do **Telescópio Gagarin** com gatilho de ativação (50 jogadores
+  OU 45 dias), **boletins** por categoria, catálogo das **8 luas** (homenagem ↔ atmosfera ↔ recurso
+  raro), **marco de 75% de terraformação** = gatilho T2 + evento "Janela de Órbita Lunar", e **prévia
+  bloqueada** das bases lunares (só T2, §12.4). 8 recursos raros adicionados a `resource_visual.dart`.
+- Entradas: cartão no **Espaçoporto** + atalho na **Central de Pesquisas e Notícias** (Capital slot 3).
+
 ## 2026-06-30
 
 ### Decisão: cliente WEB-ONLY (remoção do Android)

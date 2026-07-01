@@ -9,6 +9,7 @@ import '../features/capital/public_offices_screen.dart';
 import '../features/colony/colony_screen.dart';
 import '../features/federation/federation_screen.dart';
 import '../features/fleet/fleet_screen.dart';
+import '../features/lunar/lunar_screen.dart';
 import '../features/market/auctions_screen.dart';
 import '../features/market/informal_trade_screen.dart';
 import '../features/market/market_screen.dart';
@@ -83,7 +84,13 @@ final GoRouter appRouter = GoRouter(
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/spaceport', builder: (_, __) => const SpaceportScreen()),
+            GoRoute(
+              path: '/spaceport',
+              builder: (_, __) => const SpaceportScreen(),
+              routes: [
+                GoRoute(path: 'lunar', builder: (_, __) => const LunarScreen()),
+              ],
+            ),
           ],
         ),
         StatefulShellBranch(

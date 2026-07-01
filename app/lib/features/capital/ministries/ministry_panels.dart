@@ -247,9 +247,21 @@ class ResearchPanel extends StatelessWidget {
             icon: data.gagarinActive ? Icons.sensors : Icons.sensors_off,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               KeyValueRow(label: 'Gatilho de ativação', value: data.gagarinTrigger),
               KeyValueRow(label: 'Frequência', value: data.gagarinFrequency),
+              SizedBox(height: t.space3),
+              OutlinedButton.icon(
+                onPressed: () => context.go('/spaceport/lunar'),
+                icon: const Icon(Icons.travel_explore, size: 18),
+                label: const Text('Exploração Lunar · 8 luas'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: FwPalette.gray800,
+                  side: BorderSide(color: t.borderDefault),
+                  minimumSize: Size(0, t.controlMd),
+                ),
+              ),
             ],
           ),
         ),

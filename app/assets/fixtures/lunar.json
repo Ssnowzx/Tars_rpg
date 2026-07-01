@@ -1,0 +1,148 @@
+{
+  "gagarinActive": true,
+  "playersRegistered": 37,
+  "playersTrigger": 50,
+  "daysElapsed": 31,
+  "daysTrigger": 45,
+  "bulletinFrequency": "a cada 2–4 dias",
+  "terraformPercent": 41,
+  "terraformTrigger": 75,
+  "orbitWindowActive": true,
+  "bulletins": [
+    {
+      "id": "b14",
+      "cycle": "Ciclo 14",
+      "kind": "resource",
+      "moonId": "hawking",
+      "title": "Plasma Fossilizado confirmado em Hawking",
+      "body": "Varredura profunda detecta camadas densas de Plasma Fossilizado. Concentração compatível com bases de alto risco da Temporada 2 — a lua mais disputada militarmente.",
+      "time": "há 1 dia"
+    },
+    {
+      "id": "b13",
+      "cycle": "Ciclo 13",
+      "kind": "anomaly",
+      "moonId": "laika",
+      "title": "Sinal de origem desconhecida em Laika",
+      "body": "O Gagarin capta um padrão que não corresponde a nenhuma assinatura conhecida. A Central de Pesquisas classifica a leitura como anomalia prioritária.",
+      "time": "há 3 dias"
+    },
+    {
+      "id": "b12",
+      "cycle": "Ciclo 12",
+      "kind": "atmosphere",
+      "moonId": "ride",
+      "title": "Atmosfera de Ride segue estável",
+      "body": "Composição atmosférica similar a Fertways mantida em novo ciclo. Ride permanece a melhor candidata à colonização após terraformação.",
+      "time": "há 5 dias"
+    },
+    {
+      "id": "b11",
+      "cycle": "Ciclo 11",
+      "kind": "resource",
+      "moonId": "leonov",
+      "title": "Depósitos de Gelo de Metano em Leonov",
+      "body": "Reservas abundantes mapeadas na superfície. Insumo direto de propulsão para naves avançadas — logística-chave da Temporada 2.",
+      "time": "há 7 dias"
+    },
+    {
+      "id": "b10",
+      "cycle": "Ciclo 10",
+      "kind": "moon",
+      "title": "Oito luas catalogadas",
+      "body": "Primeira varredura orbital completa. Dados progressivos de cada lua passam a alimentar os boletins da Central de Pesquisas e Notícias.",
+      "time": "há 9 dias"
+    }
+  ],
+  "moons": [
+    {
+      "id": "armstrong",
+      "name": "Armstrong",
+      "honoree": "Neil Armstrong",
+      "honoreeNote": "1930–2012 · Primeiro homem na Lua",
+      "atmosphere": "similar",
+      "rareResourceId": "niobium",
+      "rareResource": "Nióbio Alienígena",
+      "profile": "Atmosfera similar a Fertways. Potencial de colonização com terraformação, mineração e slots futuros.",
+      "t2Reading": "Colonização e estruturas avançadas."
+    },
+    {
+      "id": "tereshkova",
+      "name": "Tereshkova",
+      "honoree": "Valentina Tereshkova",
+      "honoreeNote": "n. 1937 · Primeira mulher no espaço",
+      "atmosphere": "none",
+      "rareResourceId": "helium3",
+      "rareResource": "Cristal de Hélio-3",
+      "profile": "Sem atmosfera. Mineração com estruturas herméticas. Rica em Cristal de Hélio-3.",
+      "t2Reading": "Energia e mineração hermética."
+    },
+    {
+      "id": "sagan",
+      "name": "Sagan",
+      "honoree": "Carl Sagan",
+      "honoreeNote": "1934–1996 · \"Pálido Ponto Azul\"",
+      "atmosphere": "toxic",
+      "rareResourceId": "quartz",
+      "rareResource": "Quartzo Piezoelétrico",
+      "profile": "Atmosfera tóxica. Terraformação lenta; recursos raros concentrados na superfície.",
+      "t2Reading": "Anomalias de superfície e pesquisa."
+    },
+    {
+      "id": "aldrin",
+      "name": "Aldrin",
+      "honoree": "Buzz Aldrin",
+      "honoreeNote": "n. 1930 · Segundo homem na Lua",
+      "atmosphere": "none",
+      "rareResourceId": "rediron",
+      "rareResource": "Ferro Vermelho",
+      "profile": "Sem atmosfera. Mineração pesada — Ferro Vermelho em grande quantidade.",
+      "t2Reading": "Construção pesada."
+    },
+    {
+      "id": "ride",
+      "name": "Ride",
+      "honoree": "Sally Ride",
+      "honoreeNote": "1951–2012 · Primeira americana no espaço",
+      "atmosphere": "similar",
+      "rareResourceId": "resin",
+      "rareResource": "Resina Orgânica",
+      "profile": "Atmosfera similar a Fertways. Melhor candidata à colonização após terraformação.",
+      "t2Reading": "Biosfera e habitação."
+    },
+    {
+      "id": "leonov",
+      "name": "Leonov",
+      "honoree": "Alexei Leonov",
+      "honoreeNote": "1934–2019 · Primeira caminhada espacial",
+      "atmosphere": "toxic",
+      "rareResourceId": "methane",
+      "rareResource": "Gelo de Metano",
+      "profile": "Atmosfera tóxica. Gelo de Metano abundante — propulsão de naves avançadas.",
+      "t2Reading": "Propulsão e logística."
+    },
+    {
+      "id": "hawking",
+      "name": "Hawking",
+      "honoree": "Stephen Hawking",
+      "honoreeNote": "1942–2018 · Física teórica e cosmologia",
+      "atmosphere": "none",
+      "rareResourceId": "plasma",
+      "rareResource": "Plasma Fossilizado",
+      "profile": "Sem atmosfera. Plasma Fossilizado em camadas profundas — a lua mais disputada militarmente.",
+      "t2Reading": "Pesquisa de alto risco."
+    },
+    {
+      "id": "laika",
+      "name": "Laika",
+      "honoree": "Laika",
+      "honoreeNote": "1954–1957 · Primeira terráquea em órbita",
+      "atmosphere": "toxic",
+      "rareResourceId": "biofungus",
+      "rareResource": "Fungo Bioluminescente",
+      "profile": "Atmosfera tóxica. Anomalia detectada pelo Gagarin — um sinal de origem desconhecida que ninguém sabe explicar.",
+      "t2Reading": "Anomalia de origem desconhecida; mistério narrativo.",
+      "mystery": true
+    }
+  ]
+}

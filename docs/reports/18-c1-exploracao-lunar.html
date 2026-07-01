@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório C1 (Exploração Lunar / Telescópio Gagarin)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>C1 — Exploração Lunar / Telescópio Gagarin</h1>
+  <div class="sub">Fundação narrativa da Temporada 2: Gagarin, boletins e as 8 luas
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v33 Mestre Integral — §12 + §28.1–28.2</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Rota:</b> /spaceport/lunar</span>
+  </div>
+</div>
+
+<p class="lead">Abertura do Bloco C. A tela de Exploração Lunar é a <b>fundação narrativa da Temporada 2</b>:
+o satélite <b>Telescópio Gagarin</b> (do Governo, em órbita baixa — não no casco da Endurance, §28.1) publica
+boletins sobre as <b>8 luas</b> de Fertways, cada uma associada a um recurso raro. A tela mostra os
+<b>gatilhos da T2</b> (ativação do Gagarin e marco de 75% de terraformação) e uma <b>prévia bloqueada</b> das
+bases lunares — que só entram na T2, por GDD complementar aprovado (§12.4).</p>
+
+<div class="cards">
+  <div class="card"><div class="n">8</div><div class="l">luas (homenagem ↔ recurso raro)</div></div>
+  <div class="card"><div class="n">2–4d</div><div class="l">frequência de boletins do Gagarin</div></div>
+  <div class="card"><div class="n">75%</div><div class="l">terraformação = gatilho da T2</div></div>
+  <div class="card"><div class="n">2</div><div class="l">pontos de entrada (Espaçoporto + Pesquisas)</div></div>
+</div>
+
+<h2>As 8 luas (§12.2 / §28.2)</h2>
+<table>
+  <thead><tr><th>Lua</th><th>Homenagem</th><th>Atmosfera</th><th>Recurso raro</th></tr></thead>
+  <tbody>
+    <tr><td>Armstrong</td><td>Neil Armstrong</td><td>Similar</td><td>Nióbio Alienígena</td></tr>
+    <tr><td>Tereshkova</td><td>Valentina Tereshkova</td><td>Sem atmosfera</td><td>Cristal de Hélio-3</td></tr>
+    <tr><td>Sagan</td><td>Carl Sagan</td><td>Tóxica</td><td>Quartzo Piezoelétrico</td></tr>
+    <tr><td>Aldrin</td><td>Buzz Aldrin</td><td>Sem atmosfera</td><td>Ferro Vermelho</td></tr>
+    <tr><td>Ride</td><td>Sally Ride</td><td>Similar</td><td>Resina Orgânica</td></tr>
+    <tr><td>Leonov</td><td>Alexei Leonov</td><td>Tóxica</td><td>Gelo de Metano</td></tr>
+    <tr><td>Hawking</td><td>Stephen Hawking</td><td>Sem atmosfera</td><td>Plasma Fossilizado</td></tr>
+    <tr><td>Laika</td><td>Laika</td><td>Tóxica</td><td>Fungo Bioluminescente (mistério)</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Cartão do Telescópio Gagarin</b>: status Ativo/Inativo, barra do gatilho de ativação (50 jogadores
+      <b>OU</b> 45 dias — usa a maior fração), proprietário (Governo · não vendável), frequência e canal
+      (Central de Pesquisas e Notícias), com a correção orbital do §28.1 (não repousa no casco da Endurance).</li>
+  <li><b>Preparativos da Temporada 1</b>: progresso da terraformação global rumo aos <b>75%</b> (gatilho
+      oficial da T2) e selo do evento <b>"Janela de Órbita Lunar"</b> (§12.3).</li>
+  <li><b>Boletins do Gagarin</b>: feed com categoria (lua/atmosfera/recurso/anomalia), ciclo, horário,
+      título e corpo — incluindo a anomalia de Laika (sinal de origem desconhecida).</li>
+  <li><b>Catálogo das 8 luas</b>: cartões com homenageado, pílula de atmosfera (similar/sem/tóxica),
+      recurso raro associado (ícone/cor via <code>resource_visual</code>) e a leitura da Temporada 2.</li>
+  <li><b>Prévia bloqueada da T2</b>: cartão "Bases Lunares — Temporada 2" (bases, slots de estrutura/mineração,
+      terceirização, guerras lunares) marcado como <b>bloqueado</b> até o marco de 75% (§12.4).</li>
+  <li><b>Acesso</b>: botão dedicado no <b>Espaçoporto</b> e atalho na <b>Central de Pesquisas e Notícias</b>
+      (slot 3 da Capital, onde o Gagarin publica).</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/lunar.dart</code> (LunarExploration, Moon, GagarinBulletin + enums MoonAtmosphere/BulletinKind)</td></tr>
+    <tr><td>Seam</td><td><code>LunarRepository</code> → <code>MockLunarRepository</code> → <code>lunar.json</code> → <code>lunarProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/lunar/lunar_screen.dart</code>; rota drill-in <code>/spaceport/lunar</code>; entradas em <code>spaceport_screen.dart</code> e <code>ministries/ministry_panels.dart</code></td></tr>
+    <tr><td>Reuso</td><td>8 recursos raros adicionados a <code>market/resource_visual.dart</code> (ícone/cor)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web --pwa-strategy=none --no-tree-shake-icons</code> — ✓ Built</li>
+  <li>Visual (Chrome): <code>/spaceport/lunar</code> abre como drill-in (HUD + nav rail + voltar); cartão do
+      Gagarin com gatilho 37/50 jog · dia 31/45; terraformação 41%/75%; "Janela de Órbita Lunar"; boletins.
+      Console sem exceções do app (<code>ListView(children:[...])</code> constrói todas as 8 luas + boletins +
+      prévia sem erros)</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · dados fixos (mock) ·
+scroll do canvas Flutter não verificável na automação (validado por analyze+build+render do topo+console limpo).
+<b>Reconciliação v33 pendente (fora do C1):</b> §28.5 Central de Transportes definitiva · §28.8 Mercado Local
+(dedup Biomassa) · Predador = Módulos Operacionais (não pessoas). <b>Próximo:</b> C2 (Bloco C).</div>
+
+<footer><span>Fertways — Relatório de Entrega · C1 Exploração Lunar / Telescópio Gagarin</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

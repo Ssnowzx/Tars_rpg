@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/ds_colors.dart';
@@ -42,12 +43,61 @@ class SpaceportScreen extends ConsumerWidget {
           SizedBox(height: t.space2),
           Text('Comércio com planetas NPC. Cargueiros Interplanetários levam recursos e trazem o que falta.',
               style: TextStyle(fontSize: 12.5, color: t.textSecondary)),
+          SizedBox(height: t.space3),
+          const _LunarButton(),
           SizedBox(height: t.space4),
           for (final p in s.planets) Padding(
             padding: EdgeInsets.only(bottom: t.space3),
             child: _PlanetCard(planet: p),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LunarButton extends StatelessWidget {
+  const _LunarButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).extension<DsTokens>()!;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => context.go('/spaceport/lunar'),
+        borderRadius: BorderRadius.circular(t.radiusCard),
+        child: Container(
+          padding: EdgeInsets.all(t.space3),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [FwPalette.teal100.withValues(alpha: 0.6), FwPalette.solar100.withValues(alpha: 0.4)],
+            ),
+            borderRadius: BorderRadius.circular(t.radiusCard),
+            border: Border.all(color: FwPalette.teal300),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.satellite_alt_outlined, size: 22, color: FwPalette.teal700),
+              SizedBox(width: t.space3),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Exploração Lunar · Telescópio Gagarin',
+                        style: GoogleFonts.rajdhani(
+                            fontWeight: FontWeight.w700, fontSize: 15, color: FwPalette.gray900)),
+                    Text('Boletins das 8 luas e prévia da Temporada 2',
+                        style: TextStyle(fontSize: 11.5, color: t.textSecondary)),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right, size: 20, color: t.textSecondary),
+            ],
+          ),
+        ),
       ),
     );
   }
