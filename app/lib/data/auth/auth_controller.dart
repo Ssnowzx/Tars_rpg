@@ -17,14 +17,26 @@ class AuthState {
 const _kTokenKey = 'accessToken';
 const _kRefreshKey = 'refreshToken';
 
-/// Token carregado do storage no boot (sobrescrito em main). null = deslogado.
+/// Tokens carregados do storage no boot (sobrescritos em main). null = deslogado.
 final initialTokenProvider = Provider<String?>((ref) => null);
+final initialRefreshTokenProvider = Provider<String?>((ref) => null);
 
-/// Estado de autenticação. Guarda o token em memória (via [setAccessToken]) e
-/// persiste em SharedPreferences para sobreviver a reloads.
+/// Estado de autenticação. Guarda os tokens em memória (via [setAccessToken] /
+/// [setRefreshToken]) e persiste em SharedPreferences para sobreviver a reloads.
 class AuthController extends Notifier<AuthState> {
   @override
   AuthState build() {
+    // Auto-refresh (api_client): persiste o novo access token e desloga se o
+    // refresh falhar (refresh token inválido/expirado).
+    onAccessTokenRefreshed = (token) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_kTokenKey, token);
+    };
+    onRefreshFailed = logout;
+
+    final refresh = ref.read(initialRefreshTokenProvider);
+    if (refresh != null && refresh.isNotEmpty) setRefreshToken(refresh);
+
     final token = ref.read(initialTokenProvider);
     if (token != null && token.isNotEmpty) {
       setAccessToken(token);
@@ -50,6 +62,7 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> logout() async {
     setAccessToken(null);
+    setRefreshToken(null);
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_kTokenKey);
     await prefs.remove(_kRefreshKey);
@@ -63,7 +76,10 @@ class AuthController extends Notifier<AuthState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_kTokenKey, token);
     final refresh = data['refreshToken'] as String?;
-    if (refresh != null) await prefs.setString(_kRefreshKey, refresh);
+    if (refresh != null) {
+      setRefreshToken(refresh);
+      await prefs.setString(_kRefreshKey, refresh);
+    }
     state = AuthState(AuthStatus.authenticated, playerId: playerId);
   }
 }

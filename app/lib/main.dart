@@ -10,11 +10,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('accessToken');
+  final refreshToken = prefs.getString('refreshToken');
   final localeCode = prefs.getString('localeCode');
   runApp(
     ProviderScope(
       overrides: [
         initialTokenProvider.overrideWithValue(token),
+        initialRefreshTokenProvider.overrideWithValue(refreshToken),
         initialLocaleProvider.overrideWithValue(localeCode),
       ],
       child: const FertwaysApp(),
