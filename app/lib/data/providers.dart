@@ -45,19 +45,19 @@ import 'mock/mock_chat_repository.dart';
 import 'mock/mock_combat_repository.dart';
 import 'mock/mock_federation_repository.dart';
 import 'mock/mock_fleet_repository.dart';
-import 'mock/mock_lunar_repository.dart';
 import 'mock/mock_market_repository.dart';
 import 'mock/mock_ministry_repository.dart';
 import 'mock/mock_mission_repository.dart';
 import 'mock/mock_public_office_repository.dart';
 import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
-import 'mock/mock_terraform_repository.dart';
 import 'api/api_client.dart';
 import 'api/api_capital_repository.dart';
+import 'api/api_lunar_repository.dart';
 import 'api/api_notification_repository.dart';
 import 'api/api_profile_repository.dart';
 import 'api/api_spaceport_repository.dart';
+import 'api/api_terraform_repository.dart';
 import 'api/api_world_repository.dart';
 
 /// Ponto único de binding interface → implementação. Para usar a API real,
@@ -209,7 +209,7 @@ final notificationsProvider = FutureProvider<NotificationCenter>(
 );
 
 final lunarRepositoryProvider = Provider<LunarRepository>(
-  (ref) => const MockLunarRepository(),
+  (ref) => ApiLunarRepository(ref.watch(dioProvider)),
 );
 
 final lunarProvider = FutureProvider<LunarExploration>(
@@ -217,7 +217,7 @@ final lunarProvider = FutureProvider<LunarExploration>(
 );
 
 final terraformRepositoryProvider = Provider<TerraformRepository>(
-  (ref) => const MockTerraformRepository(),
+  (ref) => ApiTerraformRepository(ref.watch(dioProvider)),
 );
 
 final terraformProvider = FutureProvider<TerraformState>(

@@ -131,19 +131,20 @@ async function main(): Promise<void> {
   }
 
   // Estado do Telescópio Gagarin (§12.1)
+  const gagarin = {
+    active: true,
+    playersRegistered: 37,
+    playersTrigger: 50,
+    daysElapsed: 31,
+    daysTrigger: 45,
+    orbitWindowActive: true,
+    bulletinFrequency: 'a cada 2–4 dias',
+    channel: 'Central de Pesquisas e Notícias',
+  };
   await prisma.serverConfig.upsert({
     where: { key: 'gagarin' },
-    update: {},
-    create: {
-      key: 'gagarin',
-      value: {
-        active: true,
-        playersTrigger: 50,
-        daysTrigger: 45,
-        bulletinFrequency: 'a cada 2–4 dias',
-        channel: 'Central de Pesquisas e Notícias',
-      },
-    },
+    update: { value: gagarin },
+    create: { key: 'gagarin', value: gagarin },
   });
 
   console.log('Seed concluído: preços, luas, boletins, planetas, terraformação, missões.');
