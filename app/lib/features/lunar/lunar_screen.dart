@@ -244,6 +244,17 @@ class _MilestoneCard extends StatelessWidget {
                     'inicia-se a campanha "Janela de Órbita Lunar" e o gatilho oficial da Temporada 2 (§12.3).',
             style: TextStyle(fontSize: 12, height: 1.35, color: t.textSecondary),
           ),
+          SizedBox(height: t.space3),
+          OutlinedButton.icon(
+            onPressed: () => context.go('/map/terraform'),
+            icon: const Icon(Icons.public_outlined, size: 18),
+            label: const Text('Ver Terraformação Global'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: FwPalette.gray800,
+              side: BorderSide(color: t.borderDefault),
+              minimumSize: Size(0, t.controlMd),
+            ),
+          ),
         ],
       ),
     );

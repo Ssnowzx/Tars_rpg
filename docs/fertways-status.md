@@ -64,14 +64,15 @@ de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
 | `/profile/federation` | Federação (§4, tesouro/cargos/membros) | `FederationRepository` / `federation.json` | ✅ |
 | `/spaceport` | Espaçoporto (§3, 5 planetas NPC) | `SpaceportRepository` / `spaceport.json` | ✅ |
 | `/spaceport/lunar` | Exploração Lunar / Telescópio Gagarin (§12) | `LunarRepository` / `lunar.json` | ✅ |
+| `/map/terraform` | Terraformação Global (§04/§12.3) | `TerraformRepository` / `terraform.json` | ✅ |
 | `/profile` | Perfil (§5/§8) | `ProfileRepository` / `profile.json` | ✅ |
 | `/map/notifications` | Centro de Notificações (transversal) | `NotificationRepository` / `notifications.json` | ✅ |
 | HUD (shell) | Barra de recursos + sino (badge não-lidas) | `colonyProvider` + `resourcesProvider` + `notificationsProvider` | ✅ |
 
 Sub-rotas (`/map/colony`, `/map/zone`, `/map/messages`, `/map/missions`, `/map/fleet`, `/map/notifications`,
 `/capital/ministry`, `/capital/rankings`, `/capital/offices`, `/market/informal`, `/market/auctions`,
-`/spaceport/lunar`, `/profile/federation`) são **drill-ins** dentro do shell → mantêm HUD + nav rail.
-Providers em `app/lib/data/providers.dart`.
+`/spaceport/lunar`, `/map/terraform`, `/profile/federation`) são **drill-ins** dentro do shell → mantêm
+HUD + nav rail. Providers em `app/lib/data/providers.dart`.
 
 ## 6. Arquitetura / convenções
 - **Seam de repositório:** `domain/repositories/*` (interface) → `data/mock/mock_*` (impl,
@@ -141,11 +142,11 @@ Administração Pública). ~~B9 Leilões~~ ✅ (`/market/auctions`; `AuctionRepo
 "Leilões" no Mercado; gate Nível 100). ~~B10 Centro de Notificações~~ ✅ (`/map/notifications`;
 `NotificationRepository`/`notifications.json`; sino do HUD com badge). **BLOCO B CONCLUÍDO (B0–B10).**
 
-**Bloco C (Temporada 2 — previews):** ~~C1 Exploração Lunar / Telescópio Gagarin~~ ✅ (`/spaceport/lunar`;
-`LunarRepository`/`lunar.json`; §12 + §28.1–28.2: status do Gagarin + gatilho de ativação, boletins,
-catálogo das 8 luas ↔ recursos raros, marco de 75% de terraformação e prévia bloqueada das bases T2;
-entradas no Espaçoporto e na Central de Pesquisas; 8 recursos raros em `resource_visual.dart`).
-**Próximo: C2 (Bloco C)** — ver roadmap. Antes/junto: reconciliação v33 (§28.5/§28.8/Predador=Módulos).
+**Bloco C:** ~~C1 Exploração Lunar / Telescópio Gagarin~~ ✅ (`/spaceport/lunar`; `LunarRepository`/`lunar.json`;
+§12 + §28.1–28.2). ~~C2 Ranking de Guerras~~ ✅ (feito no Bloco A4, §15). ~~C3 Terraformação Global~~ ✅
+(`/map/terraform`; `TerraformRepository`/`terraform.json`; §04/§12.3: 3 indicadores rumo a 75%, contribuição
+anti-farming + Status Cívico; entradas no mapa e na tela lunar). **Reconciliação v33 feita** (ver §8).
+**Próximo: C4 fluxos reais de construção/upgrade** → depois **C5 i18n PT-BR/ES/EN**.
 Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; ações mock
 (SnackBar) → fluxos reais. Ver `docs/fertways-roadmap.md`.
 

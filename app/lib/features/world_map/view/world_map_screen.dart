@@ -90,7 +90,18 @@ class _MapViewState extends State<_MapView> {
     return Stack(
       children: [
         Positioned.fill(child: GameWidget<FertwaysWorldGame>(game: _game)),
-        Positioned(top: t.space4, left: t.space4, child: _PlanetChip(sector: widget.state.ownSector)),
+        Positioned(
+          top: t.space4,
+          left: t.space4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _PlanetChip(sector: widget.state.ownSector),
+              SizedBox(height: t.space2),
+              const _TerraformChip(),
+            ],
+          ),
+        ),
         Positioned(top: t.space4, right: t.space4, child: const _Legend()),
         Positioned(right: t.space4, bottom: t.space4, child: _ZoomControls(game: _game)),
         if (_selected != null)
@@ -137,6 +148,42 @@ class _PlanetChip extends StatelessWidget {
             Text('Setor $sector', style: TextStyle(fontSize: 12, color: t.textSecondary)),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _TerraformChip extends StatelessWidget {
+  const _TerraformChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).extension<DsTokens>()!;
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => context.go('/map/terraform'),
+        borderRadius: BorderRadius.circular(t.radiusMd),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: t.space3, vertical: t.space2),
+          decoration: BoxDecoration(
+            color: scheme.surface,
+            borderRadius: BorderRadius.circular(t.radiusMd),
+            border: Border.all(color: t.borderDefault),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.eco_outlined, size: 15, color: FwPalette.green600),
+              SizedBox(width: t.space2),
+              Text('Terraformação',
+                  style: GoogleFonts.rajdhani(fontWeight: FontWeight.w700, color: FwPalette.gray900)),
+              SizedBox(width: t.space1),
+              Icon(Icons.chevron_right, size: 16, color: t.textSecondary),
+            ],
+          ),
+        ),
       ),
     );
   }

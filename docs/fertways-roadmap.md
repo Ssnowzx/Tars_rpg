@@ -254,6 +254,20 @@ Três lugares distintos (3 níveis):
 ### C2 — Ranking de Guerras  ✅  · GDD §15 (preenchido no v24)
 - **Desbloqueado e construído** — ver "§15 — Ranking de Guerras" no Bloco A4 acima. (Era bloqueio de design; o v24 §15.1–15.3 definiu 6 sub-rankings + pesos do Ranking Geral.)
 
+### C3 — Terraformação Global  ✅  · GDD v33 §04 + §12.3
+- **Construído** — `/map/terraform` (drill-in do Mapa). `TerraformRepository`/`terraform.json` →
+  `terraformProvider`; tela `features/terraform/terraform_screen.dart`.
+- Três indicadores públicos (atmosfera/ciclo hídrico/biosfera) rumo a 75% (o menor determina o
+  gatilho); "Sua contribuição" com teto diário **anti-farming**, total e recompensa **+Status Cívico**
+  (nunca vantagem econômica, §04); gatilho da T2 = "Janela de Órbita Lunar". Entradas: chip no mapa +
+  botão na tela lunar.
+
+### C4 — Fluxos reais de construção/upgrade  ⬜  · GDD §17/§19/§20
+- Substituir ações mock (SnackBar) por fluxos reais de construir/evoluir + fila (Colônia/Zona/Capital).
+
+### C5 — i18n PT-BR/ES/EN  ⬜  · GDD §11
+- Extrair strings hard-coded → ARB; adicionar ES/EN; troca de idioma no Perfil/config.
+
 ---
 
 ## Ordem de execução proposta

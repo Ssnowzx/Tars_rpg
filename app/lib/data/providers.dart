@@ -19,6 +19,7 @@ import '../domain/models/planet_models.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/models/resources.dart';
 import '../domain/models/spaceport.dart';
+import '../domain/models/terraform.dart';
 import '../domain/models/war_ranking.dart';
 import '../domain/models/world_models.dart';
 import '../domain/repositories/auction_repository.dart';
@@ -37,6 +38,7 @@ import '../domain/repositories/public_office_repository.dart';
 import '../domain/repositories/ranking_repository.dart';
 import '../domain/repositories/reputation_repository.dart';
 import '../domain/repositories/spaceport_repository.dart';
+import '../domain/repositories/terraform_repository.dart';
 import '../domain/repositories/world_repository.dart';
 import 'mock/mock_auction_repository.dart';
 import 'mock/mock_capital_repository.dart';
@@ -54,6 +56,7 @@ import 'mock/mock_public_office_repository.dart';
 import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
 import 'mock/mock_spaceport_repository.dart';
+import 'mock/mock_terraform_repository.dart';
 import 'mock/mock_world_repository.dart';
 
 /// Ponto único de binding interface → implementação. Para usar a API real,
@@ -208,5 +211,13 @@ final lunarRepositoryProvider = Provider<LunarRepository>(
 
 final lunarProvider = FutureProvider<LunarExploration>(
   (ref) => ref.watch(lunarRepositoryProvider).loadLunar(),
+);
+
+final terraformRepositoryProvider = Provider<TerraformRepository>(
+  (ref) => const MockTerraformRepository(),
+);
+
+final terraformProvider = FutureProvider<TerraformState>(
+  (ref) => ref.watch(terraformRepositoryProvider).loadTerraform(),
 );
 

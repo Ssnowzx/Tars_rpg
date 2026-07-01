@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório C3 (Terraformação Global)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>C3 — Terraformação Global</h1>
+  <div class="sub">Objetivo coletivo da temporada — três indicadores rumo ao gatilho da T2
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v33 — §04 (Terraformação global) + §12.3</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Rota:</b> /map/terraform</span>
+  </div>
+</div>
+
+<p class="lead">A Terraformação Global é o <b>objetivo coletivo da temporada</b>: três indicadores públicos
+(<b>atmosfera, ciclo hídrico, biosfera</b>) que avançam por contribuição. Quando os <b>três alcançam 75%</b>,
+inicia-se a campanha "Janela de Órbita Lunar" e o gatilho oficial da Temporada 2 (§12.3) — a mesma barra que
+a tela lunar (C1) já referenciava, agora com tela própria. Contribuir concede <b>apenas Status Cívico</b> e
+cosméticos, nunca vantagem econômica ou competitiva (§04).</p>
+
+<div class="cards">
+  <div class="card"><div class="n">3</div><div class="l">indicadores (atmosfera/água/biosfera)</div></div>
+  <div class="card"><div class="n">75%</div><div class="l">marco dos três = gatilho da T2</div></div>
+  <div class="card"><div class="n">anti-farming</div><div class="l">teto diário de contribuição</div></div>
+  <div class="card"><div class="n">2</div><div class="l">entradas (mapa + tela lunar)</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Objetivo coletivo</b>: os três indicadores com barra rumo a 75%, nota/tendência por indicador, e
+      a regra de que o <b>menor indicador determina o progresso</b> (o gatilho exige os três em 75%).</li>
+  <li><b>Sua contribuição</b>: barra da contribuição de hoje contra o <b>teto diário anti-farming</b>,
+      total acumulado, recompensa (<b>+Status Cívico</b>) e selo "Top N%" de contribuidores. Ação
+      "Contribuir" (mock) que bloqueia ao atingir o teto.</li>
+  <li><b>Recompensa não-competitiva</b>: nota explícita de que só há Status Cívico e cosméticos (§04).</li>
+  <li><b>Gatilho da T2</b>: cartão explicando que 75% dispara a "Janela de Órbita Lunar" (não automático;
+      depende de GDD complementar) com atalho para a Exploração Lunar.</li>
+  <li><b>Acesso</b>: chip "Terraformação" no mapa-planeta + botão "Ver Terraformação Global" na tela lunar.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/terraform.dart</code> (TerraformState, TerraformTrack + enum TerraformIndicator; getters lowestPercent/season2Unlocked/dailyCapReached)</td></tr>
+    <tr><td>Seam</td><td><code>TerraformRepository</code> → <code>MockTerraformRepository</code> → <code>terraform.json</code> → <code>terraformProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/terraform/terraform_screen.dart</code>; rota drill-in <code>/map/terraform</code>; entradas em <code>world_map_screen.dart</code> (chip) e <code>lunar_screen.dart</code> (botão)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web --pwa-strategy=none --no-tree-shake-icons</code> — ✓ Built</li>
+  <li>Visual (Chrome): <code>/map/terraform</code> abre como drill-in; Atmosfera 58% / Ciclo Hídrico 41% /
+      Biosfera 66% (cada /75%); nota "faltam 34 pontos" (75−41); contribuição 30/50 anti-farming; +2 Status
+      Cívico; Top 35%</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · "Contribuir" = mock
+(dados imutáveis). <b>Próximo:</b> C4 — fluxos reais de construção/upgrade; depois C5 — i18n PT-BR/ES/EN.</div>
+
+<footer><span>Fertways — Relatório de Entrega · C3 Terraformação Global</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

@@ -14,6 +14,14 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
   **Proteção de novato = 8 dias** (§28.4 supera §27.11 "20 dias"; `combat.dart` + `zone_screen.dart`).
   **N/A:** §28.8 Mercado Local (tabela de custo não exibida) · Predador (unidade não modelada).
 
+### Bloco C — C3 Terraformação Global CONCLUÍDO
+- Nova tela `/map/terraform` (drill-in do Mapa): `terraform.dart` (TerraformState/TerraformTrack + enum
+  TerraformIndicator)/`TerraformRepository`/`terraform.json`/`terraformProvider` → `terraform_screen.dart`.
+- §04 + §12.3: três indicadores públicos (atmosfera/ciclo hídrico/biosfera) rumo a 75% (o menor determina
+  o gatilho); "Sua contribuição" com teto diário **anti-farming**, total e recompensa **+Status Cívico**
+  (nunca vantagem econômica); gatilho da T2 = "Janela de Órbita Lunar". Relatório PDF `docs/reports/19` +
+  spec OpenSpec `terraformation`. Entradas: chip "Terraformação" no mapa + botão na tela lunar (C1).
+
 ### Bloco C — C1 Exploração Lunar / Telescópio Gagarin CONCLUÍDO
 - Vertical slice completo (modelo → repo → mock → `lunar.json` → provider → tela → rota drill-in
   `/spaceport/lunar` → 2 entradas) + validação (analyze limpo, build web ✓) + **relatório PDF**

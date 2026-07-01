@@ -1,0 +1,32 @@
+{
+  "triggerPercent": 75,
+  "dailyContributed": 30,
+  "dailyCap": 50,
+  "totalContributed": 1240,
+  "civicStatusGain": 2,
+  "contributorTopPct": 35,
+  "orbitWindowActive": true,
+  "tracks": [
+    {
+      "kind": "atmosphere",
+      "label": "Atmosfera",
+      "percent": 58,
+      "perDay": 1,
+      "note": "Pressão e composição respirável do ar. Alimentada por Geradores de Atmosfera e biomassa."
+    },
+    {
+      "kind": "water",
+      "label": "Ciclo Hídrico",
+      "percent": 41,
+      "perDay": 1,
+      "note": "Água líquida estável em superfície. O indicador mais atrasado — determina o gatilho da T2."
+    },
+    {
+      "kind": "biosphere",
+      "label": "Biosfera",
+      "percent": 66,
+      "perDay": 2,
+      "note": "Cobertura viva e solo fértil. Avança com fazendas, estufas e projetos de biomassa."
+    }
+  ]
+}

@@ -19,6 +19,7 @@ import '../features/notifications/notifications_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/rankings/rankings_screen.dart';
 import '../features/shell/app_shell.dart';
+import '../features/terraform/terraform_screen.dart';
 import '../features/spaceport/spaceport_screen.dart';
 import '../features/world_map/view/world_map_screen.dart';
 import '../features/zone/zone_screen.dart';
@@ -50,6 +51,7 @@ final GoRouter appRouter = GoRouter(
                 GoRoute(path: 'missions', builder: (_, __) => const MissionsScreen()),
                 GoRoute(path: 'fleet', builder: (_, __) => const FleetScreen()),
                 GoRoute(path: 'notifications', builder: (_, __) => const NotificationsScreen()),
+                GoRoute(path: 'terraform', builder: (_, __) => const TerraformScreen()),
               ],
             ),
           ],
