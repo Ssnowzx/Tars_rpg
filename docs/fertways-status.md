@@ -9,10 +9,14 @@ Marte 2387. **Fonte de verdade: `FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES
 edição mestre integral — supera v29: §1–§27 herdados + §0 tabela de precedência de 12 conflitos +
 §28 correções). Escopo atual: **frontend/visual only**, tudo com **mock data** atrás de interfaces
 de repositório. **Backend (a partir de 2026-07-01): `backend/` = NestJS+TS(strict)+Prisma+MariaDB** — schema
-completo (47 modelos) + **loop core FUNCIONAL**: auth JWT, colônia/recursos/fila de construção, Mercado com
-escrow + livro-razão Fert$ (taxa 3%) e dados de referência semeados; demais domínios (federações, combate,
-justiça, leilões…) têm schema pronto e entram incrementais. Ver `backend/README.md` (tabela de endpoints).
-GDD §14 (Laravel/MySQL) e §23 (Docker/Laravel) ficam superados por essa escolha.
+completo (47 modelos), auth JWT, loop core + Mercado (escrow + livro-razão Fert$), e **o FRONTEND FOI
+TOTALMENTE DES-MOCKADO**: `providers.dart` binda todos os repos a implementações `Api…`. Dados dinâmicos vêm
+de endpoints próprios; a config estática do jogo (Capital, ministérios, mapa, boards) vem de `/config/:key`
+(seed lê os 14 fixtures → ServerConfig). **Tudo em `origin/main`.** Ver `backend/README.md` e [[fertways-backend]].
+Pendências (próxima sessão): verificar visualmente as telas recém-ligadas; refinar fleet/missions/federation
+p/ dados por-jogador (hoje config compartilhado); ligar as ações de trade a `/market/buy`. GDD §14/§23 superados.
+**Como abrir do zero:** `cd backend && pnpm db:up && pnpm prisma:migrate && pnpm seed && pnpm start:dev` (usar
+node v20 do fnm, NÃO o /opt/homebrew node quebrado) · `cd app && flutter run -d chrome` · login vale@fertways.test / colonia123.
 
 ## 2. Stack
 - **Cliente:** Flutter **web-only**, código em `app/` (a pasta `android/` foi removida —

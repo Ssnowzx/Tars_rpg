@@ -4,6 +4,20 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
 ## 2026-07-01
 
+### Integração frontend ↔ backend — FRONTEND TOTALMENTE DES-MOCKADO
+- Cliente Flutter conectado ao backend NestJS: `dio` + auth (JWT/refresh, LoginScreen, gate no roteador),
+  token em SharedPreferences. `providers.dart` binda **todos** os repositórios a implementações `Api…` —
+  **zero mock em runtime**.
+- Dinâmico (endpoints próprios): auth, /resources, /colony+/me, /spaceport, /me→perfil, /notifications,
+  /lunar, /terraform, /build-queue (fila real autoritativa: colônia POSTa /colony/build|upgrade), /market
+  (escrow+ledger). Mercado com escrow + taxa 3% + livro-razão Fert$.
+- Config estática (canônica do jogo) via **GET /config/:key**: seed lê os 14 fixtures de referência
+  (market, informal, auctions, missionsBoard, fleet, federation, disputes, rankings, offices, chat, capital,
+  ministries, planet, combat) → `ServerConfig`; 11 Api repos fazem `Model.fromJson(get('/config/:key'))`.
+- Contratos mapeados por agentes (fromJson exato, sem perda). analyze limpo + build web ✓. **Tudo em main.**
+- Pendências: verificação visual das telas recém-ligadas; fleet/missions/federation → dados por-jogador;
+  ações de trade → /market/buy; remover `lib/data/mock/*` (dead code).
+
 ### GDD v33 Mestre Integral adotado como fonte de verdade
 - **`FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES.html`** supera a v29. Edição **aditiva**: v3.0
   integral (Parte II) + v3.2 sanitizada (Parte I) + **§0 tabela de precedência** (12 conflitos resolvidos)
