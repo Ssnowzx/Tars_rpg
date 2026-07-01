@@ -195,6 +195,60 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Em construção'**
   String get comingSoon;
+
+  /// No description provided for @actionBuild.
+  ///
+  /// In pt, this message translates to:
+  /// **'Construir'**
+  String get actionBuild;
+
+  /// No description provided for @actionRecruit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Recrutar'**
+  String get actionRecruit;
+
+  /// No description provided for @actionResearch.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pesquisar'**
+  String get actionResearch;
+
+  /// No description provided for @actionReports.
+  ///
+  /// In pt, this message translates to:
+  /// **'Relatórios'**
+  String get actionReports;
+
+  /// No description provided for @actionMissions.
+  ///
+  /// In pt, this message translates to:
+  /// **'Missões'**
+  String get actionMissions;
+
+  /// No description provided for @actionMessages.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mensagens'**
+  String get actionMessages;
+
+  /// No description provided for @statusOnline.
+  ///
+  /// In pt, this message translates to:
+  /// **'Online'**
+  String get statusOnline;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Idioma'**
+  String get settingsLanguage;
+
+  /// No description provided for @comingSoonAction.
+  ///
+  /// In pt, this message translates to:
+  /// **'{label} — em breve'**
+  String comingSoonAction(String label);
 }
 
 class _AppLocalizationsDelegate

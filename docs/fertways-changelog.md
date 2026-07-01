@@ -14,6 +14,16 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
   **Proteção de novato = 8 dias** (§28.4 supera §27.11 "20 dias"; `combat.dart` + `zone_screen.dart`).
   **N/A:** §28.8 Mercado Local (tabela de custo não exibida) · Predador (unidade não modelada).
 
+### Bloco C — C5 i18n PT-BR/ES/EN CONCLUÍDO (Bloco C completo)
+- Idioma trocável ao vivo: `data/locale_controller.dart` (`NotifierProvider<LocaleController, Locale?>`) →
+  `app.dart` (ConsumerWidget) → `MaterialApp.locale`. Seletor no HUD (`_LanguageMenu`, ícone de globo:
+  Português/Español/English, marca no atual). Troca reflete na hora, sem recarregar.
+- Chrome traduzido nos 3 idiomas (ARB pt/es/en): nav rail, ações da barra inferior (Construir/Recrutar/
+  Pesquisar/Relatórios/Missões/Mensagens), "Online", "em breve" e estados comuns. Barra inferior roteia por
+  chave estável (`_ShellAction`), não pelo texto. Números do HUD (intl) acompanham o locale (14.280 ↔ 14,280).
+- Relatório PDF `docs/reports/21` + spec OpenSpec `i18n-locale`. **Dívida:** strings do corpo de cada tela
+  seguem pt-BR (extração incremental grande) · persistência do idioma entre sessões. **Bloco C (C1–C5) completo.**
+
 ### Bloco C — C4 Fluxos reais de construção/upgrade CONCLUÍDO
 - **Primeiro estado mutável do app**: `build_queue.dart` (QueuedBuild com getters vivos + `buildSeconds`
   curva 1.5×) + `data/build_queue_controller.dart` (`NotifierProvider<BuildQueueController, BuildQueueState>`

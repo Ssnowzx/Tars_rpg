@@ -15,5 +15,14 @@
   "capitalBuildAction": "Install",
   "stateLoading": "Loading…",
   "stateError": "Couldn't load. Tap to retry.",
-  "comingSoon": "Coming soon"
+  "comingSoon": "Coming soon",
+  "actionBuild": "Build",
+  "actionRecruit": "Recruit",
+  "actionResearch": "Research",
+  "actionReports": "Reports",
+  "actionMissions": "Missions",
+  "actionMessages": "Messages",
+  "statusOnline": "Online",
+  "settingsLanguage": "Language",
+  "comingSoonAction": "{label} — coming soon"
 }

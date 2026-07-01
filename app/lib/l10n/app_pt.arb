@@ -26,5 +26,20 @@
 
   "stateLoading": "Carregando…",
   "stateError": "Não foi possível carregar. Toque para tentar de novo.",
-  "comingSoon": "Em construção"
+  "comingSoon": "Em construção",
+
+  "actionBuild": "Construir",
+  "actionRecruit": "Recrutar",
+  "actionResearch": "Pesquisar",
+  "actionReports": "Relatórios",
+  "actionMissions": "Missões",
+  "actionMessages": "Mensagens",
+  "statusOnline": "Online",
+  "settingsLanguage": "Idioma",
+  "comingSoonAction": "{label} — em breve",
+  "@comingSoonAction": {
+    "placeholders": {
+      "label": { "type": "String" }
+    }
+  }
 }

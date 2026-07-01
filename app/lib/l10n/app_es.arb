@@ -15,5 +15,14 @@
   "capitalBuildAction": "Instalar",
   "stateLoading": "Cargando…",
   "stateError": "No se pudo cargar. Toca para reintentar.",
-  "comingSoon": "En construcción"
+  "comingSoon": "En construcción",
+  "actionBuild": "Construir",
+  "actionRecruit": "Reclutar",
+  "actionResearch": "Investigar",
+  "actionReports": "Informes",
+  "actionMissions": "Misiones",
+  "actionMessages": "Mensajes",
+  "statusOnline": "En línea",
+  "settingsLanguage": "Idioma",
+  "comingSoonAction": "{label} — próximamente"
 }

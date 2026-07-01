@@ -57,4 +57,33 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get comingSoon => 'En construcción';
+
+  @override
+  String get actionBuild => 'Construir';
+
+  @override
+  String get actionRecruit => 'Reclutar';
+
+  @override
+  String get actionResearch => 'Investigar';
+
+  @override
+  String get actionReports => 'Informes';
+
+  @override
+  String get actionMissions => 'Misiones';
+
+  @override
+  String get actionMessages => 'Mensajes';
+
+  @override
+  String get statusOnline => 'En línea';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String comingSoonAction(String label) {
+    return '$label — próximamente';
+  }
 }

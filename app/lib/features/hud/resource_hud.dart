@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
+import '../../data/locale_controller.dart';
 import '../../data/providers.dart';
 import '../../domain/models/resources.dart';
 import '../../domain/models/world_models.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Barra superior persistente (HUD) — direção Solar Frontier: brasão + nome da
 /// colônia + nível/XP, contadores de recurso (valor/capacidade + produção/h) e
@@ -352,7 +354,7 @@ class _PlayerCluster extends ConsumerWidget {
         SizedBox(width: t.space2),
         const _IconBtn(icon: Icons.help_outline),
         SizedBox(width: t.space2),
-        const _IconBtn(icon: Icons.settings_outlined),
+        const _LanguageMenu(),
         SizedBox(width: t.space3),
         Container(
           padding: EdgeInsets.fromLTRB(t.space1, t.space1, t.space3, t.space1),
@@ -448,6 +450,29 @@ class _IconBtn extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(t.radiusMd),
       child: content,
+    );
+  }
+}
+
+/// Seletor de idioma (§11): troca PT-BR/ES/EN na hora via [localeProvider].
+class _LanguageMenu extends ConsumerWidget {
+  const _LanguageMenu();
+
+  static const _langs = [('pt', 'Português'), ('es', 'Español'), ('en', 'English')];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final code = ref.watch(localeProvider)?.languageCode ?? 'pt';
+    final l10n = AppLocalizations.of(context);
+    return PopupMenuButton<String>(
+      tooltip: l10n.settingsLanguage,
+      position: PopupMenuPosition.under,
+      onSelected: (c) => ref.read(localeProvider.notifier).set(Locale(c)),
+      itemBuilder: (_) => [
+        for (final (c, name) in _langs)
+          CheckedPopupMenuItem<String>(value: c, checked: c == code, child: Text(name)),
+      ],
+      child: const _IconBtn(icon: Icons.language_outlined),
     );
   }
 }

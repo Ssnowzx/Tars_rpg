@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório C5 (i18n PT-BR/ES/EN)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>C5 — i18n PT-BR / ES / EN</h1>
+  <div class="sub">Troca de idioma ao vivo + chrome traduzido nos três idiomas
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v33 — §11 (Internacionalização)</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Escopo:</b> infraestrutura + chrome (nav/ações/estados)</span>
+  </div>
+</div>
+
+<p class="lead">PT-BR/ES/EN são requisito de lançamento (§11). O app já tinha scaffolding gen-l10n (ARB), mas o
+idioma seguia o dispositivo e quase nada usava as chaves. Agora há um <b>idioma trocável ao vivo</b>
+(<code>localeProvider</code>, estado mutável) com <b>seletor no HUD</b> (ícone de globo → Português/Español/
+English), e toda a <b>camada de chrome sempre-visível</b> (nav rail, barra de ações, "Online", "em breve",
+estados comuns) está traduzida nos três idiomas. A troca reflete na hora, sem recarregar.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">3</div><div class="l">idiomas (PT-BR / ES / EN)</div></div>
+  <div class="card"><div class="n">ao vivo</div><div class="l">troca sem recarregar (localeProvider)</div></div>
+  <div class="card"><div class="n">HUD</div><div class="l">seletor de idioma (globo)</div></div>
+  <div class="card"><div class="n">chave estável</div><div class="l">roteamento independe do rótulo</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Idioma mutável</b>: <code>localeProvider</code> (NotifierProvider) alimenta <code>MaterialApp.locale</code>;
+      a raiz do app virou ConsumerWidget.</li>
+  <li><b>Seletor de idioma</b> no HUD (ícone de globo substitui a engrenagem sem ação): PopupMenu com
+      Português/Español/English e marca no idioma atual.</li>
+  <li><b>Chrome traduzido (PT/ES/EN)</b>: nav rail (Mapa/Capital/Mercado/Espaçoporto/Perfil), ações da barra
+      inferior (Construir/Recrutar/Pesquisar/Relatórios/Missões/Mensagens), status "Online", "— em breve" e
+      os estados comuns (carregando/erro).</li>
+  <li><b>Roteamento por chave estável</b>: a barra de ações usa um enum (<code>_ShellAction</code>) em vez do
+      texto traduzido, então navegar funciona em qualquer idioma.</li>
+  <li><b>Números por localidade</b>: a formatação de recursos do HUD (intl) já acompanha o locale ativo
+      (ex.: PT 14.280 ↔ EN 14,280).</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Estado</td><td><code>data/locale_controller.dart</code> — <code>NotifierProvider&lt;LocaleController, Locale?&gt;</code> (padrão pt)</td></tr>
+    <tr><td>Raiz</td><td><code>app/app.dart</code> (ConsumerWidget) → <code>MaterialApp.router(locale: …)</code></td></tr>
+    <tr><td>Traduções</td><td><code>l10n/app_pt.arb</code> · <code>app_es.arb</code> · <code>app_en.arb</code> (+ chaves action*/statusOnline/settingsLanguage/comingSoonAction)</td></tr>
+    <tr><td>UI</td><td><code>features/shell/app_shell.dart</code> (barra inferior via l10n + enum) · <code>features/hud/resource_hud.dart</code> (<code>_LanguageMenu</code>)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter gen-l10n</code> + <code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web --pwa-strategy=none --no-tree-shake-icons</code> — ✓ Built</li>
+  <li>Visual (Chrome): globo no HUD abre PT/ES/EN; escolher English troca a nav rail (Map/Capital/Market/
+      Spaceport/Profile) e a barra (Build/Recruit/Research/Reports/Missions/Messages · Online) na hora; números
+      viram 14,280</li>
+  <li>Estado mutável Riverpod · tokens DsTokens · sem emoji</li>
+</ul>
+
+<div class="note"><b>Dívidas / backlog i18n:</b> as <b>strings do corpo de cada tela</b> seguem pt-BR
+hard-coded — extrair para ARB é tarefa incremental (grande). <b>Persistência</b> do idioma entre sessões
+precisa de storage local. <b>Fim do Bloco C</b> (C1–C5 + reconciliação v33).</div>
+
+<footer><span>Fertways — Relatório de Entrega · C5 i18n PT-BR/ES/EN</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

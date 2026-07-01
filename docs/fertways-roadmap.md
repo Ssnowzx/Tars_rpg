@@ -271,8 +271,12 @@ Três lugares distintos (3 níveis):
 - Dívidas: dedução de recursos (resources ainda read-only) · nível persistente ao concluir · upgrades de
   ministério da Capital (Depósito/Central de Transportes) seguem mock.
 
-### C5 — i18n PT-BR/ES/EN  ⬜  · GDD §11
-- Extrair strings hard-coded → ARB; adicionar ES/EN; troca de idioma no Perfil/config.
+### C5 — i18n PT-BR/ES/EN  ✅  · GDD §11
+- **Construído** — idioma trocável ao vivo: `data/locale_controller.dart` (`NotifierProvider<LocaleController,
+  Locale?>`) → `MaterialApp.locale`; seletor no HUD (`_LanguageMenu`, ícone de globo: PT/ES/EN).
+- Chrome traduzido nos 3 idiomas (ARB): nav rail, ações da barra inferior, "Online", "em breve", estados
+  comuns; roteamento por chave estável (`_ShellAction`). Números do HUD acompanham o locale (intl).
+- Dívidas: strings do corpo de cada tela ainda pt-BR (extração incremental) · persistência do idioma.
 
 ---
 

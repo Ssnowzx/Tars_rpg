@@ -89,8 +89,9 @@ class _BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
-    // Android: barra de navegação principal embaixo.
+    // Narrow: barra de navegação principal embaixo.
     if (!isWide) {
       return NavigationBar(
         selectedIndex: current,
@@ -107,23 +108,27 @@ class _BottomBar extends StatelessWidget {
     }
 
     // Desktop: barra de ações secundárias.
-    const actions = [
-      ('Construir', Icons.add_box_outlined),
-      ('Recrutar', Icons.groups_outlined),
-      ('Pesquisar', Icons.science_outlined),
-      ('Relatórios', Icons.description_outlined),
-      ('Missões', Icons.flag_circle_outlined),
-      ('Mensagens', Icons.mail_outline),
+    final actions = <(_ShellAction, String, IconData)>[
+      (_ShellAction.build, l10n.actionBuild, Icons.add_box_outlined),
+      (_ShellAction.recruit, l10n.actionRecruit, Icons.groups_outlined),
+      (_ShellAction.research, l10n.actionResearch, Icons.science_outlined),
+      (_ShellAction.reports, l10n.actionReports, Icons.description_outlined),
+      (_ShellAction.missions, l10n.actionMissions, Icons.flag_circle_outlined),
+      (_ShellAction.messages, l10n.actionMessages, Icons.mail_outline),
     ];
-    void onAction(String label) {
-      switch (label) {
-        case 'Mensagens':
+    void onAction(_ShellAction kind, String label) {
+      switch (kind) {
+        case _ShellAction.messages:
           context.go('/map/messages');
-        case 'Missões':
+        case _ShellAction.missions:
           context.go('/map/missions');
         default:
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$label — em breve'), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
+            SnackBar(
+              content: Text(l10n.comingSoonAction(label)),
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 2),
+            ),
           );
       }
     }
@@ -138,13 +143,13 @@ class _BottomBar extends StatelessWidget {
       child: Row(
         children: [
           for (final a in actions) ...[
-            _ActionItem(label: a.$1, icon: a.$2, onTap: () => onAction(a.$1)),
+            _ActionItem(label: a.$2, icon: a.$3, onTap: () => onAction(a.$1, a.$2)),
             SizedBox(width: t.space4),
           ],
           const Spacer(),
           const SizedBox(width: 8, height: 8, child: DecoratedBox(decoration: BoxDecoration(color: FwPalette.green500, shape: BoxShape.circle))),
           SizedBox(width: t.space2),
-          Text('Online', style: TextStyle(fontSize: 11, color: t.textSecondary)),
+          Text(l10n.statusOnline, style: TextStyle(fontSize: 11, color: t.textSecondary)),
         ],
       ),
     );
@@ -183,3 +188,7 @@ class _Dest {
   final IconData icon;
   final IconData selectedIcon;
 }
+
+/// Ações da barra inferior (chave estável — o roteamento não depende do rótulo
+/// traduzido).
+enum _ShellAction { build, recruit, research, reports, missions, messages }

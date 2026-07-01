@@ -146,8 +146,11 @@ Administração Pública). ~~B9 Leilões~~ ✅ (`/market/auctions`; `AuctionRepo
 §12 + §28.1–28.2). ~~C2 Ranking de Guerras~~ ✅ (feito no Bloco A4, §15). ~~C3 Terraformação Global~~ ✅
 (`/map/terraform`; `TerraformRepository`/`terraform.json`; §04/§12.3). ~~C4 Fluxos reais de construção/upgrade~~
 ✅ (**1º estado mutável**: `build_queue.dart` + `data/build_queue_controller.dart` `NotifierProvider`+Timer;
-painel de fila ao vivo na Colônia; enfileiram Colônia+Zona; fila dupla §20.2). **Reconciliação v33 feita** (§8).
-**Próximo: C5 i18n PT-BR/ES/EN** (§11). Dívidas C4: dedução de recursos, nível persistente, upgrades de ministério.
+painel de fila ao vivo na Colônia; enfileiram Colônia+Zona; fila dupla §20.2). ~~C5 i18n PT-BR/ES/EN~~ ✅
+(`data/locale_controller.dart` `NotifierProvider<Locale?>` → `MaterialApp.locale`; seletor de idioma no HUD;
+chrome traduzido nos 3 idiomas via ARB). **Reconciliação v33 feita** (§8). **BLOCO C (C1–C5) COMPLETO.**
+Próximo: backlog i18n (extrair strings do corpo das telas) · dívidas C4 (dedução de recursos, nível persistente,
+upgrades de ministério) · ou nova prioridade do produto.
 Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; ações mock
 (SnackBar) → fluxos reais. Ver `docs/fertways-roadmap.md`.
 
