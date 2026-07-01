@@ -14,6 +14,16 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
   **Proteção de novato = 8 dias** (§28.4 supera §27.11 "20 dias"; `combat.dart` + `zone_screen.dart`).
   **N/A:** §28.8 Mercado Local (tabela de custo não exibida) · Predador (unidade não modelada).
 
+### Bloco C — C4 Fluxos reais de construção/upgrade CONCLUÍDO
+- **Primeiro estado mutável do app**: `build_queue.dart` (QueuedBuild com getters vivos + `buildSeconds`
+  curva 1.5×) + `data/build_queue_controller.dart` (`NotifierProvider<BuildQueueController, BuildQueueState>`
+  + Timer 1s; enqueue/cancel/finishAll; obras concluídas saem sozinhas). Riverpod era 100% read-only.
+- `construction_panel.dart` (antes definido mas nunca montado) virou ConsumerWidget que lê a fila e
+  mostra contagem regressiva ao vivo + cancelar + "Concluir agora" + fila dupla (2 vagas, §20.2). Montado na
+  Colônia. Enfileiram: `colony_screen.dart` (build+upgrade, agora ConsumerStatefulWidget) e `zone_screen.dart`
+  (estruturas §17.4, agora ConsumerWidget). Relatório PDF `docs/reports/20` + spec OpenSpec `construction-queue`.
+- Dívidas: dedução de recursos (resources read-only) · nível persistente ao concluir · upgrades de ministério.
+
 ### Bloco C — C3 Terraformação Global CONCLUÍDO
 - Nova tela `/map/terraform` (drill-in do Mapa): `terraform.dart` (TerraformState/TerraformTrack + enum
   TerraformIndicator)/`TerraformRepository`/`terraform.json`/`terraformProvider` → `terraform_screen.dart`.

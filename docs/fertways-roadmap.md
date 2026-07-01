@@ -262,8 +262,14 @@ Três lugares distintos (3 níveis):
   (nunca vantagem econômica, §04); gatilho da T2 = "Janela de Órbita Lunar". Entradas: chip no mapa +
   botão na tela lunar.
 
-### C4 — Fluxos reais de construção/upgrade  ⬜  · GDD §17/§19/§20
-- Substituir ações mock (SnackBar) por fluxos reais de construir/evoluir + fila (Colônia/Zona/Capital).
+### C4 — Fluxos reais de construção/upgrade  ✅  · GDD §17/§20/§20.2
+- **Construído** — fila de construção mutável (1º estado mutável do app): `build_queue.dart` +
+  `data/build_queue_controller.dart` (`NotifierProvider` + Timer 1s: enqueue/cancel/finishAll).
+- Painel "Construção em andamento" (`construction_panel.dart`, agora ConsumerWidget) montado na Colônia:
+  contagem regressiva ao vivo, cancelar, "Concluir agora", **fila dupla** (2 vagas, §20.2), obra concluída
+  sai sozinha. Enfileiram: Colônia (build+upgrade) e Zona (estruturas §17.4).
+- Dívidas: dedução de recursos (resources ainda read-only) · nível persistente ao concluir · upgrades de
+  ministério da Capital (Depósito/Central de Transportes) seguem mock.
 
 ### C5 — i18n PT-BR/ES/EN  ⬜  · GDD §11
 - Extrair strings hard-coded → ARB; adicionar ES/EN; troca de idioma no Perfil/config.

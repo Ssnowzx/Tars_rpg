@@ -6,8 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
+import '../../data/build_queue_controller.dart';
 import '../../data/providers.dart';
+import '../../domain/models/build_queue.dart';
 import '../../domain/models/colony_buildings.dart';
+import '../../domain/models/world_models.dart' show PlotKind;
+import '../world_map/view/construction_panel.dart';
 import 'colony_building_panel.dart';
 import 'game/colony_game.dart';
 
@@ -35,15 +39,15 @@ class ColonyScreen extends ConsumerWidget {
   }
 }
 
-class _ColonyView extends StatefulWidget {
+class _ColonyView extends ConsumerStatefulWidget {
   const _ColonyView({required this.base});
   final ColonyBase base;
 
   @override
-  State<_ColonyView> createState() => _ColonyViewState();
+  ConsumerState<_ColonyView> createState() => _ColonyViewState();
 }
 
-class _ColonyViewState extends State<_ColonyView> {
+class _ColonyViewState extends ConsumerState<_ColonyView> {
   ColonyBuilding? _selected;
   late final FertwaysColonyGame _game = FertwaysColonyGame(widget.base, onTap: _select);
 
@@ -67,8 +71,46 @@ class _ColonyViewState extends State<_ColonyView> {
     } else if (b.isFree) {
       _showBuildSheet();
     } else {
-      _toast('Melhorar ${b.name} (Nv ${b.level} → ${b.level + 1}) — em breve');
+      _enqueue(name: b.name, kind: _kindFor(b.category), fromLevel: b.level, toLevel: b.level + 1);
     }
+  }
+
+  /// Enfileira uma obra na fila de construção (§17/§20) em vez do antigo mock.
+  void _enqueue({
+    required String name,
+    required PlotKind kind,
+    required int fromLevel,
+    required int toLevel,
+  }) {
+    final seconds = buildSeconds(toLevel);
+    final ok = ref.read(buildQueueProvider.notifier).enqueue(
+          name: name,
+          kind: kind,
+          fromLevel: fromLevel,
+          toLevel: toLevel,
+          seconds: seconds,
+        );
+    final verb = fromLevel == 0 ? 'Construção' : 'Melhoria';
+    _toast(ok
+        ? '$verb de $name adicionada à fila (~${seconds}s)'
+        : 'Fila cheia — aguarde uma obra concluir');
+  }
+
+  PlotKind _kindFor(BuildingCategory c) => switch (c) {
+        BuildingCategory.water => PlotKind.water,
+        BuildingCategory.metals || BuildingCategory.rawmetal => PlotKind.metals,
+        BuildingCategory.biomass => PlotKind.biomass,
+        BuildingCategory.energy => PlotKind.energy,
+        BuildingCategory.components || BuildingCategory.biofuel => PlotKind.factory,
+        _ => PlotKind.empty,
+      };
+
+  PlotKind _kindForName(String name) {
+    if (name.contains('Água')) return PlotKind.water;
+    if (name.contains('Energia')) return PlotKind.energy;
+    if (name.contains('Fazenda')) return PlotKind.biomass;
+    if (name.contains('Oficina') || name.contains('Refinaria')) return PlotKind.factory;
+    return PlotKind.empty;
   }
 
   /// Fluxo de construir: escolher a estrutura para o slot livre (GDD v21 §17).
@@ -112,7 +154,7 @@ class _ColonyViewState extends State<_ColonyView> {
                     side: BorderSide(color: t.borderDefault),
                     onPressed: () {
                       Navigator.of(sheetCtx).pop();
-                      _toast('Construir ${o.$1} — em breve');
+                      _enqueue(name: o.$1, kind: _kindForName(o.$1), fromLevel: 0, toLevel: 1);
                     },
                   ),
               ],
@@ -139,6 +181,8 @@ class _ColonyViewState extends State<_ColonyView> {
               const _CapitalButton(),
               SizedBox(height: t.space2),
               const _FleetButton(),
+              SizedBox(height: t.space3),
+              const ConstructionPanel(),
             ],
           ),
         ),

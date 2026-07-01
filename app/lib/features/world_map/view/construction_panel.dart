@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme/ds_colors.dart';
 import '../../../app/theme/ds_tokens.dart';
-import '../../../domain/models/world_models.dart';
+import '../../../data/build_queue_controller.dart';
+import '../../../domain/models/build_queue.dart';
+import '../../../domain/models/world_models.dart' show PlotKind;
 
-/// Painel flutuante "Construção em andamento" (canto superior direito do mapa).
-class ConstructionPanel extends StatelessWidget {
-  const ConstructionPanel({super.key, required this.items});
-  final List<BuildItem> items;
+/// Painel flutuante "Construção em andamento". Lê a fila mutável
+/// (`buildQueueProvider`) e anima a contagem regressiva a cada tick. Fila dupla
+/// (2 vagas) nos primeiros 5 dias de conta (§20.2). Some quando não há obras.
+class ConstructionPanel extends ConsumerWidget {
+  const ConstructionPanel({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = Theme.of(context).extension<DsTokens>()!;
     final scheme = Theme.of(context).colorScheme;
+    final queue = ref.watch(buildQueueProvider);
+    if (queue.jobs.isEmpty) return const SizedBox.shrink();
+    final now = DateTime.now().millisecondsSinceEpoch;
 
     return Container(
       width: 320,
@@ -46,21 +53,26 @@ class ConstructionPanel extends StatelessWidget {
                       Text('Construção em andamento',
                           style: GoogleFonts.rajdhani(
                               fontWeight: FontWeight.w700, fontSize: 14, color: FwPalette.gray900)),
-                      Text('Fila de obras · Capital',
+                      Text(queue.doubleQueue ? 'Fila dupla · primeiros 5 dias (§20.2)' : 'Fila de obras · Slot',
                           style: TextStyle(fontSize: 10.5, color: t.textSecondary)),
                     ],
                   ),
                 ),
-                _Pill(text: '${items.length}/5'),
+                _Pill(text: '${queue.jobs.length}/${queue.maxSlots}'),
               ],
             ),
           ),
           Divider(height: 1, color: t.borderDefault),
-          for (final b in items) _BuildRow(item: b),
+          for (final b in queue.jobs)
+            _BuildRow(
+              item: b,
+              now: now,
+              onCancel: () => ref.read(buildQueueProvider.notifier).cancel(b.id),
+            ),
           Padding(
             padding: EdgeInsets.all(t.space3),
             child: FilledButton.icon(
-              onPressed: () {},
+              onPressed: () => ref.read(buildQueueProvider.notifier).finishAll(),
               icon: const Icon(Icons.flash_on, size: 18),
               label: const Text('Concluir agora'),
               style: FilledButton.styleFrom(
@@ -76,8 +88,10 @@ class ConstructionPanel extends StatelessWidget {
 }
 
 class _BuildRow extends StatelessWidget {
-  const _BuildRow({required this.item});
-  final BuildItem item;
+  const _BuildRow({required this.item, required this.now, required this.onCancel});
+  final QueuedBuild item;
+  final int now;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +132,7 @@ class _BuildRow extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
-                          value: item.progress,
+                          value: item.progress(now),
                           minHeight: 6,
                           backgroundColor: t.surfaceSunken,
                           valueColor: const AlwaysStoppedAnimation(FwPalette.solar500),
@@ -126,7 +140,7 @@ class _BuildRow extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: t.space2),
-                    Text(item.remaining,
+                    Text(item.remainingLabel(now),
                         style: GoogleFonts.rajdhani(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
@@ -136,6 +150,13 @@ class _BuildRow extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          SizedBox(width: t.space1),
+          IconButton(
+            onPressed: onCancel,
+            visualDensity: VisualDensity.compact,
+            tooltip: 'Cancelar obra',
+            icon: Icon(Icons.close, size: 16, color: t.textSecondary),
           ),
         ],
       ),

@@ -5,9 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
+import '../../data/build_queue_controller.dart';
 import '../../data/providers.dart';
+import '../../domain/models/build_queue.dart';
 import '../../domain/models/combat.dart';
 import '../../domain/models/planet_models.dart';
+import '../../domain/models/world_models.dart' show PlotKind;
 import '../world_map/game/fertways_world_game.dart' show zoneResourceColor, zoneResourceIcon;
 
 String _resourceLabel(ZoneResource k) => switch (k) {
@@ -31,13 +34,13 @@ class _Structure {
 
 /// Tela de uma Zona Neutra: ocupar (Robôs Mineradores) → extrair (depósito 10
 /// níveis) → transportar (4 destinos). Estruturas do §17.4. Tudo mock.
-class ZoneScreen extends StatelessWidget {
+class ZoneScreen extends ConsumerWidget {
   const ZoneScreen({super.key, required this.zone});
 
   final MapNode? zone;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = Theme.of(context).extension<DsTokens>()!;
     if (zone == null) {
       return Center(
@@ -174,7 +177,23 @@ class ZoneScreen extends StatelessWidget {
         SizedBox(height: t.space2),
         ...structures.map((s) => Padding(
               padding: EdgeInsets.only(bottom: t.space2),
-              child: _StructureRow(s: s, onTap: () => toast('${s.level == 0 ? 'Construir' : 'Melhorar'} ${s.name} — em breve')),
+              child: _StructureRow(
+                s: s,
+                onTap: () {
+                  final seconds = buildSeconds(s.level + 1);
+                  final ok = ref.read(buildQueueProvider.notifier).enqueue(
+                        name: s.name,
+                        kind: PlotKind.empty,
+                        fromLevel: s.level,
+                        toLevel: s.level + 1,
+                        seconds: seconds,
+                      );
+                  final verb = s.level == 0 ? 'Construção' : 'Melhoria';
+                  toast(ok
+                      ? '$verb de ${s.name} adicionada à fila (~${seconds}s)'
+                      : 'Fila cheia — aguarde uma obra concluir');
+                },
+              ),
             )),
         SizedBox(height: t.space4),
 

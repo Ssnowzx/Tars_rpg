@@ -144,9 +144,10 @@ Administração Pública). ~~B9 Leilões~~ ✅ (`/market/auctions`; `AuctionRepo
 
 **Bloco C:** ~~C1 Exploração Lunar / Telescópio Gagarin~~ ✅ (`/spaceport/lunar`; `LunarRepository`/`lunar.json`;
 §12 + §28.1–28.2). ~~C2 Ranking de Guerras~~ ✅ (feito no Bloco A4, §15). ~~C3 Terraformação Global~~ ✅
-(`/map/terraform`; `TerraformRepository`/`terraform.json`; §04/§12.3: 3 indicadores rumo a 75%, contribuição
-anti-farming + Status Cívico; entradas no mapa e na tela lunar). **Reconciliação v33 feita** (ver §8).
-**Próximo: C4 fluxos reais de construção/upgrade** → depois **C5 i18n PT-BR/ES/EN**.
+(`/map/terraform`; `TerraformRepository`/`terraform.json`; §04/§12.3). ~~C4 Fluxos reais de construção/upgrade~~
+✅ (**1º estado mutável**: `build_queue.dart` + `data/build_queue_controller.dart` `NotifierProvider`+Timer;
+painel de fila ao vivo na Colônia; enfileiram Colônia+Zona; fila dupla §20.2). **Reconciliação v33 feita** (§8).
+**Próximo: C5 i18n PT-BR/ES/EN** (§11). Dívidas C4: dedução de recursos, nível persistente, upgrades de ministério.
 Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; ações mock
 (SnackBar) → fluxos reais. Ver `docs/fertways-roadmap.md`.
 

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório C4 (Fila de Construção real)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>C4 — Fluxos reais de construção/upgrade</h1>
+  <div class="sub">Fila de construção mutável com contagem regressiva ao vivo
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v33 — §17 (construções) + §20 (custos/tempo) + §20.2 (fila dupla)</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Rotas:</b> /map/colony · /map/zone</span>
+  </div>
+</div>
+
+<p class="lead">Até aqui, tocar em "Construir/Melhorar" só mostrava um SnackBar "— em breve". Agora existe uma
+<b>fila de construção real</b>: o <b>primeiro estado mutável do app</b> (um <code>NotifierProvider</code> com
+<code>Timer</code> de 1s). As ações de construir/evoluir da Colônia e das estruturas de Zona <b>enfileiram</b>
+obras que <b>contam regressivamente ao vivo</b>, respeitam a <b>fila dupla</b> (2 vagas nos primeiros 5 dias,
+§20.2) e podem ser <b>canceladas</b> ou <b>concluídas na hora</b>. Obras concluídas saem da fila sozinhas.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">1º</div><div class="l">estado mutável (NotifierProvider) do app</div></div>
+  <div class="card"><div class="n">2</div><div class="l">vagas — fila dupla, primeiros 5 dias (§20.2)</div></div>
+  <div class="card"><div class="n">1s</div><div class="l">tick da contagem regressiva ao vivo</div></div>
+  <div class="card"><div class="n">2</div><div class="l">superfícies que enfileiram (Colônia + Zona)</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Fila mutável</b> (<code>buildQueueProvider</code>): obras com tempo total + horário de conclusão;
+      tempo restante e progresso derivados do relógio a cada tick; obras concluídas <b>saem sozinhas</b>.</li>
+  <li><b>Painel "Construção em andamento"</b> montado na Colônia (antes existia mas nunca era exibido):
+      progresso, contagem regressiva (mm:ss), <b>cancelar (X)</b> por obra, <b>"Concluir agora"</b>, e
+      selo <code>usadas/máx</code> com nota "Fila dupla · primeiros 5 dias".</li>
+  <li><b>Enfileirar na Colônia</b>: "Construir" (slot livre) e "Melhorar" (Nv N→N+1) agora criam obras
+      com tempo estimado por nível (curva §20) em vez do SnackBar mock.</li>
+  <li><b>Enfileirar na Zona</b>: as estruturas de zona (§17.4) enfileiram na mesma fila global.</li>
+  <li><b>Fila cheia</b>: enfileirar é recusado com aviso quando as 2 vagas estão ocupadas.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/build_queue.dart</code> (QueuedBuild com getters vivos remainingSeconds/progress/isDone; BuildQueueState; helper <code>buildSeconds</code> curva 1.5×)</td></tr>
+    <tr><td>Estado mutável</td><td><code>data/build_queue_controller.dart</code> — <code>NotifierProvider&lt;BuildQueueController, BuildQueueState&gt;</code> + Timer 1s (enqueue/cancel/finishAll). <b>Primeiro estado mutável do app.</b></td></tr>
+    <tr><td>UI</td><td><code>features/world_map/view/construction_panel.dart</code> agora ConsumerWidget (lê a fila, cancelar/concluir); montado em <code>colony_screen.dart</code>. Enfileiram: <code>colony_screen.dart</code> (build+upgrade) e <code>zone_screen.dart</code> (estruturas)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web --pwa-strategy=none --no-tree-shake-icons</code> — ✓ Built</li>
+  <li>Visual (Chrome): painel na Colônia com "Coletor Solar 3→4" contando regressivamente; tocar "Melhorar"
+      na Fazenda enfileira "Fazenda 4→5" (pill 2/2); ao concluir, a obra sai sozinha (2/2 → 1/2); cancelar
+      e "Concluir agora" funcionam</li>
+  <li>Seam de repositório mantido para dados read-only · tokens DsTokens · sem emoji · Riverpod Notifier</li>
+</ul>
+
+<div class="note"><b>Dívidas / próximos incrementos:</b> <span class="badge debt">i18n</span> pt hard-coded ·
+<b>dedução de recursos</b> na obra (o <code>resourcesProvider</code> segue read-only — falta um AsyncNotifier
+mutável para debitar custo) · <b>mudança de nível persistente</b> ao concluir (construções ainda vêm de
+world.json) · <b>upgrades de ministério</b> da Capital (Depósito/Central de Transportes) seguem em SnackBar.
+<b>Próximo:</b> C5 — i18n PT-BR/ES/EN.</div>
+
+<footer><span>Fertways — Relatório de Entrega · C4 Fila de Construção</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>
