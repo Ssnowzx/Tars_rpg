@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -330,16 +331,24 @@ class _ResourceChip extends StatelessWidget {
   }
 }
 
-class _PlayerCluster extends StatelessWidget {
+class _PlayerCluster extends ConsumerWidget {
   const _PlayerCluster();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = Theme.of(context).extension<DsTokens>()!;
+    final unread = ref.watch(notificationsProvider).maybeWhen(
+          data: (c) => c.unreadCount,
+          orElse: () => 0,
+        );
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const _IconBtn(icon: Icons.notifications_none, badge: true),
+        _IconBtn(
+          icon: Icons.notifications_none,
+          badgeCount: unread,
+          onTap: () => context.go('/map/notifications'),
+        ),
         SizedBox(width: t.space2),
         const _IconBtn(icon: Icons.help_outline),
         SizedBox(width: t.space2),
@@ -394,14 +403,15 @@ class _PlayerCluster extends StatelessWidget {
 }
 
 class _IconBtn extends StatelessWidget {
-  const _IconBtn({required this.icon, this.badge = false});
+  const _IconBtn({required this.icon, this.badgeCount = 0, this.onTap});
   final IconData icon;
-  final bool badge;
+  final int badgeCount;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
-    return Stack(
+    final content = Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
@@ -414,21 +424,30 @@ class _IconBtn extends StatelessWidget {
           ),
           child: Icon(icon, size: 18, color: FwPalette.gray700),
         ),
-        if (badge)
+        if (badgeCount > 0)
           Positioned(
-            top: 7,
-            right: 7,
+            top: -3,
+            right: -3,
             child: Container(
-              width: 8,
-              height: 8,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+              constraints: const BoxConstraints(minWidth: 16),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: FwPalette.rust600,
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(9),
                 border: Border.all(color: FwPalette.gray50, width: 1.5),
               ),
+              child: Text(badgeCount > 9 ? '9+' : '$badgeCount',
+                  style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: Colors.white)),
             ),
           ),
       ],
+    );
+    if (onTap == null) return content;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(t.radiusMd),
+      child: content,
     );
   }
 }

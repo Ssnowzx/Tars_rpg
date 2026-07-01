@@ -1,0 +1,84 @@
+{
+  "eligibility": [
+    { "label": "Sem avaliação abaixo de 3★ nos últimos 7 dias", "met": true },
+    { "label": "Sem nota abaixo de 3★ nas últimas 7 negociações", "met": true },
+    { "label": "Entre os 35% melhores em terraformação", "met": true },
+    { "label": "Sem restrição comercial há 7 dias", "met": true },
+    { "label": "Não bloqueado de leilões", "met": true },
+    { "label": "Reputação mínima atingida", "met": true },
+    { "label": "10 missões diárias concluídas", "met": true }
+  ],
+  "offices": [
+    {
+      "kind": "conciliator",
+      "title": "Conciliador",
+      "institution": "Ministério das Reputações",
+      "description": "Julga denúncias e concilia disputas entre colonos (§9).",
+      "salary": "50 Fert$/dia + 3 por denúncia (§26.7)",
+      "reputationIndex": "Conduta Social + Status Cívico",
+      "seats": 3,
+      "holders": [
+        { "name": "Mara Tó", "since": "Dia 3", "performance": "32 casos · 1 reversão" },
+        { "name": "Yuki N.", "since": "Dia 5", "performance": "51 casos · 0 reversões" }
+      ]
+    },
+    {
+      "kind": "marketInspector",
+      "title": "Fiscal de Mercado",
+      "institution": "Central de Tributos / Mercado",
+      "description": "Fiscaliza o Mercado Central e o comércio informal (§8/§13).",
+      "salary": "Salário fixo + bônus por desempenho",
+      "reputationIndex": "Confiança Comercial",
+      "seats": 1,
+      "holders": [
+        { "name": "K. Adeyemi", "since": "Dia 4", "performance": "Aprovação 94%" }
+      ]
+    },
+    {
+      "kind": "spaceportClerk",
+      "title": "Atendente do Espaçoporto",
+      "institution": "Espaçoporto",
+      "description": "Apoia o comércio com os planetas NPC (§3).",
+      "salary": "Salário fixo + bônus",
+      "reputationIndex": "Conduta Social",
+      "seats": 2,
+      "holders": [
+        { "name": "L. Tanaka", "since": "Dia 6", "performance": "Aprovação 91%" }
+      ]
+    },
+    {
+      "kind": "reporter",
+      "title": "Repórter",
+      "institution": "Central de Pesquisas e Notícias",
+      "description": "Produz notícias e cobre eventos do servidor (§12.1).",
+      "salary": "Salário fixo + bônus",
+      "reputationIndex": "Conduta Social",
+      "seats": 1,
+      "holders": []
+    },
+    {
+      "kind": "treasuryAssistant",
+      "title": "Auxiliar de Tesouro",
+      "institution": "Secretaria de Finanças e Tesouro",
+      "description": "Apoia a gestão do Fert$ e dos tributos (§2.1).",
+      "salary": "Salário fixo + bônus",
+      "reputationIndex": "Status Cívico",
+      "seats": 1,
+      "holders": [
+        { "name": "Ingrid V.", "since": "Dia 2", "performance": "Aprovação 97%" }
+      ]
+    }
+  ],
+  "candidates": [
+    { "name": "J. Pereira", "officeTitle": "Repórter", "appliedDay": "Dia 11", "eligible": true, "note": "Cumpre todos os critérios (§14.3)." },
+    { "name": "C. Mendes", "officeTitle": "Conciliador", "appliedDay": "Dia 12", "eligible": false, "note": "Falha: restrição comercial recente." },
+    { "name": "Otto Reis", "officeTitle": "Atendente do Espaçoporto", "appliedDay": "Dia 12", "eligible": true, "note": "" }
+  ],
+  "payments": [
+    { "holder": "Mara Tó", "officeTitle": "Conciliador", "amount": 53, "day": "Dia 12" },
+    { "holder": "Yuki N.", "officeTitle": "Conciliador", "amount": 50, "day": "Dia 12" },
+    { "holder": "K. Adeyemi", "officeTitle": "Fiscal de Mercado", "amount": 120, "day": "Dia 12" },
+    { "holder": "L. Tanaka", "officeTitle": "Atendente do Espaçoporto", "amount": 90, "day": "Dia 12" },
+    { "holder": "Ingrid V.", "officeTitle": "Auxiliar de Tesouro", "amount": 100, "day": "Dia 12" }
+  ]
+}

@@ -59,6 +59,17 @@ class _MarketScreenState extends ConsumerState<MarketScreen> {
                   Text('${orders.length} ordens', style: TextStyle(fontSize: 12, color: t.textSecondary)),
                   SizedBox(width: t.space3),
                   OutlinedButton.icon(
+                    onPressed: () => context.go('/market/auctions'),
+                    icon: const Icon(Icons.gavel_outlined, size: 17),
+                    label: const Text('Leilões'),
+                    style: OutlinedButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      side: const BorderSide(color: FwPalette.rust300),
+                      foregroundColor: FwPalette.rust700,
+                    ),
+                  ),
+                  SizedBox(width: t.space2),
+                  OutlinedButton.icon(
                     onPressed: () => context.go('/market/informal'),
                     icon: const Icon(Icons.handshake_outlined, size: 17),
                     label: const Text('Comércio informal'),

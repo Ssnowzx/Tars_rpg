@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B8 (Cargos Públicos)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B8 — Cargos Públicos Neutros + Admin (§14)</h1>
+  <div class="sub">5 cargos, elegibilidade §14.3 e painel administrativo §14.4
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §14 (+ §26.6)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /capital/offices</span>
+  </div>
+</div>
+
+<p class="lead">O §14 cria os cargos públicos neutros — uma trilha administrativa paga em Fert$ aberta a
+quem cumpre critérios rígidos de conduta (§14.3). A tela lista os 5 cargos com salário e índice de
+reputação ligado (§26.6), mostra a elegibilidade do jogador e traz o painel administrativo (§14.4) para
+aprovar candidatos e gerir ocupantes. Acesso pelo botão "Gerir" da Administração Pública.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">5</div><div class="l">cargos públicos (§14)</div></div>
+  <div class="card"><div class="n">7</div><div class="l">critérios de elegibilidade (§14.3)</div></div>
+  <div class="card"><div class="n">§26.6</div><div class="l">índice por cargo</div></div>
+  <div class="card"><div class="n">§14.4</div><div class="l">painel administrativo</div></div>
+</div>
+
+<h2>Os 5 cargos (§14 / §26.6)</h2>
+<table>
+  <thead><tr><th>Cargo</th><th>Remuneração</th><th>Índice de reputação (§26.6)</th></tr></thead>
+  <tbody>
+    <tr><td>Conciliador</td><td>50 Fert$/dia + 3 por denúncia (§26.7)</td><td>Conduta Social + Status Cívico</td></tr>
+    <tr><td>Fiscal de Mercado</td><td>Fixo + bônus</td><td>Confiança Comercial</td></tr>
+    <tr><td>Atendente do Espaçoporto</td><td>Fixo + bônus</td><td>Conduta Social</td></tr>
+    <tr><td>Repórter</td><td>Fixo + bônus</td><td>Conduta Social</td></tr>
+    <tr><td>Auxiliar de Tesouro</td><td>Fixo + bônus</td><td>Status Cívico</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Aba Cargos</b>: cartão de <b>elegibilidade (§14.3)</b> com os 7 critérios (cumpridos vs pendentes) e
+      o veredito "Você está elegível"; os 5 cargos com instituição, descrição, salário, índice ligado (§26.6),
+      vagas/ocupação, ocupantes (desde quando + desempenho) e botão <b>Candidatar-se</b> (habilitado só se
+      elegível).</li>
+  <li><b>Aba Administração (§14.4)</b>: <b>candidaturas pendentes</b> (com selo Elegível/Não elegível;
+      "Aprovar" desabilitado para inelegíveis) + Aprovar/Recusar; <b>ocupantes atuais</b> com
+      Suspender/Demitir; <b>pagamentos recentes</b> (salário/bônus por ocupante).</li>
+  <li><b>Acesso</b>: botão "Gerir" da seção "Cargos públicos neutros" no ministério da Administração Pública
+      (antes dava "Bloco B8"); rota <code>/capital/offices</code>.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/public_office.dart</code> (PublicOffice, OfficeHolder, OfficeCandidate, OfficePayment, EligibilityCriterion, PublicOfficeBoard + enum OfficeKind)</td></tr>
+    <tr><td>Seam</td><td><code>PublicOfficeRepository</code> → <code>MockPublicOfficeRepository</code> → <code>offices.json</code> → <code>publicOfficeProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/capital/public_offices_screen.dart</code> (2 abas); rota <code>/capital/offices</code>; botão "Gerir" no <code>AdminPanel</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built · <code>flutter test</code> — All tests passed</li>
+  <li>Visual (Chrome): elegibilidade 7/7; 5 cargos com salário/índice/vagas/ocupantes e Candidatar-se por cor;
+      Admin com 3 candidatos (Aprovar desabilitado p/ C. Mendes inelegível), ocupantes e 5 pagamentos; entrada
+      pelo "Gerir" da Administração Pública</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · candidatar-se/aprovar/
+suspender/demitir = mock · critérios de elegibilidade são fixos no mock. <b>Próximo:</b> B9 — Leilões (§13).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B8 Cargos Públicos</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

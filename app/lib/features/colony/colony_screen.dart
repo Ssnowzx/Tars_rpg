@@ -130,7 +130,18 @@ class _ColonyViewState extends State<_ColonyView> {
       children: [
         Positioned.fill(child: GameWidget<FertwaysColonyGame>(game: _game)),
         Positioned(top: t.space4, left: t.space4, child: _Header(base: widget.base)),
-        Positioned(top: t.space4, right: t.space4, child: const _CapitalButton()),
+        Positioned(
+          top: t.space4,
+          right: t.space4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const _CapitalButton(),
+              SizedBox(height: t.space2),
+              const _FleetButton(),
+            ],
+          ),
+        ),
         Positioned(right: t.space4, bottom: t.space4, child: _ZoomControls(game: _game)),
         if (_selected != null)
           Positioned(
@@ -202,6 +213,27 @@ class _CapitalButton extends StatelessWidget {
       icon: const Icon(Icons.account_balance_outlined, size: 18),
       label: const Text('Capital'),
       style: FilledButton.styleFrom(backgroundColor: FwPalette.rust600, minimumSize: Size(0, t.controlLg)),
+    );
+  }
+}
+
+class _FleetButton extends StatelessWidget {
+  const _FleetButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).extension<DsTokens>()!;
+    final scheme = Theme.of(context).colorScheme;
+    return OutlinedButton.icon(
+      onPressed: () => context.go('/map/fleet'),
+      icon: const Icon(Icons.local_shipping_outlined, size: 18),
+      label: const Text('Frota'),
+      style: OutlinedButton.styleFrom(
+        backgroundColor: scheme.surface,
+        foregroundColor: FwPalette.gray800,
+        side: BorderSide(color: t.borderDefault),
+        minimumSize: Size(0, t.controlLg),
+      ),
     );
   }
 }

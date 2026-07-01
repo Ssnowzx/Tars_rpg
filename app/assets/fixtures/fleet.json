@@ -1,0 +1,16 @@
+{
+  "garageUsed": 10,
+  "garageCapacity": 12,
+  "vehicles": [
+    { "id": "v1", "plate": "CAM-118", "kind": "truck", "capacityM3": 30, "condition": 16, "activeHours": 980, "status": "critical", "assignment": "Bloqueado — abaixo do limite crítico", "maintenanceCost": 640, "buildDay": "Dia 1", "criticalThreshold": 20 },
+    { "id": "v2", "plate": "TQC-003", "kind": "fuelTanker", "capacityM3": 80, "condition": 60, "activeHours": 210, "status": "maintenance", "assignment": "Em manutenção na oficina", "maintenanceCost": 250, "buildDay": "Dia 3" },
+    { "id": "v3", "plate": "FRG-204", "kind": "van", "capacityM3": 6, "condition": 38, "activeHours": 412, "status": "idle", "assignment": "Ocioso no hangar", "maintenanceCost": 180, "buildDay": "Dia 2", "criticalThreshold": 20 },
+    { "id": "v4", "plate": "FRG-377", "kind": "van", "capacityM3": 6, "condition": 72, "activeHours": 190, "status": "inTransit", "assignment": "Entrega a Setor F-07 · 50 Água", "maintenanceCost": 90, "buildDay": "Dia 4", "criticalThreshold": 20 },
+    { "id": "v5", "plate": "CAM-205", "kind": "truck", "capacityM3": 30, "condition": 54, "activeHours": 520, "status": "loading", "assignment": "Carregando Metal Bruto", "maintenanceCost": 300, "buildDay": "Dia 3", "criticalThreshold": 20 },
+    { "id": "v6", "plate": "DRN-061", "kind": "drone", "capacityM3": 1, "condition": 88, "activeHours": 60, "status": "idle", "assignment": "Ocioso", "maintenanceCost": 0, "buildDay": "Dia 5" },
+    { "id": "v7", "plate": "RBM-012", "kind": "miningRobot", "capacityM3": 4, "condition": 70, "activeHours": 300, "status": "inTransit", "assignment": "Ciclo de extração na Jazida Ferrosa", "maintenanceCost": 120, "buildDay": "Dia 2" },
+    { "id": "v8", "plate": "NTP-009", "kind": "planetaryTransport", "capacityM3": 120, "condition": 95, "activeHours": 40, "status": "idle", "assignment": "Ociosa na Plataforma de Pouso", "maintenanceCost": 0, "buildDay": "Dia 4" },
+    { "id": "v9", "plate": "CRG-001", "kind": "freighter", "capacityM3": 500, "condition": 82, "activeHours": 90, "status": "inTransit", "assignment": "Rota ao planeta Kalidor", "maintenanceCost": 0, "buildDay": "Dia 1" },
+    { "id": "v10", "plate": "NLD-002", "kind": "longHauler", "capacityM3": 200, "condition": 77, "activeHours": 130, "status": "idle", "assignment": "Ociosa", "maintenanceCost": 0, "buildDay": "Dia 3" }
+  ]
+}

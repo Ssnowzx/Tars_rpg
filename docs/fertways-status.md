@@ -10,7 +10,9 @@ números, v29 adiciona §24–§27). Escopo atual: **frontend/visual only**, tud
 de interfaces de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
 
 ## 2. Stack
-- **Cliente:** Flutter (web + Android), código em `app/`.
+- **Cliente:** Flutter **web-only**, código em `app/` (a pasta `android/` foi removida —
+  empacotamento mobile será feito depois via **WebView** apontando pro web build; assim a VPS
+  não precisa de Android SDK/JDK e evita sobrecarga).
 - **Motor 2D:** Flame (mapas de Planeta e Colônia). HUD/painéis = widgets Flutter por cima.
 - **Estado:** Riverpod. **Navegação:** go_router (`StatefulShellRoute.indexedStack`).
 - **Tema:** "Solar Frontier" (claro/quente), tokens DTCG espelhados em `app/lib/app/theme/`.
@@ -51,18 +53,23 @@ de interfaces de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
 | `/capital/ministry` | Ministério (10 painéis, §2.1) | `MinistryRepository` / `ministries.json` (`state.extra`=slot) | ✅ |
 | `/capital/ministry` (slot Reputações) | Justiça §9 (denúncias/conciliação/punições) | `ReputationRepository` / `disputes.json` | ✅ |
 | `/capital/rankings` | Ranking de Guerras (§15) | `RankingRepository` / `rankings.json` | ✅ |
+| `/capital/offices` | Cargos Públicos Neutros (§14) | `PublicOfficeRepository` / `offices.json` | ✅ |
 | `/market` | Mercado Central (§13/§8) | `MarketRepository` / `market.json` | ✅ |
 | `/market/informal` | Comércio Informal + antifraude (§8) | `MarketRepository.loadInformalBoard` / `informal.json` | ✅ |
+| `/market/auctions` | Leilões (§13, gate Nível 100) | `AuctionRepository` / `auctions.json` | ✅ |
 | `/map/messages` | Mensagens (§10, 5 canais) | `ChatRepository` / `chat.json` | ✅ |
 | `/map/missions` | Missões/Conquistas/Eventos (§6) | `MissionRepository` / `missions.json` | ✅ |
+| `/map/fleet` | Frota do colono (§21/§16.4) | `FleetRepository` / `fleet.json` | ✅ |
 | `/profile/federation` | Federação (§4, tesouro/cargos/membros) | `FederationRepository` / `federation.json` | ✅ |
 | `/spaceport` | Espaçoporto (§3, 5 planetas NPC) | `SpaceportRepository` / `spaceport.json` | ✅ |
 | `/profile` | Perfil (§5/§8) | `ProfileRepository` / `profile.json` | ✅ |
-| HUD (shell) | Barra de recursos | `colonyProvider` (header) + `resourcesProvider` (`player.json`) | ✅ |
+| `/map/notifications` | Centro de Notificações (transversal) | `NotificationRepository` / `notifications.json` | ✅ |
+| HUD (shell) | Barra de recursos + sino (badge não-lidas) | `colonyProvider` + `resourcesProvider` + `notificationsProvider` | ✅ |
 
-Sub-rotas (`/map/colony`, `/map/zone`, `/map/messages`, `/map/missions`, `/capital/ministry`,
-`/capital/rankings`, `/market/informal`, `/profile/federation`) são **drill-ins** dentro do shell → mantêm
-HUD + nav rail. Providers em `app/lib/data/providers.dart`.
+Sub-rotas (`/map/colony`, `/map/zone`, `/map/messages`, `/map/missions`, `/map/fleet`, `/map/notifications`,
+`/capital/ministry`, `/capital/rankings`, `/capital/offices`, `/market/informal`, `/market/auctions`,
+`/profile/federation`) são **drill-ins** dentro do shell → mantêm HUD + nav rail. Providers em
+`app/lib/data/providers.dart`.
 
 ## 6. Arquitetura / convenções
 - **Seam de repositório:** `domain/repositories/*` (interface) → `data/mock/mock_*` (impl,
@@ -113,8 +120,12 @@ Reputações é stub→B5). ~~B2 Comércio Informal + antifraude~~ ✅ (`/market
 `FederationRepository`/`federation.json`; entrada = chip da federação no Perfil). ~~B5 Reputações/justiça~~ ✅
 (slot Reputações do `/capital/ministry`; `ReputationRepository`/`disputes.json`; `reputation_panel.dart`).
 ~~B6 Progressão/Missões~~ ✅ (`/map/missions`; `MissionRepository`/`missions.json`; ação "Missões" da barra).
-**Próximo: B7.** · B7 Frota/Transportes (§16/§21) ·
-B8 Cargos Públicos (§14) · B9 Leilões (§13) · B10 Centro de Notificações.
+~~B7 Frota~~ ✅ (`/map/fleet`; `FleetRepository`/`fleet.json`; botão "Frota" na Colônia).
+~~B8 Cargos Públicos~~ ✅ (`/capital/offices`; `PublicOfficeRepository`/`offices.json`; botão "Gerir" da
+Administração Pública). ~~B9 Leilões~~ ✅ (`/market/auctions`; `AuctionRepository`/`auctions.json`; botão
+"Leilões" no Mercado; gate Nível 100). ~~B10 Centro de Notificações~~ ✅ (`/map/notifications`;
+`NotificationRepository`/`notifications.json`; sino do HUD com badge). **BLOCO B CONCLUÍDO (B0–B10).**
+Próximo: **C1 Exploração Lunar / Telescópio Gagarin** (previews T2, §12).
 Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; ações mock
 (SnackBar) → fluxos reais. Ver `docs/fertways-roadmap.md`.
 

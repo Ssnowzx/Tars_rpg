@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B9 (Leilões)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B9 — Leilões (§13)</h1>
+  <div class="sub">Casa de leilões de peças únicas, com gate de Nível 100 (Lenda)
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §13 (+ §9.4 / §26.2)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /market/auctions</span>
+  </div>
+</div>
+
+<p class="lead">O §13 abre a Casa de Leilões para peças únicas, mas só no Nível 100 (Lenda de Fertways).
+Como o colono está no nível 14, a tela funciona como <b>prévia com lances bloqueados</b> — vê-se os lotes
+ativos e o histórico, mas o botão de lance fica travado. O acesso também pode ser bloqueado por Persona Non
+Grata (§9.4) ou Confiança Comercial baixa (§26.2). Acesso pelo botão "Leilões" no Mercado.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">100</div><div class="l">nível p/ desbloquear (§13)</div></div>
+  <div class="card"><div class="n">3</div><div class="l">raridades (única/lendária/rara)</div></div>
+  <div class="card"><div class="n">§9.4</div><div class="l">Persona Non Grata bloqueia</div></div>
+  <div class="card"><div class="n">§26.2</div><div class="l">Confiança baixa bloqueia</div></div>
+</div>
+
+<h2>Regras do §13 modeladas</h2>
+<table>
+  <thead><tr><th>Regra</th><th>Como aparece</th></tr></thead>
+  <tbody>
+    <tr><td>Leilões de peças únicas</td><td>Lotes com raridade Peça única / Lendária / Rara.</td></tr>
+    <tr><td>Desbloqueia no Nível 100 (Lenda)</td><td>Banner de bloqueio + barra de progresso (14/100); lance travado ("Nível 100").</td></tr>
+    <tr><td>Bloqueio de leilões = Persona Non Grata (§9.4)</td><td>Estado <code>blocked</code> com motivo, no banner.</td></tr>
+    <tr><td>Confiança Comercial baixa bloqueia (§26.2)</td><td>Idem — citado na nota do banner.</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Banner de bloqueio</b>: explica o desbloqueio no Nível 100 (Lenda), barra de progresso do jogador
+      e a nota de Persona Non Grata / Confiança Comercial (§9.4/§26.2).</li>
+  <li><b>Aba Ativos</b>: cartões de lote com <b>raridade</b> (cor por tier), <b>cronômetro</b> (Ativo /
+      Encerrando), descrição, <b>lance atual</b> (Fert\$), nº de lances, líder (com destaque "Você lidera"),
+      próximo lance mínimo e botão <b>Dar lance</b> — desabilitado ("Nível 100") enquanto travado.</li>
+  <li><b>Aba Histórico</b>: leilões encerrados com vencedor, dia e preço final.</li>
+  <li><b>Fora de escopo</b>: a loja AbacatePay (PIX/cartão) é monetização com dinheiro real — backend adiado,
+      sem fluxo de pagamento nesta versão (só moeda do jogo Fert\$).</li>
+  <li><b>Acesso</b>: botão "Leilões" no cabeçalho do Mercado (ao lado de "Comércio informal");
+      rota <code>/market/auctions</code>.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/auction.dart</code> (AuctionItem, AuctionRecord, AuctionHouse + enums AuctionRarity/AuctionStatus)</td></tr>
+    <tr><td>Seam</td><td><code>AuctionRepository</code> → <code>MockAuctionRepository</code> → <code>auctions.json</code> → <code>auctionHouseProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/market/auctions_screen.dart</code> (2 abas); rota <code>/market/auctions</code>; botão "Leilões" em <code>market_screen.dart</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built · <code>flutter test</code> — All tests passed</li>
+  <li>Visual (Chrome): banner 14/100 (Lenda §13); 4 lotes com raridade/cronômetro/lance e "Você lidera" no
+      Mapa Estelar; lance travado "Nível 100"; histórico com 3 encerrados; entrada pelo botão "Leilões" do
+      Mercado</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · dar lance = mock ·
+cronômetros são strings fixas (sem contagem real); loja AbacatePay é futura (requer backend). <b>Próximo:</b>
+B10 — Centro de Notificações.</div>
+
+<footer><span>Fertways — Relatório de Entrega · B9 Leilões</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

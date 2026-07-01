@@ -1,41 +1,53 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../domain/models/auction.dart';
 import '../domain/models/chat.dart';
 import '../domain/models/colony_buildings.dart';
 import '../domain/models/combat.dart';
 import '../domain/models/dispute.dart';
 import '../domain/models/federation.dart';
+import '../domain/models/fleet.dart';
 import '../domain/models/institution_slot.dart';
 import '../domain/models/informal_trade.dart';
 import '../domain/models/market.dart';
 import '../domain/models/ministry.dart';
 import '../domain/models/mission.dart';
+import '../domain/models/notification.dart';
+import '../domain/models/public_office.dart';
 import '../domain/models/planet_models.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/models/resources.dart';
 import '../domain/models/spaceport.dart';
 import '../domain/models/war_ranking.dart';
 import '../domain/models/world_models.dart';
+import '../domain/repositories/auction_repository.dart';
 import '../domain/repositories/capital_repository.dart';
 import '../domain/repositories/chat_repository.dart';
 import '../domain/repositories/combat_repository.dart';
 import '../domain/repositories/federation_repository.dart';
+import '../domain/repositories/fleet_repository.dart';
 import '../domain/repositories/market_repository.dart';
 import '../domain/repositories/ministry_repository.dart';
 import '../domain/repositories/mission_repository.dart';
+import '../domain/repositories/notification_repository.dart';
 import '../domain/repositories/profile_repository.dart';
+import '../domain/repositories/public_office_repository.dart';
 import '../domain/repositories/ranking_repository.dart';
 import '../domain/repositories/reputation_repository.dart';
 import '../domain/repositories/spaceport_repository.dart';
 import '../domain/repositories/world_repository.dart';
+import 'mock/mock_auction_repository.dart';
 import 'mock/mock_capital_repository.dart';
 import 'mock/mock_chat_repository.dart';
 import 'mock/mock_combat_repository.dart';
 import 'mock/mock_federation_repository.dart';
+import 'mock/mock_fleet_repository.dart';
 import 'mock/mock_market_repository.dart';
 import 'mock/mock_ministry_repository.dart';
 import 'mock/mock_mission_repository.dart';
+import 'mock/mock_notification_repository.dart';
 import 'mock/mock_profile_repository.dart';
+import 'mock/mock_public_office_repository.dart';
 import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
 import 'mock/mock_spaceport_repository.dart';
@@ -153,5 +165,37 @@ final missionRepositoryProvider = Provider<MissionRepository>(
 
 final missionBoardProvider = FutureProvider<MissionBoard>(
   (ref) => ref.watch(missionRepositoryProvider).loadBoard(),
+);
+
+final fleetRepositoryProvider = Provider<FleetRepository>(
+  (ref) => const MockFleetRepository(),
+);
+
+final fleetProvider = FutureProvider<FleetBoard>(
+  (ref) => ref.watch(fleetRepositoryProvider).loadFleet(),
+);
+
+final publicOfficeRepositoryProvider = Provider<PublicOfficeRepository>(
+  (ref) => const MockPublicOfficeRepository(),
+);
+
+final publicOfficeProvider = FutureProvider<PublicOfficeBoard>(
+  (ref) => ref.watch(publicOfficeRepositoryProvider).loadOffices(),
+);
+
+final auctionRepositoryProvider = Provider<AuctionRepository>(
+  (ref) => const MockAuctionRepository(),
+);
+
+final auctionHouseProvider = FutureProvider<AuctionHouse>(
+  (ref) => ref.watch(auctionRepositoryProvider).loadAuctions(),
+);
+
+final notificationRepositoryProvider = Provider<NotificationRepository>(
+  (ref) => const MockNotificationRepository(),
+);
+
+final notificationsProvider = FutureProvider<NotificationCenter>(
+  (ref) => ref.watch(notificationRepositoryProvider).loadNotifications(),
 );
 

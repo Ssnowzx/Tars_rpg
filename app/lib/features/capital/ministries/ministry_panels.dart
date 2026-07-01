@@ -387,7 +387,7 @@ class AdminPanel extends StatelessWidget {
           title: 'Cargos públicos neutros (§14)',
           subtitle: 'Trilha administrativa: salário fixo + bônus por atividade.',
           trailing: TextButton(
-            onPressed: () => mockMinistryAction(context, 'Painel de cargos públicos — Bloco B8'),
+            onPressed: () => context.go('/capital/offices'),
             child: const Text('Gerir'),
           ),
           child: Column(

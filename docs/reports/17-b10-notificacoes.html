@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B10 (Centro de Notificações)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B10 — Centro de Notificações (transversal)</h1>
+  <div class="sub">Central in-app, badge no sino e severidade por cor + forma
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — transversal (§9/§12.1/§27/§6/§4/§14/§13/§16)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/notifications</span>
+  </div>
+</div>
+
+<p class="lead">Fecho do Bloco B: o Centro de Notificações agrega, em um só lugar, os eventos de todos os
+sistemas do jogo. A severidade é comunicada por <b>cor + forma</b> (ícone diferente por nível, nunca só cor,
+por acessibilidade), com badge de não-lidas no sino do HUD e ações que levam direto à tela de origem.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">4</div><div class="l">níveis de severidade (cor+forma)</div></div>
+  <div class="card"><div class="n">10</div><div class="l">origens agregadas</div></div>
+  <div class="card"><div class="n">5</div><div class="l">não-lidas (badge no sino)</div></div>
+  <div class="card"><div class="n">3</div><div class="l">filtros (todas/não lidas/importantes)</div></div>
+</div>
+
+<h2>Severidade por cor + forma</h2>
+<table>
+  <thead><tr><th>Nível</th><th>Forma (ícone)</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td>Info</td><td>Círculo "i"</td><td>Novidades neutras (Gagarin, mercado, federação).</td></tr>
+    <tr><td>Sucesso</td><td>Círculo "✓"</td><td>Conclusões positivas (missão pronta, vaga elegível).</td></tr>
+    <tr><td>Atenção</td><td>Triângulo "!"</td><td>Requer ação (denúncia em análise, veículo bloqueado).</td></tr>
+    <tr><td>Crítico</td><td>Octógono "×"</td><td>Urgente (ataque iminente §27).</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Sino do HUD</b> agora é clicável e mostra o <b>badge com a contagem de não-lidas</b> (lê o provider),
+      abrindo o centro.</li>
+  <li><b>Centro de Notificações</b>: legenda de severidade (cor + forma); filtros <b>Todas / Não lidas /
+      Importantes</b> com contagem; cartões com selo de severidade (cor+forma), <b>chip de origem</b>
+      (Guerra, Reputações, Gagarin, Mercado, Missão, Federação, Cargos, Leilão, Frota, Sistema), corpo,
+      horário, ponto de não-lida e <b>ação</b>.</li>
+  <li><b>Ações com deep-link</b>: quando a notificação aponta para uma tela existente, a ação navega direto
+      (ex.: "Ver frota" → <code>/map/fleet</code>, "Ver missões" → <code>/map/missions</code>, "Ver cargos"
+      → <code>/capital/offices</code>, "Ver leilões" → <code>/market/auctions</code>).</li>
+  <li><b>Acesso</b>: sino do HUD (topo, sempre visível); rota <code>/map/notifications</code>.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/notification.dart</code> (AppNotification, NotificationCenter + enums NotifKind/NotifSeverity)</td></tr>
+    <tr><td>Seam</td><td><code>NotificationRepository</code> → <code>MockNotificationRepository</code> → <code>notifications.json</code> → <code>notificationsProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/notifications/notifications_screen.dart</code>; rota <code>/map/notifications</code>; sino wired em <code>resource_hud.dart</code> (badge com contagem)</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found</li>
+  <li><code>flutter build web</code> — ✓ Built · <code>flutter test</code> — All tests passed</li>
+  <li>Visual (Chrome): sino com badge "5"; centro com legenda cor+forma e 4 severidades (octógono/triângulo/
+      círculo); filtro "Importantes (3)" isola atenção+crítico; ação "Ver frota" navega a <code>/map/fleet</code></li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · marcar-como-lida/marcar-
+todas = mock (dados imutáveis) · notificações são fixas (sem push em tempo real). <b>Bloco B concluído.</b>
+<b>Próximo:</b> C1 — Exploração Lunar / Telescópio Gagarin (previews T2, §12).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B10 Centro de Notificações</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

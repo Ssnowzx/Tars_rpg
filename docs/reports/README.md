@@ -42,6 +42,10 @@ repositório, arquivos, Definition of Done validada e dívidas/futuro.
 | 11 | B4 — Federações (§4, tesouro/cargos/tributação/membros) | `11-b4-federacoes.pdf` |
 | 12 | B5 — Reputações/Justiça (§9, denúncia→decisão, estados auditáveis) | `12-b5-reputacoes.pdf` |
 | 13 | B6 — Missões/Conquistas/Eventos (§6, 7 tipos + 4 medalhas) | `13-b6-missoes.pdf` |
+| 14 | B7 — Frota (§21 veículos + §16.4 depreciação) | `14-b7-frota.pdf` |
+| 15 | B8 — Cargos Públicos Neutros + Admin (§14, 5 cargos + §14.4) | `15-b8-cargos.pdf` |
+| 16 | B9 — Leilões (§13, peças únicas + gate Nível 100) | `16-b9-leiloes.pdf` |
+| 17 | B10 — Centro de Notificações (transversal, cor+forma) | `17-b10-notificacoes.pdf` |
 
 > Requisito: Google Chrome instalado (`/Applications/Google Chrome.app`). Sem dependência de
 > pandoc/wkhtmltopdf.

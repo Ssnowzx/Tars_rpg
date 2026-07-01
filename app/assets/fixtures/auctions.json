@@ -1,0 +1,64 @@
+{
+  "unlocked": false,
+  "unlockLevel": 100,
+  "unlockTitle": "Lenda de Fertways",
+  "playerLevel": 14,
+  "blocked": false,
+  "blockReason": "",
+  "items": [
+    {
+      "id": "a1",
+      "name": "Núcleo de Reator Ancião",
+      "description": "Reator lendário com +50% de geração de energia. Apenas 1 no servidor.",
+      "rarity": "unique",
+      "currentBid": 48000,
+      "minIncrement": 1000,
+      "bidCount": 23,
+      "topBidder": "Drax",
+      "timeLeft": "Termina em 2h14",
+      "status": "live"
+    },
+    {
+      "id": "a2",
+      "name": "Selo do Primeiro Colono",
+      "description": "Título cosmético comemorativo da fundação da colônia de Marte.",
+      "rarity": "legendary",
+      "currentBid": 12500,
+      "minIncrement": 500,
+      "bidCount": 9,
+      "topBidder": "L. Tanaka",
+      "timeLeft": "Termina em 41min",
+      "status": "endingSoon"
+    },
+    {
+      "id": "a3",
+      "name": "Robô Minerador Prototype-X",
+      "description": "Protótipo com ciclo de extração 2× mais rápido (§21).",
+      "rarity": "unique",
+      "currentBid": 31000,
+      "minIncrement": 1000,
+      "bidCount": 15,
+      "topBidder": "K. Adeyemi",
+      "timeLeft": "Termina em 5h02",
+      "status": "live"
+    },
+    {
+      "id": "a4",
+      "name": "Mapa Estelar de Gagarin",
+      "description": "Revela jazidas raras com antecedência via Telescópio Gagarin (§12.1).",
+      "rarity": "rare",
+      "currentBid": 8200,
+      "minIncrement": 200,
+      "bidCount": 6,
+      "topBidder": "Cmdt. Vale",
+      "timeLeft": "Termina em 1d 3h",
+      "status": "live",
+      "youAreTop": true
+    }
+  ],
+  "history": [
+    { "name": "Cristal de Terraformação", "winner": "Renata Sol", "finalPrice": 54000, "day": "Dia 11" },
+    { "name": "Insígnia de Comandante", "winner": "Drax", "finalPrice": 22000, "day": "Dia 10" },
+    { "name": "Drone Sentinela Dourado", "winner": "Ingrid V.", "finalPrice": 17500, "day": "Dia 9" }
+  ]
+}

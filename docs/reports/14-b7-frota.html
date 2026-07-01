@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório B7 (Frota)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>B7 — Frota + Ministério dos Transportes (§16/§21)</h1>
+  <div class="sub">Veículos do colono com capacidade, depreciação e manutenção
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (frontend/visual, mock data)</span>
+    <span><b>GDD:</b> v29 — §21 (veículos) + §16.4 (depreciação)</span>
+    <span><b>Data:</b> 30/06/2026</span>
+    <span><b>Rota:</b> /map/fleet</span>
+  </div>
+</div>
+
+<p class="lead">O §21 define os veículos da logística e o §16.4 a depreciação por horas de uso. A tela de
+Frota reúne os veículos do colono — capacidade, condição/depreciação, situação operacional e ações de
+despacho/manutenção/sucateamento — complementando o registro de placas civis (§16.3) que já vive no
+Ministério dos Transportes. Acesso pelo botão "Frota" na Colônia.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">8</div><div class="l">tipos de veículo (§21)</div></div>
+  <div class="card"><div class="n">5</div><div class="l">situações operacionais</div></div>
+  <div class="card"><div class="n">§16.4</div><div class="l">depreciação Furgão/Caminhão</div></div>
+  <div class="card"><div class="n">§16.3</div><div class="l">placas no M. Transportes</div></div>
+</div>
+
+<h2>Veículos modelados (§21)</h2>
+<table>
+  <thead><tr><th>Veículo</th><th>Capacidade</th><th>Depreciação (§16.4)</th></tr></thead>
+  <tbody>
+    <tr><td>Furgão</td><td>6 m³</td><td><b>Sim</b> — por horas de uso</td></tr>
+    <tr><td>Caminhão de Carga</td><td>30 m³</td><td><b>Sim</b> — por horas de uso</td></tr>
+    <tr><td>Drone de Carga</td><td>1 m³</td><td>Não</td></tr>
+    <tr><td>Robô Minerador</td><td>4 m³ (ciclo)</td><td>Não</td></tr>
+    <tr><td>Nave de Longa Distância</td><td>200 m³</td><td>Não</td></tr>
+    <tr><td>Nave de Transporte Planetária</td><td>120 m³</td><td>Não</td></tr>
+    <tr><td>Tanque de Combustível</td><td>80 m³</td><td>Não</td></tr>
+    <tr><td>Cargueiro Interplanetário</td><td>500 m³</td><td>Não</td></tr>
+  </tbody>
+</table>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Resumo</b>: ocupação do hangar (X/Y), nº em trânsito, nº para manutenção e capacidade total (m³).</li>
+  <li><b>Lista de veículos</b> ordenada por urgência (bloqueado → manutenção → carregando → trânsito →
+      ocioso). Cada cartão: ícone/cor por tipo, placa, capacidade, horas de uso; <b>situação</b>
+      (Ocioso · Em trânsito · Carregando · Manutenção · <b>Bloqueado</b>); <b>barra de condição</b> com cor
+      por saúde; nota de <b>depreciação §16.4</b> (com limite crítico para Furgão/Caminhão) ou "sem
+      depreciação"; tarefa atual; e ações <b>Manutenção (Fert\$) · Despachar · Sucatear</b>.</li>
+  <li><b>Limite crítico (§16.4)</b>: abaixo do limite o veículo fica <b>Bloqueado</b> até a manutenção
+      (ex.: Caminhão CAM-118 a 16%).</li>
+  <li><b>Acesso</b>: botão "Frota" na Colônia (ao lado do botão "Capital"); rota <code>/map/fleet</code>.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Modelo</td><td><code>domain/models/fleet.dart</code> (Vehicle, FleetBoard + enums VehicleKind/VehicleStatus)</td></tr>
+    <tr><td>Seam</td><td><code>FleetRepository</code> → <code>MockFleetRepository</code> → <code>fleet.json</code> → <code>fleetProvider</code></td></tr>
+    <tr><td>UI</td><td><code>features/fleet/fleet_screen.dart</code>; rota <code>/map/fleet</code>; botão "Frota" em <code>colony_screen.dart</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li><code>flutter analyze</code> — No issues found (primeira tentativa)</li>
+  <li><code>flutter build web</code> — ✓ Built · <code>flutter test</code> — All tests passed</li>
+  <li>Visual (Chrome): resumo (Hangar 10/12 · 3 em trânsito · 2 p/ manutenção · 977 m³); CAM-118 "Bloqueado"
+      16%; tipos com ícone/cor; barras por saúde; depreciação §16.4 vs "sem depreciação"; entrada pelo botão
+      "Frota" da Colônia (context.go funciona)</li>
+  <li>Seam de repositório · tokens DsTokens · sem emoji (ícones Material) · estados loading/error/empty</li>
+</ul>
+
+<div class="note"><b>Dívidas:</b> <span class="badge debt">i18n</span> pt hard-coded · manutenção/despachar/
+sucatear = mock · registro de placas (§16.3) continua no Ministério dos Transportes (não duplicado).
+<b>Próximo:</b> B8 — Cargos Públicos Neutros + Admin (§14).</div>
+
+<footer><span>Fertways — Relatório de Entrega · B7 Frota</span><span>Gerado em 30/06/2026</span></footer>
+
+</body>
+</html>

@@ -26,7 +26,7 @@
 - [ ] Estados explícitos: **loading / empty / error / sucesso** (latência/erro simulados no mock)
 - [ ] Sem valores hard-coded (cores/spacing/tipografia via `DsTokens`/Theme) · sem emoji (ícones Material/vetoriais)
 - [ ] Textos via chaves ARB (pt-BR default, es, en)
-- [ ] Responsivo: desktop multi-painel + Android adaptativo (≥48dp de toque)
+- [ ] Responsivo: desktop multi-painel + mobile/touch adaptativo (≥48dp de toque; web via WebView)
 - [ ] Integrado à navegação (`go_router`) e ao HUD/estado compartilhado quando aplicável
 - [ ] **Relatório PDF da etapa** gerado em `docs/reports/` (`./gen-pdf.sh`)
 
@@ -189,22 +189,55 @@ Três lugares distintos (3 níveis):
   (Mission/Achievement/GameEvent/MissionBoard + enums). Ações = mock. Relatório `docs/reports/13-b6-missoes.pdf`.
 - Futuro: resgatar/trocar reais (creditar recompensa), pool dinâmico de diárias, capítulos de narrativa.
 
-### B7 — Frota + Ministério dos Transportes  ⬜  · GDD §16 + §7
-- Registro de frota (placas), depreciação por horas de uso, manutenção, limite crítico.
-- Painel admin de transportes (registro/depreciação/sucateamento).
-- Repo: `FleetRepository` (completo).
+### B7 — Frota + Ministério dos Transportes  ✅  · GDD §16 + §21
+- ✅ Tela `/map/fleet` (drill-in; botão "Frota" na Colônia, ao lado de "Capital"). **8 tipos de veículo §21**
+  (Furgão 6m³ · Caminhão 30m³ · Drone · Robô Minerador · Nave Longa Distância · Nave Transporte Planetária ·
+  Tanque de Combustível · Cargueiro). **Resumo**: hangar X/Y, em trânsito, p/ manutenção, capacidade total m³.
+- ✅ Cada veículo: placa, capacidade, horas de uso, **situação** (Ocioso/Em trânsito/Carregando/Manutenção/
+  **Bloqueado**), **barra de condição** por saúde, **depreciação §16.4** (só Furgão/Caminhão, com limite
+  crítico → bloqueio) ou "sem depreciação", tarefa atual e ações **Manutenção (Fert$)/Despachar/Sucatear** (mock).
+  Lista ordenada por urgência. Registro de placas (§16.3) permanece no Ministério dos Transportes (não duplicado).
+- Seam: `FleetRepository`/`MockFleetRepository`/`fleet.json`/`fleetProvider`; `fleet.dart` (Vehicle/FleetBoard +
+  enums VehicleKind/VehicleStatus). Relatório `docs/reports/14-b7-frota.pdf`.
+- Futuro: manutenção/despacho/sucateamento reais; ligar despacho à logística §25; painel admin de sucateamento.
 
-### B8 — Cargos Públicos Neutros + Admin  ⬜  · GDD §14
-- Lista de cargos, elegibilidade, salário/bônus; painel admin (aprovar/suspender/demitir).
-- Repo: `PublicOfficeRepository`.
+### B8 — Cargos Públicos Neutros + Admin  ✅  · GDD §14
+- ✅ Tela `/capital/offices` (drill-in da Capital; botão "Gerir" da Administração Pública). **Aba Cargos**:
+  cartão de **elegibilidade §14.3** (7 critérios cumpridos/pendentes) + os **5 cargos** (Conciliador · Fiscal
+  de Mercado · Atendente do Espaçoporto · Repórter · Auxiliar de Tesouro) com instituição, descrição, salário,
+  **índice §26.6**, vagas/ocupantes (desde+desempenho) e **Candidatar-se** (habilitado só se elegível).
+- ✅ **Aba Administração §14.4**: candidaturas pendentes (selo Elegível/Não elegível; Aprovar desabilitado p/
+  inelegível) + Aprovar/Recusar; ocupantes atuais com Suspender/Demitir; pagamentos recentes (salário/bônus).
+- Seam: `PublicOfficeRepository`/`MockPublicOfficeRepository`/`offices.json`/`publicOfficeProvider`;
+  `public_office.dart` (PublicOffice/OfficeHolder/OfficeCandidate/OfficePayment/EligibilityCriterion/Board +
+  enum OfficeKind). Ações = mock. Relatório `docs/reports/15-b8-cargos.pdf`.
+- Futuro: candidatar-se/aprovar/suspender/demitir reais; elegibilidade derivada do estado real do jogador.
 
-### B9 — Leilões  ⬜  · GDD §13
-- Itens em leilão, lances, histórico, cronômetro (mock).
-- Repo: `AuctionRepository`.
+### B9 — Leilões  ✅  · GDD §13
+- ✅ Tela `/market/auctions` (drill-in do Mercado; botão "Leilões" no header). **Casa de leilões de peças
+  únicas** que desbloqueiam no **Nível 100 (Lenda)** — como o colono está no nível 14, é uma **prévia com
+  lances bloqueados** (banner com barra 14/100 + nota Persona Non Grata §9.4 / Confiança Comercial §26.2).
+- ✅ **Aba Ativos**: lotes com raridade (única/lendária/rara, cor por tier), cronômetro (Ativo/Encerrando),
+  lance atual (Fert$), nº de lances, líder ("Você lidera"), próximo lance mín. e botão **Dar lance**
+  (desabilitado "Nível 100" enquanto travado). **Aba Histórico**: encerrados (vencedor/dia/preço final).
+- Seam: `AuctionRepository`/`MockAuctionRepository`/`auctions.json`/`auctionHouseProvider`; `auction.dart`
+  (AuctionItem/AuctionRecord/AuctionHouse + enums). Relatório `docs/reports/16-b9-leiloes.pdf`.
+- **Fora de escopo:** loja AbacatePay (PIX/cartão = dinheiro real) — backend adiado, sem fluxo de pagamento.
+- Futuro: dar lance real, cronômetro com contagem regressiva, loja AbacatePay quando houver backend.
 
-### B10 — Centro de Notificações  ⬜  · transversal
-- Centro in-app, badges, severidade por cor + forma (não só cor).
-- Repo: `NotificationRepository`.
+### B10 — Centro de Notificações  ✅  · transversal
+- ✅ Tela `/map/notifications` (drill-in; **sino do HUD** agora clicável com **badge de não-lidas** lendo o
+  provider). Agrega eventos de todos os sistemas (guerra §27, Reputações §9, Gagarin §12.1, mercado, missões
+  §6, federação §4, cargos §14, leilões §13, frota §16).
+- ✅ **Severidade por cor + forma** (ícone distinto por nível: círculo-i/check/triângulo/octógono — não só
+  cor) + legenda; **filtros** Todas/Não lidas/Importantes com contagem; cartões com selo de severidade, chip
+  de origem, ponto de não-lida e **ação com deep-link** (ex.: "Ver frota"→`/map/fleet`, "Ver missões"→
+  `/map/missions`, "Ver cargos"→`/capital/offices`, "Ver leilões"→`/market/auctions`).
+- Seam: `NotificationRepository`/`MockNotificationRepository`/`notifications.json`/`notificationsProvider`;
+  `notification.dart` (AppNotification/NotificationCenter + enums). Relatório `docs/reports/17-b10-notificacoes.pdf`.
+- Futuro: marcar-como-lida real, push em tempo real, agrupamento por dia.
+
+**➡️ Bloco B CONCLUÍDO** (B0–B10). Próximo: Bloco C (C1 Exploração Lunar/Gagarin — previews T2).
 
 ---
 

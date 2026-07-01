@@ -1,0 +1,106 @@
+{
+  "notifications": [
+    {
+      "id": "n1",
+      "kind": "war",
+      "severity": "critical",
+      "title": "Ataque iminente no Setor F",
+      "body": "A federação Meridiano moveu Sentinelas para perto da Jazida Ferrosa (§27).",
+      "time": "há 8min",
+      "read": false,
+      "actionLabel": "Ver combate"
+    },
+    {
+      "id": "n2",
+      "kind": "dispute",
+      "severity": "warning",
+      "title": "Denúncia DEN-0481 em análise",
+      "body": "A conciliadora Mara Tó está avaliando sua denúncia (§9).",
+      "time": "há 22min",
+      "read": false,
+      "actionLabel": "Ver Reputações"
+    },
+    {
+      "id": "n3",
+      "kind": "gagarin",
+      "severity": "info",
+      "title": "Leitura anômala do Gagarin",
+      "body": "O Telescópio Gagarin captou um sinal incomum no cinturão de ferrugem (§12.1).",
+      "time": "há 1h",
+      "read": false
+    },
+    {
+      "id": "n4",
+      "kind": "mission",
+      "severity": "success",
+      "title": "Missão pronta para resgate",
+      "body": "‘Logística diária' foi concluída — resgate a recompensa (§6).",
+      "time": "há 2h",
+      "read": false,
+      "actionLabel": "Ver missões",
+      "route": "/map/missions"
+    },
+    {
+      "id": "n5",
+      "kind": "fleet",
+      "severity": "warning",
+      "title": "Caminhão CAM-118 bloqueado",
+      "body": "Condição em 16% — abaixo do limite crítico. Precisa de manutenção (§16.4).",
+      "time": "há 3h",
+      "read": false,
+      "actionLabel": "Ver frota",
+      "route": "/map/fleet"
+    },
+    {
+      "id": "n6",
+      "kind": "market",
+      "severity": "info",
+      "title": "Alta do Metal Bruto",
+      "body": "O preço do Metal Bruto subiu 2.7% no Mercado Central (§24.8).",
+      "time": "há 4h",
+      "read": true,
+      "actionLabel": "Ver mercado",
+      "route": "/market"
+    },
+    {
+      "id": "n7",
+      "kind": "office",
+      "severity": "success",
+      "title": "Vaga aberta: Repórter",
+      "body": "Você está elegível ao cargo de Repórter (§14).",
+      "time": "há 6h",
+      "read": true,
+      "actionLabel": "Ver cargos",
+      "route": "/capital/offices"
+    },
+    {
+      "id": "n8",
+      "kind": "federation",
+      "severity": "info",
+      "title": "Aporte ao fundo da federação",
+      "body": "Você contribuiu 1.240 Fert$ ao Pacto Boreal hoje (§4).",
+      "time": "há 7h",
+      "read": true
+    },
+    {
+      "id": "n9",
+      "kind": "auction",
+      "severity": "info",
+      "title": "Você lidera um leilão",
+      "body": "Mapa Estelar de Gagarin — lances liberam no Nível 100 (§13).",
+      "time": "há 9h",
+      "read": true,
+      "actionLabel": "Ver leilões",
+      "route": "/market/auctions"
+    },
+    {
+      "id": "n10",
+      "kind": "system",
+      "severity": "info",
+      "title": "Bem-vindo(a) ao Fertways",
+      "body": "Complete a tutoria para desbloquear os principais recursos da colônia.",
+      "time": "Dia 1",
+      "read": true
+    }
+  ]
+}

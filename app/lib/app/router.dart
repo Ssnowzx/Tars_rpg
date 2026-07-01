@@ -5,12 +5,16 @@ import '../domain/models/institution_slot.dart';
 import '../domain/models/planet_models.dart';
 import '../features/capital/capital_screen.dart';
 import '../features/capital/ministries/ministry_screen.dart';
+import '../features/capital/public_offices_screen.dart';
 import '../features/colony/colony_screen.dart';
 import '../features/federation/federation_screen.dart';
+import '../features/fleet/fleet_screen.dart';
+import '../features/market/auctions_screen.dart';
 import '../features/market/informal_trade_screen.dart';
 import '../features/market/market_screen.dart';
 import '../features/messages/messages_screen.dart';
 import '../features/missions/missions_screen.dart';
+import '../features/notifications/notifications_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/rankings/rankings_screen.dart';
 import '../features/shell/app_shell.dart';
@@ -43,6 +47,8 @@ final GoRouter appRouter = GoRouter(
                 ),
                 GoRoute(path: 'messages', builder: (_, __) => const MessagesScreen()),
                 GoRoute(path: 'missions', builder: (_, __) => const MissionsScreen()),
+                GoRoute(path: 'fleet', builder: (_, __) => const FleetScreen()),
+                GoRoute(path: 'notifications', builder: (_, __) => const NotificationsScreen()),
               ],
             ),
           ],
@@ -54,6 +60,7 @@ final GoRouter appRouter = GoRouter(
               builder: (_, __) => const CapitalScreen(),
               routes: [
                 GoRoute(path: 'rankings', builder: (_, __) => const RankingsScreen()),
+                GoRoute(path: 'offices', builder: (_, __) => const PublicOfficesScreen()),
                 GoRoute(
                   path: 'ministry',
                   builder: (_, state) => MinistryScreen(slot: state.extra as InstitutionSlot?),
@@ -69,6 +76,7 @@ final GoRouter appRouter = GoRouter(
               builder: (_, __) => const MarketScreen(),
               routes: [
                 GoRoute(path: 'informal', builder: (_, __) => const InformalTradeScreen()),
+                GoRoute(path: 'auctions', builder: (_, __) => const AuctionsScreen()),
               ],
             ),
           ],
