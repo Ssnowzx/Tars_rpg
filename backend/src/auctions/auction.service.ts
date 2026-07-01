@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { LedgerService } from '../common/ledger/ledger.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 const UNLOCK_LEVEL = 100; // §13 — "Lenda de Fertways"
@@ -22,14 +23,52 @@ function formatTimeLeft(endsAt: Date): string {
   return `Termina em ${mins}min`;
 }
 
+/// Tempo decorrido desde o encerramento (para o histórico).
+function relDay(date: Date): string {
+  const min = Math.floor((Date.now() - date.getTime()) / 60_000);
+  if (min < 60) return 'agora há pouco';
+  const h = Math.floor(min / 60);
+  if (h < 24) return `há ${h}h`;
+  return `há ${Math.floor(h / 24)}d`;
+}
+
 /// Casa de Leilões (§13). Lotes são registros `Auction` reais; lances são `Bid`.
 /// Nível do jogador e desbloqueio (Nível 100) são por jogador.
 @Injectable()
 export class AuctionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly ledger: LedgerService,
+  ) {}
+
+  /// Encerra leilões vencidos: marca `ended` e cobra o vencedor (maior lance)
+  /// via livro-razão. Se o vencedor estiver insolvente, encerra sem cobrança.
+  async closeExpired(): Promise<void> {
+    const due = await this.prisma.auction.findMany({
+      where: { status: { not: 'ended' }, endsAt: { lte: new Date() } },
+      include: { bids: { orderBy: { amount: 'desc' }, take: 1 } },
+    });
+    for (const a of due) {
+      const top = a.bids[0];
+      await this.prisma.$transaction(async (tx) => {
+        await tx.auction.update({ where: { id: a.id }, data: { status: 'ended' } });
+        if (top) {
+          try {
+            await this.ledger.apply(
+              { playerId: top.playerId, amount: a.currentBid.negated(), reason: 'auction', refType: 'auction', refId: a.id },
+              tx,
+            );
+          } catch {
+            // Vencedor insolvente — leilão encerra sem cobrança.
+          }
+        }
+      });
+    }
+  }
 
   async getAuctions(playerId: string) {
-    const [cfg, player, auctions] = await Promise.all([
+    await this.closeExpired();
+    const [cfg, player, auctions, ended] = await Promise.all([
       this.prisma.serverConfig.findUnique({ where: { key: 'auctions' } }),
       this.prisma.player.findUniqueOrThrow({ where: { id: playerId }, select: { level: true } }),
       this.prisma.auction.findMany({
@@ -40,8 +79,23 @@ export class AuctionService {
           _count: { select: { bids: true } },
         },
       }),
+      this.prisma.auction.findMany({
+        where: { status: 'ended' },
+        orderBy: { endsAt: 'desc' },
+        take: 10,
+        include: {
+          bids: { orderBy: { amount: 'desc' }, take: 1, include: { player: { select: { nickname: true } } } },
+        },
+      }),
     ]);
     const content = (cfg?.value ?? {}) as Record<string, unknown>;
+    // Histórico real de leilões encerrados; se ainda não houver, usa a vitrine.
+    const realHistory = ended.map((a) => ({
+      name: a.name,
+      winner: a.bids[0]?.player.nickname ?? 'Sem lances',
+      finalPrice: Number(a.currentBid),
+      day: relDay(a.endsAt),
+    }));
     return {
       unlocked: player.level >= UNLOCK_LEVEL,
       unlockLevel: UNLOCK_LEVEL,
@@ -65,7 +119,7 @@ export class AuctionService {
           youAreTop: top?.playerId === playerId,
         };
       }),
-      history: content.history ?? [],
+      history: realHistory.length > 0 ? realHistory : (content.history ?? []),
     };
   }
 

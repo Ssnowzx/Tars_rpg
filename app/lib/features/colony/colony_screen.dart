@@ -76,10 +76,8 @@ class _ColonyViewState extends ConsumerState<_ColonyView> {
   /// Enfileira uma evolução no backend (/colony/buildings/:id/upgrade). O nível
   /// exato é decidido pelo servidor (fonte autoritativa).
   Future<void> _upgrade(ColonyBuilding b) async {
-    final ok = await ref.read(buildQueueProvider.notifier).enqueueUpgrade(b.id);
-    _toast(ok
-        ? 'Melhoria de ${b.name} adicionada à fila'
-        : 'Fila cheia — aguarde uma obra concluir');
+    final err = await ref.read(buildQueueProvider.notifier).enqueueUpgrade(b.id);
+    _toast(err ?? 'Melhoria de ${b.name} adicionada à fila');
   }
 
   /// Fluxo de construir: escolher a estrutura para o slot livre (GDD v21 §17).
@@ -124,12 +122,10 @@ class _ColonyViewState extends ConsumerState<_ColonyView> {
                     side: BorderSide(color: t.borderDefault),
                     onPressed: () async {
                       Navigator.of(sheetCtx).pop();
-                      final ok = await ref
+                      final err = await ref
                           .read(buildQueueProvider.notifier)
                           .enqueueNew(kind: o.$3, name: o.$1, category: o.$4);
-                      _toast(ok
-                          ? 'Construção de ${o.$1} adicionada à fila'
-                          : 'Fila cheia ou sem slot livre');
+                      _toast(err ?? 'Construção de ${o.$1} adicionada à fila');
                     },
                   ),
               ],

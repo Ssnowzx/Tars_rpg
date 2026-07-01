@@ -69,28 +69,37 @@ class BuildQueueController extends Notifier<BuildQueueState> {
     if (anyDone || _sinceRefetch >= 5) {
       _sinceRefetch = 0;
       unawaited(refresh());
-      ref.invalidate(colonyBaseProvider);
+      if (anyDone) _refreshEconomy();
     }
     _syncTimer();
   }
 
-  /// Evolui uma construção (Nv N→N+1). false = fila cheia / erro.
-  Future<bool> enqueueUpgrade(String buildingId) =>
+  /// Evolui uma construção (Nv N→N+1). Devolve null em sucesso, ou a mensagem
+  /// de erro do servidor (fila cheia, recurso insuficiente, etc.).
+  Future<String?> enqueueUpgrade(String buildingId) =>
       _mutate(() => _dio.post<void>('/colony/buildings/$buildingId/upgrade'));
 
   /// Constrói uma estrutura no primeiro slot livre.
-  Future<bool> enqueueNew({required String kind, required String name, required String category}) =>
+  Future<String?> enqueueNew({required String kind, required String name, required String category}) =>
       _mutate(() => _dio.post<void>('/colony/build', data: {'kind': kind, 'name': name, 'category': category}));
 
-  Future<bool> _mutate(Future<void> Function() action) async {
+  Future<String?> _mutate(Future<void> Function() action) async {
     try {
       await action();
       await refresh();
-      ref.invalidate(colonyBaseProvider);
-      return true;
-    } on DioException {
-      return false;
+      _refreshEconomy();
+      return null;
+    } on DioException catch (e) {
+      return _dioMessage(e);
     }
+  }
+
+  /// Atualiza o que a obra afeta: a Colônia (nível/produção) e os recursos
+  /// (custo debitado + produção por hora recalculada).
+  void _refreshEconomy() {
+    ref.invalidate(colonyBaseProvider);
+    ref.invalidate(colonyProvider);
+    ref.invalidate(resourcesProvider);
   }
 
   Future<void> cancel(String id) async {
@@ -100,7 +109,7 @@ class BuildQueueController extends Notifier<BuildQueueState> {
       // ignora
     }
     await refresh();
-    ref.invalidate(colonyBaseProvider);
+    _refreshEconomy();
   }
 
   Future<void> finishAll() async {
@@ -112,8 +121,18 @@ class BuildQueueController extends Notifier<BuildQueueState> {
       }
     }
     await refresh();
-    ref.invalidate(colonyBaseProvider);
+    _refreshEconomy();
   }
+}
+
+/// Mensagem de erro amigável do backend (Nest) a partir de uma DioException.
+String _dioMessage(DioException e) {
+  final data = e.response?.data;
+  if (data is Map && data['message'] != null) {
+    final m = data['message'];
+    return m is List ? m.join(' · ') : '$m';
+  }
+  return 'Não foi possível concluir a ação.';
 }
 
 final buildQueueProvider =
