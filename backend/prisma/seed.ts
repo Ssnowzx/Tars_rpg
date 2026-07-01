@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
+  AuctionRarity,
+  AuctionStatus,
   MissionCategory,
   MoonAtmosphere,
   Prisma,
@@ -253,6 +255,66 @@ async function seedMarketNpcs(passwordHash: string): Promise<void> {
   }
 }
 
+/// Ofertas de Comércio Informal (§8) lastreadas por NPCs — barter real e
+/// aceitável. Idempotente: só semeia se ainda não houver ofertas.
+async function seedInformalOffers(passwordHash: string): Promise<void> {
+  if ((await prisma.informalOffer.count()) > 0) return;
+  // NPC extra de baixa confiança (perfil arriscado, §26).
+  const colonoZ = await ensurePlayer({
+    email: 'colonoz@fertways.test',
+    nickname: 'Colono Z',
+    passwordHash,
+    sector: 'J-03',
+    level: 8,
+    xp: 5000,
+    fertBalance: 2000,
+    reputation: { commercialTrust: 210, socialConduct: 300, civicStatus: 300, militaryHonor: 300 },
+  });
+  const byEmail = async (email: string): Promise<string> =>
+    (await prisma.player.findUniqueOrThrow({ where: { email }, select: { id: true } })).id;
+
+  const offers: Prisma.InformalOfferCreateManyInput[] = [
+    { sellerId: await byEmail('renata@fertways.test'), giveKey: 'alloys', giveQty: 120, wantKey: 'water', wantQty: 50, distanceSlots: 8, deals: 41, successRate: 98, scams: 0, note: 'Troca rápida, envio na hora após receber.' },
+    { sellerId: await byEmail('tanaka@fertways.test'), giveKey: 'chemicals', giveQty: 75, wantKey: 'oxygen', wantQty: 220, distanceSlots: 15, deals: 62, successRate: 100, scams: 0, note: 'Comerciante verificado. Histórico limpo.' },
+    { sellerId: await byEmail('drax@fertways.test'), giveKey: 'biomass', giveQty: 300, wantKey: 'energy', wantQty: 180, distanceSlots: 22, deals: 18, successRate: 94, scams: 1, note: 'Procuro energia para o reator. Aceito parcelar.' },
+    { sellerId: await byEmail('adeyemi@fertways.test'), giveKey: 'water', giveQty: 200, wantKey: 'biomass', wantQty: 140, distanceSlots: 5, deals: 30, successRate: 92, scams: 0, note: 'Em rota de biomassa; troca justa.' },
+    { sellerId: colonoZ, giveKey: 'metalore', giveQty: 60, wantKey: 'alloys', wantQty: 90, distanceSlots: 41, deals: 14, successRate: 57, scams: 4, note: 'Preço abaixo do mercado. Envie primeiro.' },
+  ];
+  await prisma.informalOffer.createMany({ data: offers });
+}
+
+/// Lotes reais da Casa de Leilões (§13). Idempotente: só semeia se não houver.
+async function seedAuctions(): Promise<void> {
+  if ((await prisma.auction.count()) > 0) return;
+  const items: {
+    name: string;
+    description: string;
+    rarity: AuctionRarity;
+    status: AuctionStatus;
+    currentBid: number;
+    minIncrement: number;
+    hoursLeft: number;
+  }[] = [
+    { name: 'Núcleo de Reator Ancião', description: 'Reator lendário com +50% de geração de energia. Apenas 1 no servidor.', rarity: 'unique', status: 'live', currentBid: 48000, minIncrement: 1000, hoursLeft: 2.23 },
+    { name: 'Selo do Primeiro Colono', description: 'Título cosmético comemorativo da fundação da colônia de Marte.', rarity: 'legendary', status: 'endingSoon', currentBid: 12500, minIncrement: 500, hoursLeft: 0.68 },
+    { name: 'Robô Minerador Prototype-X', description: 'Protótipo com ciclo de extração 2× mais rápido (§21).', rarity: 'unique', status: 'live', currentBid: 31000, minIncrement: 1000, hoursLeft: 5.03 },
+    { name: 'Mapa Estelar de Gagarin', description: 'Revela jazidas raras com antecedência via Telescópio Gagarin (§12.1).', rarity: 'rare', status: 'live', currentBid: 8200, minIncrement: 200, hoursLeft: 27 },
+  ];
+  for (const it of items) {
+    await prisma.auction.create({
+      data: {
+        name: it.name,
+        description: it.description,
+        rarity: it.rarity,
+        status: it.status,
+        currentBid: new Prisma.Decimal(it.currentBid),
+        minIncrement: new Prisma.Decimal(it.minIncrement),
+        endsAt: new Date(Date.now() + it.hoursLeft * 3_600_000),
+      },
+    });
+  }
+}
+
 /// Conteúdo de demonstração por jogador (§ pendência: dados por jogador): frota,
 /// missões e federação de Cmdt. Vale + vendedores NPC do Mercado.
 async function seedDemo(): Promise<void> {
@@ -295,6 +357,8 @@ async function seedDemo(): Promise<void> {
 
   await seedVehicles(valeId, 'fleet.json');
   await seedMarketNpcs(passwordHash);
+  await seedInformalOffers(passwordHash);
+  await seedAuctions();
 }
 
 async function main(): Promise<void> {

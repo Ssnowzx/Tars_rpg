@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,16 @@ import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
 import '../../data/providers.dart';
 import '../../domain/models/auction.dart';
+
+/// Mensagem de erro amigável do backend (Nest) a partir de uma DioException.
+String _dioMessage(DioException e) {
+  final data = e.response?.data;
+  if (data is Map && data['message'] != null) {
+    final m = data['message'];
+    return m is List ? m.join(' · ') : '$m';
+  }
+  return 'falha de conexão';
+}
 
 ({String label, Color color}) _rarityMeta(AuctionRarity r, DsTokens t) => switch (r) {
       AuctionRarity.unique => (label: 'Peça única', color: t.federation),
@@ -41,6 +52,47 @@ class _AuctionsScreenState extends ConsumerState<AuctionsScreen> {
         SnackBar(content: Text(m), behavior: SnackBarBehavior.floating, duration: const Duration(seconds: 2)),
       );
 
+  /// Dá um lance (§13) no valor do próximo incremento. Bloqueado abaixo do
+  /// Nível 100; senão confirma e registra o lance no backend.
+  Future<void> _bid(AuctionItem item) async {
+    final house = ref.read(auctionHouseProvider).valueOrNull;
+    if (house == null) return;
+    if (!house.canBid) {
+      _toast('Leilões liberam no Nível ${house.unlockLevel} (${house.unlockTitle}) — §13');
+      return;
+    }
+    final money = NumberFormat.decimalPattern(Localizations.localeOf(context).languageCode);
+    final messenger = ScaffoldMessenger.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Dar lance em ${item.name}?'),
+        content: Text('Seu lance: ${money.format(item.nextBid)} Fert\$ '
+            '(atual ${money.format(item.currentBid)} + incremento ${money.format(item.minIncrement)}).'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Dar lance')),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await ref.read(auctionRepositoryProvider).placeBid(item.id, item.nextBid);
+      ref.invalidate(auctionHouseProvider);
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Lance de ${money.format(item.nextBid)} Fert\$ registrado em ${item.name}.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    } on DioException catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Não foi possível dar o lance: ${_dioMessage(e)}'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
@@ -69,7 +121,7 @@ class _AuctionsScreenState extends ConsumerState<AuctionsScreen> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 840),
                   child: switch (_tab) {
-                    _Tab.active => _ActiveTab(house: h, money: money, onBid: _toast),
+                    _Tab.active => _ActiveTab(house: h, money: money, onBid: _bid),
                     _Tab.history => _HistoryTab(house: h, money: money),
                   },
                 ),
@@ -146,7 +198,7 @@ class _ActiveTab extends StatelessWidget {
   const _ActiveTab({required this.house, required this.money, required this.onBid});
   final AuctionHouse house;
   final NumberFormat money;
-  final ValueChanged<String> onBid;
+  final ValueChanged<AuctionItem> onBid;
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +213,7 @@ class _ActiveTab extends StatelessWidget {
             item: item,
             money: money,
             canBid: house.canBid,
-            onBid: () => onBid(house.canBid
-                ? 'Lance de ${money.format(item.nextBid)} Fert\$ em ${item.name} — em breve'
-                : 'Leilões liberam no Nível ${house.unlockLevel} (${house.unlockTitle}) — §13'),
+            onBid: () => onBid(item),
           ),
       ],
     );

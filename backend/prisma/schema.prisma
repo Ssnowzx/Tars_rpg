@@ -325,6 +325,7 @@ model Player {
   fertBalance       Decimal  @default(50) @db.Decimal(18, 4) // saldo Fert$ (cache; ledger é fonte)
   neutralRegistered Boolean  @default(false) // Neutro Registrado (Conciliador, §14)
   missionState      Json? // painel de Missões/Conquistas por jogador (§6); null = novato (board fresco)
+  producedAt        DateTime @default(now()) // marca do último acúmulo de produção por hora (§19)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -340,6 +341,7 @@ model Player {
   marketListings MarketListing[]
   marketOrders   MarketOrder[]
   bids           Bid[]
+  informalOffers InformalOffer[]
 
   agreementsProposed TradeAgreement[] @relation("AgreementProposer")
   agreementsReceived TradeAgreement[] @relation("AgreementCounterparty")
@@ -653,6 +655,28 @@ model FederationMember {
   player     Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@index([federationId])
+}
+
+/// Oferta de Comércio Informal (§8) — barter direto entre colonos, sem escrow.
+/// O ofertante entrega `give*` e quer `want*`; aceitar faz a troca atômica.
+model InformalOffer {
+  id            String      @id @default(cuid())
+  sellerId      String
+  giveKey       ResourceKey
+  giveQty       Int
+  wantKey       ResourceKey
+  wantQty       Int
+  distanceSlots Int         @default(10)
+  deals         Int         @default(0)
+  successRate   Int         @default(100)
+  scams         Int         @default(0)
+  note          String      @default("") @db.Text
+  status        String      @default("open") // open | closed
+  createdAt     DateTime    @default(now())
+
+  seller Player @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@index([sellerId, status])
 }
 
 model Treaty {

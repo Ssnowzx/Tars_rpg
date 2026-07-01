@@ -49,7 +49,7 @@ Auth por Bearer JWT (obtido em register/login). `*` = exige token.
 | GET | `/api/colony` * | colônia + construções |
 | POST | `/api/colony/buildings/:id/upgrade` * | evolui construção → enfileira obra |
 | POST | `/api/colony/build` * | constrói no slot livre → enfileira obra |
-| GET | `/api/resources` * | estoques + saldo Fert$ |
+| GET | `/api/resources` * | estoques (com produção por hora acumulada §19) + saldo Fert$ |
 | GET | `/api/build-queue` * | fila (contagem regressiva, fila dupla §20.2) |
 | POST | `/api/build-queue/:id/cancel` * | cancela obra |
 | POST | `/api/build-queue/:id/complete` * | conclui obra na hora (mock) |
@@ -65,7 +65,10 @@ Auth por Bearer JWT (obtido em register/login). `*` = exige token.
 | GET | `/api/missions/board` * | board de missões/conquistas/eventos por jogador |
 | POST | `/api/missions/:id/claim` * | resgata a recompensa de uma missão concluída |
 | GET | `/api/federation` * | federação do jogador (`inFederation:false` se não filiado) |
-| GET | `/api/auctions` * | casa de leilões (nível real do jogador) |
+| GET | `/api/auctions` * | casa de leilões (lotes reais; nível real do jogador) |
+| POST | `/api/auctions/:id/bid` * | lance num lote (gate Nível 100 §13, incremento mínimo, saldo) |
+| GET | `/api/informal` * | ofertas de barter reais do Comércio Informal (§8) |
+| POST | `/api/informal/:id/accept` * | aceita a troca (swap atômico, sem escrow) |
 | GET | `/api/lunar` · `/api/terraform` · `/api/spaceport` · `/api/missions` | dados de referência semeados |
 | GET | `/api/notifications` * | notificações do jogador |
 | GET | `/api/config/:key` | config canônica compartilhada (capital, ministérios, mapa, boards etc.) |

@@ -17,6 +17,10 @@ abstract interface class MarketRepository {
     required int quantity,
     required double unitPrice,
   });
+
+  /// Aceita uma oferta do Comércio Informal (§8): troca atômica de recursos
+  /// (você envia o `want`, recebe o `give`), sem escrow.
+  Future<void> acceptInformalOffer(String offerId);
 }
 
 /// Resumo do fechamento de uma compra no Mercado Central.

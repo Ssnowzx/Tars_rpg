@@ -4,6 +4,23 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
 ## 2026-07-01
 
+### Etapa 23 — Economia viva + Comércio Informal e Leilões transacionais
+- **Produção por hora (§19)** deixa de ser preguiçosa: acúmulo "compute-on-read" em
+  `GET /resources` (cada recurso ganha `perHour × horas` desde `Player.producedAt`, com teto na
+  capacidade; excedente com estoque cheio é perdido, como num idle). Verificado: 2h → +perHour×2.
+- **Comércio Informal transacional (§8)**: ofertas de barter reais (novo modelo `InformalOffer`
+  lastreado por NPCs, recursos válidos). `GET /informal` + `POST /informal/:id/accept` (swap
+  atômico: você envia o `want`, recebe o `give`, sem escrow). Botão **Negociar** ligado + confirmação.
+- **Leilões transacionais (§13)**: lotes viram registros `Auction` reais; `POST /auctions/:id/bid`
+  grava `Bid`, valida gate Nível 100 + incremento mínimo + saldo, e eleva o lance. Botão **Dar lance**
+  ligado. Verificado com jogador nível 100 (LendaTest): lance registrado, topBidder atualizado,
+  lance abaixo do mínimo rejeitado.
+- Migrações `production_accrual` e `informal_offers`; novos módulos `informal/` + endpoint de lance
+  em `auctions/`. Seed cria 5 ofertas informais (NPCs) + 4 lotes de leilão.
+- **Validação**: `jest` 11/11 · analyze limpo · build web ✓ · verificação no Chrome (produção
+  crescendo, troca informal −220 O₂/+75 Compostos com refresh do board+HUD).
+- Relatório: `docs/reports/23-economia-viva.{html,pdf}`.
+
 ### Etapa 22 — De-mock POR JOGADOR + Mercado transacional + ações reais
 - **Frota/Missões/Federação agora por jogador** (não mais config compartilhado): colono recém-registrado
   começa limpo; o jogador de demonstração (Vale) mantém o conteúdo rico via seed.

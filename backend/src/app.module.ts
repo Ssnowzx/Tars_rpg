@@ -11,6 +11,7 @@ import { ContentModule } from './content/content.module';
 import { FederationModule } from './federation/federation.module';
 import { FleetModule } from './fleet/fleet.module';
 import { HealthController } from './health/health.controller';
+import { InformalModule } from './informal/informal.module';
 import { MarketModule } from './market/market.module';
 import { MissionModule } from './missions/mission.module';
 import { NotificationsModule } from './notifications/notifications.module';
@@ -35,6 +36,7 @@ import { ResourcesModule } from './resources/resources.module';
     MissionModule,
     FederationModule,
     AuctionModule,
+    InformalModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

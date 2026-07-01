@@ -20,7 +20,12 @@ escrow + taxa 3% + livro-razão). Ações reais: resgate de missão, manutençã
 Leilões/Perfil por jogador (nível real, chip de federação). Mocks (`app/lib/data/mock/*`) removidos.
 Verificação clique-a-clique de TODAS as telas OK (sem erro de fromJson). Novos módulos NestJS: fleet/missions/
 federation/auctions. Relatório: `docs/reports/22-backend-per-player.{html,pdf}`. GDD §14/§23 superados.
-Dívidas: ações do Comércio Informal e lances de Leilão seguem board/preview (precisam de contraparte/sistema vivo).
+**Etapa 23 (01/07): ECONOMIA VIVA + DÍVIDAS FECHADAS.** Produção por hora real (acúmulo compute-on-read em
+`/resources`, teto na capacidade). **Comércio Informal transacional** (modelo `InformalOffer` + `POST
+/informal/:id/accept` swap atômico; botão Negociar ligado) e **Leilões transacionais** (`Auction`/`Bid` reais +
+`POST /auctions/:id/bid` com gate Nível 100/incremento/saldo; botão Dar lance ligado). Novos módulos `informal/`;
+migrações `production_accrual`+`informal_offers`. jest 11/11 · analyze/build limpos · verificado no Chrome.
+Relatório: `docs/reports/23-economia-viva.{html,pdf}`. Tudo em `origin/main`.
 **Como abrir do zero:** `cd backend && pnpm db:up && pnpm prisma:migrate && pnpm seed && pnpm start:dev` (usar
 node v20 do fnm, NÃO o /opt/homebrew node quebrado) · `cd app && flutter run -d chrome` · login vale@fertways.test / colonia123.
 

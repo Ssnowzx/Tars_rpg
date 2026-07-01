@@ -18,8 +18,13 @@ class ApiMarketRepository implements MarketRepository {
 
   @override
   Future<InformalBoard> loadInformalBoard() async {
-    final res = await _dio.get<Map<String, dynamic>>('/config/informal');
+    final res = await _dio.get<Map<String, dynamic>>('/informal');
     return InformalBoard.fromJson(res.data!);
+  }
+
+  @override
+  Future<void> acceptInformalOffer(String offerId) async {
+    await _dio.post<Map<String, dynamic>>('/informal/$offerId/accept');
   }
 
   @override

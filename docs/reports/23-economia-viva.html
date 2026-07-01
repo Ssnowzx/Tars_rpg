@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório 23 (Economia viva + Informal/Leilões transacionais)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>23 — Economia viva + Informal & Leilões transacionais</h1>
+  <div class="sub">Produção por hora real · Comércio Informal (barter) e Leilões (lance) reais
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (Flutter web + NestJS/Prisma/MariaDB)</span>
+    <span><b>GDD:</b> v33 — §8/§13/§19</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Escopo:</b> fechamento das dívidas econômicas</span>
+  </div>
+</div>
+
+<p class="lead">Fecha as três dívidas que restavam para o jogo ter uma economia viva: a <b>produção por hora</b>
+deixa de ser preguiçosa e passa a acumular ao longo do tempo; o <b>Comércio Informal</b> e os <b>Leilões</b>
+deixam de ser board/preview e ganham transações reais (barter atômico e lances validados). Todos verificados de
+ponta a ponta — inclusive o gate de Nível 100 dos leilões, testado com um jogador de nível 100.</p>
+
+<div class="cards">
+  <div class="card"><div class="n">§19</div><div class="l">produção acumula por hora (teto na capacidade)</div></div>
+  <div class="card"><div class="n">barter</div><div class="l">Comércio Informal: troca atômica real</div></div>
+  <div class="card"><div class="n">lance</div><div class="l">Leilões: bid real (gate Nível 100)</div></div>
+  <div class="card"><div class="n">2</div><div class="l">migrações · 1 módulo novo · jest 11/11</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Produção por hora (§19)</b> — acúmulo <i>compute-on-read</i> em <code>GET /resources</code>: cada recurso
+      ganha <code>perHour × horas</code> desde <code>Player.producedAt</code>, limitado à capacidade (excedente com
+      estoque cheio é perdido, como num idle). Avança o relógio sempre que ≥ 1 min passou — vender um recurso cheio
+      não recarrega o período já perdido. Verificado: 2 h → +<code>perHour×2</code> em todos os recursos.</li>
+  <li><b>Comércio Informal transacional (§8)</b> — novo modelo <code>InformalOffer</code> lastreado por NPCs (as
+      ofertas do fixture usavam recursos inexistentes no backend, ex.: "electronics"). <code>GET /informal</code> +
+      <code>POST /informal/:id/accept</code> fazem o <b>swap atômico</b> (você envia o <code>want</code>, recebe o
+      <code>give</code>; o ofertante faz o inverso), sem escrow. Botão <b>Negociar</b> ligado com confirmação.</li>
+  <li><b>Leilões transacionais (§13)</b> — lotes viram registros <code>Auction</code> reais; lances são
+      <code>Bid</code>. <code>POST /auctions/:id/bid</code> valida o gate de <b>Nível 100</b>, o incremento mínimo e
+      o saldo, grava o lance e eleva o lance atual; o board mostra líder/contagem/tempo a partir dos lances reais.
+      Botão <b>Dar lance</b> ligado.</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Schema</td><td><code>Player.producedAt</code> · modelo <code>InformalOffer</code> (migrações <code>production_accrual</code>, <code>informal_offers</code>)</td></tr>
+    <tr><td>Produção</td><td><code>resources.service</code> — <code>accrueProduction()</code> transacional</td></tr>
+    <tr><td>Informal</td><td>módulo <code>informal/</code> (service+controller) · <code>resource-tier.frontendTier()</code></td></tr>
+    <tr><td>Leilões</td><td><code>auctions/auction.service</code> (getAuctions/bid) + <code>dto/bid.dto</code></td></tr>
+    <tr><td>Seed</td><td><code>seedInformalOffers</code> (5 ofertas NPC) · <code>seedAuctions</code> (4 lotes)</td></tr>
+    <tr><td>Cliente</td><td><code>api_market_repository</code> (<code>/informal</code> + accept) · <code>api_auction_repository</code> (placeBid) · telas informal/leilões</td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li>Backend: 2 migrações aplicadas; <code>jest</code> 11/11; <code>start:dev</code> limpo (0 erros TS)</li>
+  <li>App: <code>flutter analyze</code> — No issues found · <code>flutter build web</code> — ✓ Built</li>
+  <li>Produção (API): <code>producedAt</code> −2 h → oxigênio +108, água +176, … (exatamente <code>perHour×2</code>, sem estourar capacidade)</li>
+  <li>Informal (Chrome): "Negociar" com L. Tanaka → −220 Oxigênio / +75 Compostos; oferta fecha e some; board e HUD atualizam</li>
+  <li>Leilões (API, jogador nível 100): lance registrado (líder = LendaTest, lance atual sobe); lance abaixo do mínimo rejeitado ("Lance mínimo: 8600 Fert$"); Vale (nível 14) vê os lotes bloqueados</li>
+</ul>
+
+<div class="note"><b>Dívidas / backlog:</b> <b>fechamento de leilão</b> (cobrar o vencedor e entregar o item) e
+<b>produção reagindo a upgrades</b> (<code>ResourceStock.perHour</code> ainda é o do starter) seguem no backlog,
+junto de conclusão de obra agendada (hoje preguiçosa), testes e2e e extração de i18n. As ações "Acordo"/"Reputação"
+do informal seguem informativas (Acordo de Troca §26.5 = aperto de mão não modelado).</div>
+
+<footer><span>Fertways — Relatório de Entrega · 23 Economia viva + Informal/Leilões transacionais</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,16 @@ import '../../app/theme/ds_tokens.dart';
 import '../../data/providers.dart';
 import '../../domain/models/informal_trade.dart';
 import 'resource_visual.dart';
+
+/// Extrai a mensagem de erro do backend (Nest) de uma DioException.
+String _dioMessage(DioException e) {
+  final data = e.response?.data;
+  if (data is Map && data['message'] != null) {
+    final m = data['message'];
+    return m is List ? m.join(' · ') : '$m';
+  }
+  return 'falha de conexão';
+}
 
 /// Filtro da lista de ofertas.
 enum _OfferFilter { all, trusted, federation }
@@ -26,6 +37,44 @@ class InformalTradeScreen extends ConsumerStatefulWidget {
 class _InformalTradeScreenState extends ConsumerState<InformalTradeScreen> {
   int _tab = 0; // 0 = Ofertas, 1 = Histórico, 2 = Como funciona
   _OfferFilter _filter = _OfferFilter.all;
+
+  /// Aceita a oferta (§8): troca atômica no backend — você envia o `want` e
+  /// recebe o `give`. Atualiza a lista e o HUD de recursos.
+  Future<void> _negotiate(InformalOffer offer) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Trocar com ${offer.trader}?'),
+        content: Text(
+          'Você envia ${offer.want.qty} ${offer.want.label} e recebe '
+          '${offer.give.qty} ${offer.give.label}. A troca é imediata e atômica.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Trocar')),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await ref.read(marketRepositoryProvider).acceptInformalOffer(offer.id);
+      ref.invalidate(informalBoardProvider);
+      ref.invalidate(resourcesProvider);
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Troca concluída: −${offer.want.qty} ${offer.want.label} · '
+            '+${offer.give.qty} ${offer.give.label}.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    } on DioException catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(SnackBar(
+        content: Text('Não foi possível trocar: ${_dioMessage(e)}'),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +168,7 @@ class _InformalTradeScreenState extends ConsumerState<InformalTradeScreen> {
                   ? Center(child: Text('Nenhuma oferta com esse filtro.', style: TextStyle(color: t.textSecondary)))
                   : ListView(
                       padding: EdgeInsets.fromLTRB(t.space4, 0, t.space4, t.space6),
-                      children: [for (final o in offers) _OfferCard(offer: o, board: b)],
+                      children: [for (final o in offers) _OfferCard(offer: o, board: b, onNegotiate: _negotiate)],
                     ),
             ),
           ],
@@ -269,9 +318,10 @@ class _InfoLine extends StatelessWidget {
 }
 
 class _OfferCard extends StatelessWidget {
-  const _OfferCard({required this.offer, required this.board});
+  const _OfferCard({required this.offer, required this.board, required this.onNegotiate});
   final InformalOffer offer;
   final InformalBoard board;
+  final ValueChanged<InformalOffer> onNegotiate;
 
   String _trimNum(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
 
@@ -453,7 +503,7 @@ class _OfferCard extends StatelessWidget {
                 ),
                 SizedBox(width: t.space2),
                 FilledButton.icon(
-                  onPressed: () => _mock(context, 'Proposta enviada a ${offer.trader} — despache seu veículo quando quiser (§25.7)'),
+                  onPressed: () => onNegotiate(offer),
                   icon: const Icon(Icons.send_outlined, size: 16),
                   label: const Text('Negociar'),
                   style: FilledButton.styleFrom(

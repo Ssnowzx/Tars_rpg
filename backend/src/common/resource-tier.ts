@@ -16,3 +16,13 @@ export function resourceTier(key: ResourceKey): ResourceTier {
   if (COMPONENT.includes(key)) return ResourceTier.component;
   return ResourceTier.rare;
 }
+
+/// Camada no vocabulário do cliente (primary | secondary | rare), usada na
+/// alíquota de tributo do Comércio Informal (§8.3). Industrial/mineral/
+/// componente colapsam em "secundário".
+export function frontendTier(key: ResourceKey): 'primary' | 'secondary' | 'rare' {
+  const tier = resourceTier(key);
+  if (tier === ResourceTier.primary) return 'primary';
+  if (tier === ResourceTier.rare) return 'rare';
+  return 'secondary';
+}
