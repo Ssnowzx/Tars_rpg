@@ -49,14 +49,14 @@ import 'mock/mock_lunar_repository.dart';
 import 'mock/mock_market_repository.dart';
 import 'mock/mock_ministry_repository.dart';
 import 'mock/mock_mission_repository.dart';
-import 'mock/mock_notification_repository.dart';
-import 'mock/mock_profile_repository.dart';
 import 'mock/mock_public_office_repository.dart';
 import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
 import 'mock/mock_terraform_repository.dart';
 import 'api/api_client.dart';
 import 'api/api_capital_repository.dart';
+import 'api/api_notification_repository.dart';
+import 'api/api_profile_repository.dart';
 import 'api/api_spaceport_repository.dart';
 import 'api/api_world_repository.dart';
 
@@ -85,7 +85,7 @@ final spaceportRepositoryProvider = Provider<SpaceportRepository>(
 );
 
 final profileRepositoryProvider = Provider<ProfileRepository>(
-  (ref) => const MockProfileRepository(),
+  (ref) => ApiProfileRepository(ref.watch(dioProvider)),
 );
 
 final ministryRepositoryProvider = Provider<MinistryRepository>(
@@ -201,7 +201,7 @@ final auctionHouseProvider = FutureProvider<AuctionHouse>(
 );
 
 final notificationRepositoryProvider = Provider<NotificationRepository>(
-  (ref) => const MockNotificationRepository(),
+  (ref) => ApiNotificationRepository(ref.watch(dioProvider)),
 );
 
 final notificationsProvider = FutureProvider<NotificationCenter>(
