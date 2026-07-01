@@ -86,4 +86,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String comingSoonAction(String label) {
     return '$label — coming soon';
   }
+
+  @override
+  String get authTaglineLogin => 'Sign in to manage your colony.';
+
+  @override
+  String get authTaglineRegister => 'Create your colony in Fertways.';
+
+  @override
+  String get authEmail => 'Email';
+
+  @override
+  String get authNickname => 'Nickname';
+
+  @override
+  String get authPassword => 'Password';
+
+  @override
+  String get authLogin => 'Sign in';
+
+  @override
+  String get authRegister => 'Register';
+
+  @override
+  String get authSwitchToLogin => 'Already have an account? Sign in';
+
+  @override
+  String get authSwitchToRegister => 'New colonist? Create account';
+
+  @override
+  String get authValidation =>
+      'Enter email, password (min. 8) and nickname (min. 3 to register).';
 }

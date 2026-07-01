@@ -41,5 +41,16 @@
     "placeholders": {
       "label": { "type": "String" }
     }
-  }
+  },
+
+  "authTaglineLogin": "Entre para gerir sua colônia.",
+  "authTaglineRegister": "Crie sua colônia em Fertways.",
+  "authEmail": "E-mail",
+  "authNickname": "Nickname",
+  "authPassword": "Senha",
+  "authLogin": "Entrar",
+  "authRegister": "Registrar",
+  "authSwitchToLogin": "Já tem conta? Entrar",
+  "authSwitchToRegister": "Novo colono? Criar conta",
+  "authValidation": "Preencha e-mail, senha (mín. 8) e nickname (mín. 3 no registro)."
 }

@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../app/theme/ds_colors.dart';
 import '../../app/theme/ds_tokens.dart';
 import '../../data/auth/auth_controller.dart';
+import '../../data/locale_controller.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Acesso ao servidor (login/registro). Sem sessão válida, o roteador
 /// redireciona para cá.
@@ -35,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final password = _password.text;
     final nickname = _nickname.text.trim();
     if (email.isEmpty || password.length < 8 || (_isRegister && nickname.length < 3)) {
-      _toast('Preencha e-mail, senha (mín. 8) e nickname (mín. 3 no registro).');
+      _toast(AppLocalizations.of(context).authValidation);
       return;
     }
     setState(() => _loading = true);
@@ -61,6 +63,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DsTokens>()!;
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: t.surfacePage,
       body: Center(
@@ -86,23 +89,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Text('Fertways',
                           style: GoogleFonts.rajdhani(
                               fontWeight: FontWeight.w700, fontSize: 26, color: FwPalette.gray900)),
+                      const Spacer(),
+                      PopupMenuButton<String>(
+                        tooltip: l10n.settingsLanguage,
+                        icon: Icon(Icons.language_outlined, size: 20, color: t.textSecondary),
+                        initialValue: ref.watch(localeProvider)?.languageCode ?? 'pt',
+                        onSelected: (c) => ref.read(localeProvider.notifier).set(Locale(c)),
+                        itemBuilder: (_) => const [
+                          PopupMenuItem(value: 'pt', child: Text('Português')),
+                          PopupMenuItem(value: 'es', child: Text('Español')),
+                          PopupMenuItem(value: 'en', child: Text('English')),
+                        ],
+                      ),
                     ],
                   ),
                   SizedBox(height: t.space1),
-                  Text(_isRegister ? 'Crie sua colônia em Fertways.' : 'Entre para gerir sua colônia.',
+                  Text(_isRegister ? l10n.authTaglineRegister : l10n.authTaglineLogin,
                       style: TextStyle(fontSize: 13, color: t.textSecondary)),
                   SizedBox(height: t.space4),
                   TextField(
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
-                    decoration: const InputDecoration(labelText: 'E-mail', border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: l10n.authEmail, border: const OutlineInputBorder()),
                   ),
                   SizedBox(height: t.space3),
                   if (_isRegister) ...[
                     TextField(
                       controller: _nickname,
-                      decoration: const InputDecoration(labelText: 'Nickname', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: l10n.authNickname, border: const OutlineInputBorder()),
                     ),
                     SizedBox(height: t.space3),
                   ],
@@ -110,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     controller: _password,
                     obscureText: true,
                     onSubmitted: (_) => _submit(),
-                    decoration: const InputDecoration(labelText: 'Senha', border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: l10n.authPassword, border: const OutlineInputBorder()),
                   ),
                   SizedBox(height: t.space4),
                   FilledButton(
@@ -122,14 +137,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: _loading
                         ? const SizedBox(
                             width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : Text(_isRegister ? 'Registrar' : 'Entrar'),
+                        : Text(_isRegister ? l10n.authRegister : l10n.authLogin),
                   ),
                   SizedBox(height: t.space2),
                   TextButton(
                     onPressed: _loading ? null : () => setState(() => _isRegister = !_isRegister),
-                    child: Text(_isRegister
-                        ? 'Já tem conta? Entrar'
-                        : 'Novo colono? Criar conta'),
+                    child: Text(_isRegister ? l10n.authSwitchToLogin : l10n.authSwitchToRegister),
                   ),
                 ],
               ),

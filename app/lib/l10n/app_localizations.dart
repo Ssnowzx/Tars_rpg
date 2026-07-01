@@ -249,6 +249,66 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'{label} — em breve'**
   String comingSoonAction(String label);
+
+  /// No description provided for @authTaglineLogin.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entre para gerir sua colônia.'**
+  String get authTaglineLogin;
+
+  /// No description provided for @authTaglineRegister.
+  ///
+  /// In pt, this message translates to:
+  /// **'Crie sua colônia em Fertways.'**
+  String get authTaglineRegister;
+
+  /// No description provided for @authEmail.
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail'**
+  String get authEmail;
+
+  /// No description provided for @authNickname.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nickname'**
+  String get authNickname;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In pt, this message translates to:
+  /// **'Senha'**
+  String get authPassword;
+
+  /// No description provided for @authLogin.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get authLogin;
+
+  /// No description provided for @authRegister.
+  ///
+  /// In pt, this message translates to:
+  /// **'Registrar'**
+  String get authRegister;
+
+  /// No description provided for @authSwitchToLogin.
+  ///
+  /// In pt, this message translates to:
+  /// **'Já tem conta? Entrar'**
+  String get authSwitchToLogin;
+
+  /// No description provided for @authSwitchToRegister.
+  ///
+  /// In pt, this message translates to:
+  /// **'Novo colono? Criar conta'**
+  String get authSwitchToRegister;
+
+  /// No description provided for @authValidation.
+  ///
+  /// In pt, this message translates to:
+  /// **'Preencha e-mail, senha (mín. 8) e nickname (mín. 3 no registro).'**
+  String get authValidation;
 }
 
 class _AppLocalizationsDelegate

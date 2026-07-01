@@ -24,5 +24,16 @@
   "actionMessages": "Mensajes",
   "statusOnline": "En línea",
   "settingsLanguage": "Idioma",
-  "comingSoonAction": "{label} — próximamente"
+  "comingSoonAction": "{label} — próximamente",
+
+  "authTaglineLogin": "Entra para gestionar tu colonia.",
+  "authTaglineRegister": "Crea tu colonia en Fertways.",
+  "authEmail": "Correo",
+  "authNickname": "Apodo",
+  "authPassword": "Contraseña",
+  "authLogin": "Entrar",
+  "authRegister": "Registrarse",
+  "authSwitchToLogin": "¿Ya tienes cuenta? Entrar",
+  "authSwitchToRegister": "¿Nuevo colono? Crear cuenta",
+  "authValidation": "Completa correo, contraseña (mín. 8) y apodo (mín. 3 al registrarte)."
 }

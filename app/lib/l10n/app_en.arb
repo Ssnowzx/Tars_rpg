@@ -24,5 +24,16 @@
   "actionMessages": "Messages",
   "statusOnline": "Online",
   "settingsLanguage": "Language",
-  "comingSoonAction": "{label} — coming soon"
+  "comingSoonAction": "{label} — coming soon",
+
+  "authTaglineLogin": "Sign in to manage your colony.",
+  "authTaglineRegister": "Create your colony in Fertways.",
+  "authEmail": "Email",
+  "authNickname": "Nickname",
+  "authPassword": "Password",
+  "authLogin": "Sign in",
+  "authRegister": "Register",
+  "authSwitchToLogin": "Already have an account? Sign in",
+  "authSwitchToRegister": "New colonist? Create account",
+  "authValidation": "Enter email, password (min. 8) and nickname (min. 3 to register)."
 }

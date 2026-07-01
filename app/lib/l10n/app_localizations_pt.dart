@@ -87,4 +87,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String comingSoonAction(String label) {
     return '$label — em breve';
   }
+
+  @override
+  String get authTaglineLogin => 'Entre para gerir sua colônia.';
+
+  @override
+  String get authTaglineRegister => 'Crie sua colônia em Fertways.';
+
+  @override
+  String get authEmail => 'E-mail';
+
+  @override
+  String get authNickname => 'Nickname';
+
+  @override
+  String get authPassword => 'Senha';
+
+  @override
+  String get authLogin => 'Entrar';
+
+  @override
+  String get authRegister => 'Registrar';
+
+  @override
+  String get authSwitchToLogin => 'Já tem conta? Entrar';
+
+  @override
+  String get authSwitchToRegister => 'Novo colono? Criar conta';
+
+  @override
+  String get authValidation =>
+      'Preencha e-mail, senha (mín. 8) e nickname (mín. 3 no registro).';
 }
