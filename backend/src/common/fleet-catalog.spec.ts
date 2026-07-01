@@ -48,10 +48,14 @@ describe('fleet-catalog', () => {
       expect(fleet.every((v) => v.condition === 100)).toBe(true);
     });
 
-    it('deve gerar placas com o prefixo do nickname sanitizado', () => {
-      const fleet = starterFleet('Ana');
-      expect(fleet[0].plate).toBe('FRG-ANA1');
-      expect(fleet[1].plate).toBe('RBM-ANA1');
+    it('deve gerar placas únicas a partir do id do jogador (sem colisão por nickname)', () => {
+      const fleet = starterFleet('cmr1abc999xyz');
+      expect(fleet[0].plate).toBe('FRG-999XYZ');
+      expect(fleet[1].plate).toBe('RBM-999XYZ');
+      // Dois jogadores com nickname de prefixo igual não colidem — a placa vem do id.
+      const a = starterFleet('cmzAAA111')[0].plate;
+      const b = starterFleet('cmzAAA222')[0].plate;
+      expect(a).not.toBe(b);
     });
   });
 });

@@ -53,7 +53,7 @@ export class AuthService {
         data: STARTER_STOCKS.map((s) => ({ ...s, playerId: created.id })),
       });
       await tx.vehicle.createMany({
-        data: starterFleet(dto.nickname).map((v) => ({
+        data: starterFleet(created.id).map((v) => ({
           ownerId: created.id,
           kind: backendKind(v.kindLabel),
           status: backendStatus(v.statusLabel),

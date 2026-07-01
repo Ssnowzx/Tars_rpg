@@ -74,13 +74,15 @@ export interface VehicleSpec {
 }
 
 /// Frota inicial de um colono novo (§21): um Furgão e um Robô Minerador ociosos.
-export function starterFleet(nick: string): VehicleSpec[] {
-  const tag = nick.slice(0, 3).toUpperCase().padEnd(3, 'X').replace(/[^A-Z]/g, 'X');
+/// `seed` deve ser único por jogador (ex.: o id do jogador) — a placa é única
+/// no servidor (§16.3), então não pode derivar do nickname (colisão).
+export function starterFleet(seed: string): VehicleSpec[] {
+  const tag = (seed.replace(/[^a-zA-Z0-9]/g, '').slice(-6).toUpperCase() || 'X').padStart(4, '0');
   return [
     {
       kindLabel: 'van',
       statusLabel: 'idle',
-      plate: `FRG-${tag}1`,
+      plate: `FRG-${tag}`,
       capacityM3: 6,
       condition: 100,
       activeHours: 0,
@@ -91,7 +93,7 @@ export function starterFleet(nick: string): VehicleSpec[] {
     {
       kindLabel: 'miningRobot',
       statusLabel: 'idle',
-      plate: `RBM-${tag}1`,
+      plate: `RBM-${tag}`,
       capacityM3: 4,
       condition: 100,
       activeHours: 0,
