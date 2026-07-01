@@ -21,7 +21,7 @@ class FertwaysApp extends ConsumerWidget {
       darkTheme: FwTheme.dark,
       themeMode: ThemeMode.light, // direção Solar Frontier (claro)
       locale: locale,
-      routerConfig: appRouter,
+      routerConfig: ref.watch(routerProvider),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );

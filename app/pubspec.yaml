@@ -26,6 +26,8 @@ dependencies:
 
   # Tipografia do design-system (Inter / Lora / JetBrains Mono) sem bundlar binários
   google_fonts: ^6.2.1
+  dio: ^5.10.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:

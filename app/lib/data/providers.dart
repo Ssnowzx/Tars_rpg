@@ -41,7 +41,6 @@ import '../domain/repositories/spaceport_repository.dart';
 import '../domain/repositories/terraform_repository.dart';
 import '../domain/repositories/world_repository.dart';
 import 'mock/mock_auction_repository.dart';
-import 'mock/mock_capital_repository.dart';
 import 'mock/mock_chat_repository.dart';
 import 'mock/mock_combat_repository.dart';
 import 'mock/mock_federation_repository.dart';
@@ -57,16 +56,20 @@ import 'mock/mock_ranking_repository.dart';
 import 'mock/mock_reputation_repository.dart';
 import 'mock/mock_spaceport_repository.dart';
 import 'mock/mock_terraform_repository.dart';
-import 'mock/mock_world_repository.dart';
+import 'api/api_client.dart';
+import 'api/api_capital_repository.dart';
+import 'api/api_world_repository.dart';
 
 /// Ponto único de binding interface → implementação. Para usar a API real,
 /// troque os mocks por implementações `Api...` aqui.
+// Reais (backend): recursos + colônia. Slots da Capital e mapa-planeta ainda
+// caem no fixture dentro das implementações de API (sem endpoint próprio).
 final capitalRepositoryProvider = Provider<CapitalRepository>(
-  (ref) => const MockCapitalRepository(),
+  (ref) => ApiCapitalRepository(ref.watch(dioProvider)),
 );
 
 final worldRepositoryProvider = Provider<WorldRepository>(
-  (ref) => const MockWorldRepository(),
+  (ref) => ApiWorldRepository(ref.watch(dioProvider)),
 );
 
 final marketRepositoryProvider = Provider<MarketRepository>(

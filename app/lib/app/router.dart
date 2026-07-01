@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data/auth/auth_controller.dart';
 import '../domain/models/institution_slot.dart';
 import '../domain/models/planet_models.dart';
+import '../features/auth/login_screen.dart';
 import '../features/capital/capital_screen.dart';
 import '../features/capital/ministries/ministry_screen.dart';
 import '../features/capital/public_offices_screen.dart';
@@ -26,14 +29,34 @@ import '../features/zone/zone_screen.dart';
 
 final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>();
 
-/// Rotas declarativas. StatefulShellRoute preserva o estado de cada aba
-/// (mapa, capital, mercado, espaçoporto, perfil) ao alternar. Sub-rotas
-/// (colony, zone, rankings) são drill-ins que mantêm o HUD/nav do shell.
-final GoRouter appRouter = GoRouter(
-  navigatorKey: _rootKey,
-  initialLocation: '/map',
-  routes: [
-    StatefulShellRoute.indexedStack(
+/// Redireciona para /login sem sessão; sai do /login quando autenticado.
+class _AuthRefresh extends ChangeNotifier {
+  _AuthRefresh(this._ref) {
+    _ref.listen(authProvider, (_, __) => notifyListeners());
+  }
+  final Ref _ref;
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    final authed = _ref.read(authProvider).isAuthenticated;
+    final atLogin = state.matchedLocation == '/login';
+    if (!authed) return atLogin ? null : '/login';
+    if (atLogin) return '/map';
+    return null;
+  }
+}
+
+/// Roteador com gate de autenticação. Sub-rotas (colony, zone, rankings) são
+/// drill-ins que mantêm o HUD/nav do shell.
+final routerProvider = Provider<GoRouter>((ref) {
+  final auth = _AuthRefresh(ref);
+  return GoRouter(
+    navigatorKey: _rootKey,
+    initialLocation: '/map',
+    refreshListenable: auth,
+    redirect: auth.redirect,
+    routes: [
+      GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+      StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
@@ -106,7 +129,8 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-      ],
-    ),
-  ],
-);
+        ],
+      ),
+    ],
+  );
+});
