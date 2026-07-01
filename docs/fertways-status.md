@@ -109,8 +109,8 @@ v29 mantém §1–§22 (números do v24) e ADICIONA 4 capítulos que afetam o qu
 **Reconciliação (status):** ✅ B2 (§25+§26.5, R1) · ✅ Perfil (§26 4 índices + §24.3 Diário, R2) · ✅ Rankings
 (§27.13, R3) · ✅ **Economia §24** (Metal Bruto, Mina Local, Destilaria, receitas §24.5, subsídio §24.7, preços
 §24.8 — HUD/Colônia/Mercado, E1) · ✅ **Combate §27** (Sentinela §27.1, forças §27.3, previsão §27.5, saque
-§27.8, novatos §27.11, manutenção §27.12 — tela de Zona, E2). **v29 COMPLETA.** Retomando Bloco B (B3
-Mensagens §10 →). (Título sem corpo = bloqueio, não inventar.)
+§27.8, novatos §27.11, manutenção §27.12 — tela de Zona, E2). **v29 COMPLETA.** Bloco B (B0–B10) também
+concluído sobre essa base. (Título sem corpo no GDD = bloqueio, não inventar.)
 
 ## 9. Próximos passos (Bloco B — profundidade)
 ~~B1 Ministérios da Capital~~ ✅ (slots do `/capital` viram telas — `MinistryRepository`/`ministries.json`;
@@ -136,4 +136,6 @@ Dívidas: i18n (telas em pt hard-coded → ARB); produção/consumo dinâmicos; 
 - `docs/image-generation.md` — prompts de arte (terreno full-bleed §22 etc.).
 - `docs/visual-history/` — evolução visual (mapas antigos arquivados + README).
 - `docs/t2-shelf/` — código desativado p/ Temporada 2 (vista de "lotes" antiga).
-- `openspec/specs/` — specs por capacidade. `FERTWAYS_GDD_v24.html` — GDD atual.
+- `docs/reports/` — relatório PDF por etapa concluída (01–17; `gen-pdf.sh`). Regra: cada etapa gera um.
+- `openspec/specs/` — specs por capacidade (inclui B4–B10). **`FERTWAYS_GDD_v29.html`** — GDD atual
+  (raiz; §1–§22 herdados do v24, +§24–§27).
