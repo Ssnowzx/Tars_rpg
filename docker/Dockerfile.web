@@ -1,0 +1,22 @@
+# Frontend Fertways (Flutter web) — build isolado servido por nginx.
+# Contexto de build: ../app
+FROM ghcr.io/cirruslabs/flutter:stable AS build
+WORKDIR /app
+# Evita "dubious ownership" do git ao inspecionar SDK/projeto durante o build.
+RUN git config --global --add safe.directory '*'
+
+# Resolve dependências primeiro (cache de camada).
+COPY pubspec.yaml pubspec.lock ./
+RUN flutter pub get
+
+# Código-fonte + build web. generate:true dispara o gen-l10n automaticamente.
+# A API aponta para o mesmo domínio (mesma origem, atrás do Apache).
+COPY . .
+RUN flutter build web --release \
+      --dart-define=API_BASE_URL=https://fertways.xiax.com.br/api
+
+# ── Runtime estático ─────────────────────────────────────────────────────────
+FROM nginx:alpine AS runtime
+COPY --from=build /app/build/web /usr/share/nginx/html
+# SPA: rotas desconhecidas do go_router caem no index.html.
+RUN printf 'server {\n  listen 80;\n  root /usr/share/nginx/html;\n  index index.html;\n  location / {\n    try_files $uri $uri/ /index.html;\n  }\n}\n' > /etc/nginx/conf.d/default.conf
