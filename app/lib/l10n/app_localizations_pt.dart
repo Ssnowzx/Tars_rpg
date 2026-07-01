@@ -66,12 +66,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get actionRecruit => 'Recrutar';
 
   @override
-  String get actionResearch => 'Pesquisar';
-
-  @override
-  String get actionReports => 'Relatórios';
-
-  @override
   String get actionMissions => 'Missões';
 
   @override

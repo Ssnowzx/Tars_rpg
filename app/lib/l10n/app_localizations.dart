@@ -208,18 +208,6 @@ abstract class AppLocalizations {
   /// **'Recrutar'**
   String get actionRecruit;
 
-  /// No description provided for @actionResearch.
-  ///
-  /// In pt, this message translates to:
-  /// **'Pesquisar'**
-  String get actionResearch;
-
-  /// No description provided for @actionReports.
-  ///
-  /// In pt, this message translates to:
-  /// **'Relatórios'**
-  String get actionReports;
-
   /// No description provided for @actionMissions.
   ///
   /// In pt, this message translates to:

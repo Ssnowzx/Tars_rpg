@@ -65,12 +65,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionRecruit => 'Reclutar';
 
   @override
-  String get actionResearch => 'Investigar';
-
-  @override
-  String get actionReports => 'Informes';
-
-  @override
   String get actionMissions => 'Misiones';
 
   @override

@@ -30,8 +30,6 @@
 
   "actionBuild": "Construir",
   "actionRecruit": "Recrutar",
-  "actionResearch": "Pesquisar",
-  "actionReports": "Relatórios",
   "actionMissions": "Missões",
   "actionMessages": "Mensagens",
   "statusOnline": "Online",

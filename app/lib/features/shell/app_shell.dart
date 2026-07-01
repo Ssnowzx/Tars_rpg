@@ -107,22 +107,25 @@ class _BottomBar extends StatelessWidget {
       );
     }
 
-    // Desktop: barra de ações secundárias.
+    // Desktop: barra de ações secundárias. "Construir" abre a Colônia (onde a
+    // fila de obras vive); "Recrutar" segue reservado (Quartel §17.2 + unidades
+    // §21, junto de combate/zonas). "Pesquisar" e "Relatórios" foram omitidos:
+    // o GDD v33 nomeia o conceito mas não define a mecânica (sem árvore/regras).
     final actions = <(_ShellAction, String, IconData)>[
       (_ShellAction.build, l10n.actionBuild, Icons.add_box_outlined),
       (_ShellAction.recruit, l10n.actionRecruit, Icons.groups_outlined),
-      (_ShellAction.research, l10n.actionResearch, Icons.science_outlined),
-      (_ShellAction.reports, l10n.actionReports, Icons.description_outlined),
       (_ShellAction.missions, l10n.actionMissions, Icons.flag_circle_outlined),
       (_ShellAction.messages, l10n.actionMessages, Icons.mail_outline),
     ];
     void onAction(_ShellAction kind, String label) {
       switch (kind) {
+        case _ShellAction.build:
+          context.go('/map/colony');
         case _ShellAction.messages:
           context.go('/map/messages');
         case _ShellAction.missions:
           context.go('/map/missions');
-        default:
+        case _ShellAction.recruit:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.comingSoonAction(label)),
@@ -190,5 +193,5 @@ class _Dest {
 }
 
 /// Ações da barra inferior (chave estável — o roteamento não depende do rótulo
-/// traduzido).
-enum _ShellAction { build, recruit, research, reports, missions, messages }
+/// traduzido). "research"/"reports" foram removidos até o GDD definir a mecânica.
+enum _ShellAction { build, recruit, missions, messages }
