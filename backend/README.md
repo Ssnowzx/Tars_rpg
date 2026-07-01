@@ -5,9 +5,10 @@ reputação e permissões vivem aqui. **NestJS + TypeScript (strict) + Prisma +
 MariaDB.** Frontend Flutter web consome via HTTP (troca os mocks do seam de
 repositório por implementações de API).
 
-> Estado: **fundação** — schema completo de todos os domínios + migração +
-> health check. Endpoints por domínio (auth, colônia, mercado, combate…) entram
-> incrementais.
+> Estado: **loop core funcional** — schema completo (47 modelos) + auth JWT +
+> colônia/recursos/fila de construção + Mercado com escrow e livro-razão Fert$ +
+> dados de referência semeados. Demais domínios (federações, combate, justiça,
+> leilões…) têm schema pronto; endpoints entram incrementais.
 
 ## Stack
 - **NestJS 11** (Node 20, TS strict) — módulos, DI, guards.
@@ -26,6 +27,7 @@ cp .env.example .env            # DATABASE_URL aponta pro MariaDB do Docker (330
 pnpm install                    # já aprova os build scripts do Prisma
 pnpm db:up                      # sobe o MariaDB (docker compose up -d)
 pnpm prisma:migrate             # aplica migrações (prisma migrate dev)
+pnpm seed                       # popula preços, luas, planetas, terraformação, missões
 pnpm start:dev                  # NestJS em watch (http://localhost:3000/api)
 ```
 
@@ -34,6 +36,30 @@ Verificação:
 curl http://localhost:3000/api/health   # { "status":"ok", "db":"up", ... }
 curl http://localhost:3000/api          # { "name":"Fertways API", ... }
 ```
+
+## Endpoints (loop core)
+Auth por Bearer JWT (obtido em register/login). `*` = exige token.
+
+| Método | Rota | O quê |
+|---|---|---|
+| POST | `/api/auth/register` | cria conta + colônia inicial + 50 Fert$ (§onboarding); devolve tokens |
+| POST | `/api/auth/login` | autentica; devolve access + refresh |
+| POST | `/api/auth/refresh` | renova o access token |
+| GET | `/api/me` * | perfil do jogador + reputação (4 índices) |
+| GET | `/api/colony` * | colônia + construções |
+| POST | `/api/colony/buildings/:id/upgrade` * | evolui construção → enfileira obra |
+| POST | `/api/colony/build` * | constrói no slot livre → enfileira obra |
+| GET | `/api/resources` * | estoques + saldo Fert$ |
+| GET | `/api/build-queue` * | fila (contagem regressiva, fila dupla §20.2) |
+| POST | `/api/build-queue/:id/cancel` * | cancela obra |
+| POST | `/api/build-queue/:id/complete` * | conclui obra na hora (mock) |
+| GET | `/api/market/prices` | preços-base (§22) |
+| GET | `/api/market/listings` * | anúncios abertos |
+| POST | `/api/market/listings` * | cria anúncio (escrow reserva o recurso) |
+| POST | `/api/market/listings/:id/buy` * | compra (Fert$ via ledger + taxa 3% + transfere recurso) |
+| POST | `/api/market/listings/:id/cancel` * | cancela e devolve o escrow |
+| GET | `/api/lunar` · `/api/terraform` · `/api/spaceport` · `/api/missions` | dados de referência semeados |
+| GET | `/api/notifications` * | notificações do jogador |
 
 Scripts úteis: `pnpm db:down` (derruba o banco), `pnpm prisma:studio`
 (explorador visual), `pnpm build`, `pnpm test`.
@@ -58,18 +84,22 @@ backend/
   docker/init.sql          # grant p/ shadow DB do Prisma
   prisma/schema.prisma     # schema completo (47 modelos)
   prisma/migrations/       # migração init
+  prisma/seed.ts           # seed: preços, luas, planetas, terraformação, missões
   src/
-    main.ts                # bootstrap (prefixo /api, CORS, shutdown hooks)
-    app.module.ts          # ConfigModule (global) + PrismaModule
-    prisma/                # PrismaService (@Global) — acesso único ao banco
-    health/                # GET /api/health (ping no banco)
+    main.ts                # bootstrap (prefixo /api, CORS, ValidationPipe, shutdown)
+    app.module.ts          # ConfigModule + Prisma + Ledger + módulos de domínio
+    prisma/, common/       # PrismaService (@Global), LedgerService, decorators, utils
+    auth/                  # register/login/refresh (JWT + refresh), JwtStrategy/Guard
+    player/ colony/ resources/ build-queue/   # loop core
+    market/                # escrow + ledger + taxa
+    content/ notifications/ health/           # leitura de referência + health
 ```
 
 ## Próximos passos
-1. **Auth** (email/senha, JWT + refresh token) e `ValidationPipe` global.
-2. Módulos por domínio expondo REST: `player`, `colony`, `resources`,
-   `build-queue` (espelha o C4 do frontend), `market` (escrow + ledger), etc.
-3. **Seed** (`prisma/seed.ts`): preços-base do Mercado (§22), 8 luas + boletins,
-   planetas NPC, indicadores de terraformação, missões iniciais.
+1. Endpoints dos demais domínios (schema já pronto): federações, justiça/denúncias,
+   território/combate (§27), leilões, cargos públicos, frota, chat.
+2. **Produção por hora** (job/cron aplicando `perHour` aos estoques) e conclusão de
+   obras por agendador (hoje é preguiçosa, ao ler/enfileirar).
+3. Testes e2e (supertest) e `ReputationEvent`/auditoria nas ações sensíveis.
 4. Trocar os mocks do frontend (`app/lib/data/mock/*`) por implementações `Api…`
    apontando para este backend (o seam de repositório já isola isso).
