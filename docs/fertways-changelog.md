@@ -4,6 +4,21 @@ Registro cronológico das decisões e marcos (frontend). Mais recente no topo.
 
 ## 2026-07-01
 
+### Etapa 24 — Economia completa (obra/custo/produção) + e2e + i18n
+- **Construção autoritativa com custo (§20)**: enfileirar debita recursos (Metal Bruto + Energia, curva 1.5×) e
+  devolve ao cancelar; concluir eleva nível + perHour do prédio (§19) e recalcula `ResourceStock.perHour` da
+  categoria. Obras vencidas concluem também na leitura da colônia. **Produção reage aos níveis** (evoluir →
+  mais produção, visível no HUD: Captação de Água 88→132/h no Chrome). Frontend mostra a mensagem real do
+  servidor e invalida colônia+recursos.
+- **Fechamento de leilão (§13)**: ao vencer o prazo, encerra, cobra o vencedor (livro-razão) e entra no histórico.
+- **Testes e2e** (`test/flows.e2e-spec.ts`): isolamento por jogador, auth, Mercado (anunciar+comprar), Informal
+  (aceitar), Leilão (gate Nível 100/incremento/lance) — fixtures próprios com limpeza. **Pegou um bug real**:
+  placa da frota inicial vinha do nickname → dois jogadores de prefixo igual colidiam (placa única §16.3);
+  corrigido p/ derivar do id. Suite: 17 unit + 8 e2e verdes.
+- **i18n (§11)**: idioma **persiste** entre sessões (SharedPreferences); tela de login/registro extraída p/ ARB
+  (pt/es/en) + seletor de idioma no card de login (trocar antes de entrar). Verificado no Chrome (troca + reload).
+- Migrações `production_accrual`+`informal_offers`; módulo `informal/`. Relatório: `docs/reports/24-economia-completa-i18n.{html,pdf}`.
+
 ### Etapa 23 — Economia viva + Comércio Informal e Leilões transacionais
 - **Produção por hora (§19)** deixa de ser preguiçosa: acúmulo "compute-on-read" em
   `GET /resources` (cada recurso ganha `perHour × horas` desde `Player.producedAt`, com teto na

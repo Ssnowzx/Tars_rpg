@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Relatório 24 (Economia completa + e2e + i18n)</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Relatório de Entrega</div>
+  <h1>24 — Economia completa + testes e2e + i18n</h1>
+  <div class="sub">Obra com custo/produção viva · fechamento de leilão · e2e dos fluxos · persistência de idioma
+    <span class="badge invert">CONCLUÍDO</span></div>
+  <div class="meta">
+    <span><b>Projeto:</b> Fertways (Flutter web + NestJS/Prisma/MariaDB)</span>
+    <span><b>GDD:</b> v33 — §11/§13/§19/§20</span>
+    <span><b>Data:</b> 01/07/2026</span>
+    <span><b>Escopo:</b> fechamento do backlog econômico + qualidade</span>
+  </div>
+</div>
+
+<p class="lead">Fecha o backlog que restava: a <b>construção</b> passa a custar recursos e a produção reage aos
+níveis; o <b>leilão</b> encerra e cobra o vencedor; os <b>fluxos-chave</b> ganham testes <b>e2e</b> (que já
+pegaram um bug real); e o <b>idioma</b> passa a persistir entre sessões, com a tela de acesso trilíngue. Tudo
+verificado ponta a ponta (API, e2e e no navegador).</p>
+
+<div class="cards">
+  <div class="card"><div class="n">§20</div><div class="l">obra custa recursos · produção reage ao nível (§19)</div></div>
+  <div class="card"><div class="n">§13</div><div class="l">leilão encerra e cobra o vencedor</div></div>
+  <div class="card"><div class="n">8</div><div class="l">testes e2e (+17 unit) · achou 1 bug real</div></div>
+  <div class="card"><div class="n">i18n</div><div class="l">idioma persiste · login PT/ES/EN</div></div>
+</div>
+
+<h2>Escopo entregue</h2>
+<ul>
+  <li><b>Construção autoritativa com custo (§20)</b>: enfileirar uma obra <b>debita recursos</b> (Metal Bruto +
+      Energia, curva 1.5×) e devolve ao cancelar; concluir <b>eleva o nível e o perHour</b> do prédio (§19) e
+      <b>recalcula o ResourceStock.perHour</b> daquela categoria. Obras vencidas concluem também na leitura da
+      colônia.</li>
+  <li><b>Economia viva de verdade</b>: o motor de acúmulo (/resources) usa o perHour recalculado — <b>evoluir uma
+      construção aumenta a produção</b>, visível no HUD (verificado no Chrome: Captação de Água nível 3→4, 88→132/h).</li>
+  <li><b>Frontend alinhado</b>: a fila mostra a <b>mensagem real do servidor</b> (não mais "fila cheia" genérico)
+      e invalida colônia + recursos após a obra.</li>
+  <li><b>Fechamento de leilão (§13)</b>: ao vencer o prazo, o lote é encerrado, o <b>vencedor é cobrado</b> pelo
+      livro-razão e entra no <b>histórico</b> (compute-on-read).</li>
+  <li><b>Testes e2e</b> (<code>test/flows.e2e-spec.ts</code>): isolamento por jogador, auth obrigatória, Mercado
+      (anunciar+comprar), Comércio Informal (aceitar troca) e Leilão (gate Nível 100 + incremento mínimo + lance).
+      Fixtures próprios com limpeza — não dependem do seed. <b>Pegou um bug real</b>: a placa da frota inicial vinha
+      do nickname → dois jogadores com prefixo igual colidiam (placa única §16.3); corrigido para derivar do id.</li>
+  <li><b>i18n (§11)</b>: o idioma <b>persiste</b> (SharedPreferences) e a <b>tela de login/registro</b> foi
+      totalmente extraída para ARB (pt/es/en), com <b>seletor de idioma</b> no card de login (trocar antes de entrar).</li>
+</ul>
+
+<h2>Arquitetura</h2>
+<table>
+  <thead><tr><th>Camada</th><th>Arquivos</th></tr></thead>
+  <tbody>
+    <tr><td>Produção/custo</td><td><code>common/production.ts</code> (categoria→recurso, base, curva, custo) · <code>build-queue.service</code> (custo/refund/perHour) · <code>colony.service</code> (conclui na leitura)</td></tr>
+    <tr><td>Leilão</td><td><code>auctions/auction.service</code> — <code>closeExpired()</code> (cobra vencedor + histórico)</td></tr>
+    <tr><td>Testes</td><td><code>test/flows.e2e-spec.ts</code> · <code>test/app.e2e-spec.ts</code> · <code>common/production.spec.ts</code></td></tr>
+    <tr><td>Frontend obra</td><td><code>build_queue_controller</code> (mensagem real + invalida recursos) · <code>colony_screen</code></td></tr>
+    <tr><td>i18n</td><td><code>data/locale_controller</code> (persistência) · <code>main.dart</code> · <code>l10n/app_*.arb</code> (auth) · <code>features/auth/login_screen</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Definition of Done — validado</h2>
+<ul class="dod">
+  <li>Backend: 2 migrações; <code>jest</code> <b>17 unit + 8 e2e</b> verdes; <code>start:dev</code> limpo</li>
+  <li>App: <code>flutter analyze</code> — No issues found · <code>build web</code> — ✓ Built</li>
+  <li>Obra (API+Chrome): enfileirar cobra Metal Bruto+Energia; concluir → nível+perHour sobem; HUD reflete 132/h</li>
+  <li>Leilão (API): expira → encerra, cobra o vencedor (100000→91600) e entra no histórico</li>
+  <li>e2e: registra/limpa fixtures próprios; valida isolamento, mercado, informal e gate de leilão</li>
+  <li>i18n (Chrome): login troca para English na hora e <b>persiste após reload</b>; volta a PT</li>
+</ul>
+
+<div class="note"><b>Backlog remanescente:</b> extração i18n do corpo das demais ~25 telas (padrão + persistência
+já sólidos) segue incremental; produção reagindo a upgrades usa curva 1.5× por prédio (a especialização e as
+receitas §24.5 completas ficam para depois). O jogo está funcional e com a economia fechando o ciclo
+construir → produzir → comerciar/leiloar.</div>
+
+<footer><span>Fertways — Relatório de Entrega · 24 Economia completa + e2e + i18n</span><span>Gerado em 01/07/2026</span></footer>
+
+</body>
+</html>

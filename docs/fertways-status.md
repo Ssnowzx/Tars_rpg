@@ -26,6 +26,13 @@ federation/auctions. Relatório: `docs/reports/22-backend-per-player.{html,pdf}`
 `POST /auctions/:id/bid` com gate Nível 100/incremento/saldo; botão Dar lance ligado). Novos módulos `informal/`;
 migrações `production_accrual`+`informal_offers`. jest 11/11 · analyze/build limpos · verificado no Chrome.
 Relatório: `docs/reports/23-economia-viva.{html,pdf}`. Tudo em `origin/main`.
+**Etapa 24 (01/07): ECONOMIA COMPLETA + E2E + I18N.** Obra autoritativa com **custo em recursos** (§20) e
+**produção que reage ao nível** (§19 — evoluir prédio → mais perHour → mais acúmulo; visto no HUD 88→132/h);
+frontend mostra a mensagem real do servidor. **Fechamento de leilão** (§13 — encerra, cobra o vencedor,
+histórico). **Testes e2e** dos fluxos (isolamento/mercado/informal/leilão) — acharam e corrigiram um bug real de
+colisão de placa na frota inicial; suite 17 unit + 8 e2e verdes. **i18n**: idioma **persiste** (SharedPreferences)
++ tela de login trilíngue com seletor. Relatório: `docs/reports/24-economia-completa-i18n.{html,pdf}`.
+Backlog: extração i18n do corpo das demais telas (incremental); receitas §24.5 completas. Tudo em `origin/main`.
 **Como abrir do zero:** `cd backend && pnpm db:up && pnpm prisma:migrate && pnpm seed && pnpm start:dev` (usar
 node v20 do fnm, NÃO o /opt/homebrew node quebrado) · `cd app && flutter run -d chrome` · login vale@fertways.test / colonia123.
 
