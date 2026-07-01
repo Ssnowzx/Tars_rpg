@@ -1,0 +1,1054 @@
+// Fertways: The Next Colony — schema de dados (GDD v33).
+// Servidor autoritativo: economia (Fert$), combate, missões, reputação e
+// permissões vivem aqui. Fert$ tem livro-razão append-only (LedgerEntry).
+// Provider "mysql" cobre MySQL e MariaDB. Money = Decimal(18,4).
+//
+// Escopo: schema COMPLETO primeiro (todos os domínios); endpoints incrementais.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum Locale {
+  pt
+  es
+  en
+}
+
+/// Recursos (§18): primários, industriais, minerais eletrônicos e raros (luas).
+enum ResourceKey {
+  // Primários
+  oxygen
+  water
+  biomass
+  energy
+  // Industriais
+  metalore // Metal Bruto
+  alloys // Ligas Metálicas
+  chemicals // Compostos Químicos
+  biofuel // Biocombustível
+  // Minerais eletrônicos (governo) — §18.3
+  aluminum
+  tin
+  copper
+  silicon
+  lithium
+  tungsten
+  tantalum
+  gold
+  // Componentes processados
+  componentBasic
+  componentIntermediate
+  componentAdvanced
+  // Raros (8 luas) — §18.4 / §28.2
+  niobium
+  helium3
+  quartz
+  redIron
+  organicResin
+  methaneIce
+  fossilPlasma
+  bioFungus
+}
+
+enum ResourceTier {
+  primary
+  industrial
+  mineral
+  component
+  rare
+}
+
+enum BuildingCategory {
+  habitat
+  oxygen
+  water
+  metals
+  rawmetal
+  biomass
+  energy
+  components
+  biofuel
+  military
+  research
+  transport
+  special
+  empty
+}
+
+enum BuildJobKind {
+  construct
+  upgrade
+}
+
+enum BuildJobStatus {
+  queued
+  active
+  done
+  cancelled
+}
+
+/// Fatos econômicos do livro-razão (§6).
+enum LedgerReason {
+  contractNpc
+  marketSale
+  marketBuy
+  missionReward
+  civicPay
+  tax
+  maintenance
+  construction
+  auction
+  repair
+  subsidy
+  adminAdjust
+  transfer
+  other
+}
+
+enum MarketListingStatus {
+  open
+  sold
+  cancelled
+}
+
+enum TradeAgreementStatus {
+  proposed
+  active
+  fulfilled
+  breached
+  cancelled
+}
+
+enum FederationRole {
+  leader
+  diplomat
+  intendant
+  member
+}
+
+enum TreatyType {
+  alliance
+  nonAggression
+  war
+}
+
+/// Os 4 índices independentes de reputação (§26).
+enum ReputationIndex {
+  commercialTrust
+  socialConduct
+  civicStatus
+  militaryHonor
+}
+
+enum DisputeStatus {
+  open
+  triage
+  assigned
+  mediation
+  decided
+  appeal
+  closed
+}
+
+enum EvidenceKind {
+  serverLog
+  tradeAgreement
+  message
+  screenshot
+  context
+}
+
+enum MissionCategory {
+  tutorial
+  production
+  logistics
+  social
+  civic
+  military
+}
+
+enum MissionStatus {
+  locked
+  available
+  active
+  ready
+  done
+}
+
+enum GameEventType {
+  narrative
+  storm
+  war
+  market
+  gagarin
+}
+
+enum VehicleKind {
+  van // Furgão de Comércio
+  truck // Caminhão de Carga
+  drone // Drone de Exploração
+  miner // Robô Minerador
+  sentinel // Sentinela
+  infiltrator // Infiltrador
+  predator // Predador
+  planetaryShip // Nave de Transporte Planetária
+  freighter // Cargueiro Interplanetário (governo)
+  longRange // Nave de Longa Distância (T2)
+}
+
+enum VehicleStatus {
+  idle
+  enRoute
+  maintenance
+  occupied
+}
+
+enum OfficeKind {
+  conciliator
+  marketInspector
+  spaceportAttendant
+  reporter
+  treasuryAssistant
+}
+
+enum UnitType {
+  sentinel
+  robo
+  infiltrator
+  predator
+}
+
+enum BattleType {
+  invasion
+  sabotage
+  apprehension
+  siege
+}
+
+enum BattleStatus {
+  pending
+  active
+  attackerWon
+  defenderWon
+  cancelled
+}
+
+enum RouteRisk {
+  none
+  low
+  high
+}
+
+enum NotificationKind {
+  war
+  reputation
+  gagarin
+  market
+  mission
+  federation
+  office
+  auction
+  fleet
+  system
+}
+
+enum NotificationSeverity {
+  info
+  success
+  warning
+  critical
+}
+
+enum ChatChannelType {
+  global
+  regional
+  federation
+  dm
+  neighborhood
+}
+
+enum MoonAtmosphere {
+  similar
+  none
+  toxic
+}
+
+enum BulletinKind {
+  moon
+  atmosphere
+  resource
+  anomaly
+}
+
+enum TerraformIndicatorKind {
+  atmosphere
+  water
+  biosphere
+}
+
+enum AuctionRarity {
+  unique
+  legendary
+  rare
+}
+
+enum AuctionStatus {
+  live
+  endingSoon
+  ended
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Identidade, autenticação e reputação (§5/§24.2/§26)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Player {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  passwordHash      String
+  nickname          String   @unique
+  avatarUrl         String?
+  locale            Locale   @default(pt)
+  marco             Int      @default(1) // marco de colonização (§3)
+  level             Int      @default(1)
+  xp                Int      @default(0)
+  fertBalance       Decimal  @default(50) @db.Decimal(18, 4) // saldo Fert$ (cache; ledger é fonte)
+  neutralRegistered Boolean  @default(false) // Neutro Registrado (Conciliador, §14)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  colony         Colony?
+  reputation     Reputation?
+  refreshTokens  RefreshToken[]
+  resourceStocks ResourceStock[]
+  buildJobs      BuildJob[]
+  ledgerEntries  LedgerEntry[]
+  diaryEntries   DiaryEntry[]
+  notifications  Notification[]
+
+  marketListings MarketListing[]
+  marketOrders   MarketOrder[]
+  bids           Bid[]
+
+  agreementsProposed TradeAgreement[] @relation("AgreementProposer")
+  agreementsReceived TradeAgreement[] @relation("AgreementCounterparty")
+  ratingsGiven       TradeRating[]    @relation("RatingRater")
+  ratingsReceived    TradeRating[]    @relation("RatingRated")
+
+  federationMember FederationMember?
+
+  disputesReported    Dispute[] @relation("DisputeReporter")
+  disputesAccused     Dispute[] @relation("DisputeAccused")
+  disputesConciliated Dispute[] @relation("DisputeConciliator")
+
+  missions     PlayerMission[]
+  achievements PlayerAchievement[]
+  vehicles     Vehicle[]
+
+  officesHeld       PublicOffice[]    @relation("OfficeHolder")
+  officeCandidacies OfficeCandidate[]
+  officePayments    OfficePayment[]
+
+  ownedZones NeutralZone[] @relation("ZoneOwner")
+  units      Unit[]
+  battles    Battle[]      @relation("BattleAttacker")
+
+  chatMessages ChatMessage[]
+
+  terraformContributions TerraformContribution[]
+  warRankingEntries      WarRankingEntry[]
+  reputationEvents       ReputationEvent[]
+
+  @@index([level])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  playerId  String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+}
+
+/// Quatro índices independentes (§26.2), 0–1000, sem compensação cruzada.
+model Reputation {
+  id              String   @id @default(cuid())
+  playerId        String   @unique
+  commercialTrust Int      @default(500)
+  socialConduct   Int      @default(500)
+  civicStatus     Int      @default(500)
+  militaryHonor   Int      @default(500)
+  updatedAt       DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+/// Log append-only de mudanças de reputação (auditoria, §26.8).
+model ReputationEvent {
+  id        String          @id @default(cuid())
+  playerId  String
+  index     ReputationIndex
+  delta     Int
+  reason    String
+  refType   String?
+  refId     String?
+  createdAt DateTime        @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, index])
+}
+
+/// Diário do Colono (§24.3) — privado por padrão.
+model DiaryEntry {
+  id        String   @id @default(cuid())
+  playerId  String
+  kind      String
+  title     String
+  body      String   @db.Text
+  note      String?  @db.Text
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Colônia, construções, recursos e fila (§17/§18/§19/§20)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Colony {
+  id             String   @id @default(cuid())
+  playerId       String   @unique
+  name           String
+  sector         String   @default("")
+  specialization String? // 1 de 15 (§17.3); null = nenhuma
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  player    Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  buildings Building[]
+}
+
+model Building {
+  id        String           @id @default(cuid())
+  colonyId  String
+  kind      String // identificador estável (ex.: "oficina", "reator")
+  name      String
+  category  BuildingCategory
+  level     Int              @default(1)
+  perHour   Int              @default(0)
+  dx        Float            @default(0)
+  dy        Float            @default(0)
+  built     Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  colony Colony @relation(fields: [colonyId], references: [id], onDelete: Cascade)
+
+  @@index([colonyId])
+}
+
+/// Estoque de um recurso do jogador (§18/§19).
+model ResourceStock {
+  id       String       @id @default(cuid())
+  playerId String
+  key      ResourceKey
+  tier     ResourceTier
+  amount   Int          @default(0)
+  capacity Int?
+  perHour  Int          @default(0)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, key])
+}
+
+/// Fila de construção (§20/§20.2 fila dupla). Estado autoritativo do C4.
+model BuildJob {
+  id           String         @id @default(cuid())
+  playerId     String
+  name         String
+  targetKind   String // "colonyBuilding" | "zoneStructure"
+  targetId     String?
+  kind         BuildJobKind
+  fromLevel    Int            @default(0)
+  toLevel      Int            @default(1)
+  totalSeconds Int
+  startedAt    DateTime       @default(now())
+  endsAt       DateTime
+  status       BuildJobStatus @default(active)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Economia: livro-razão, Mercado (escrow) e comércio informal (§6/§8/§13/§22)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Livro-razão append-only do Fert$ (§6). Nunca editar/apagar.
+model LedgerEntry {
+  id           String       @id @default(cuid())
+  playerId     String
+  amount       Decimal      @db.Decimal(18, 4) // positivo = crédito; negativo = débito
+  balanceAfter Decimal      @db.Decimal(18, 4)
+  reason       LedgerReason
+  refType      String?
+  refId        String?
+  ruleVersion  String       @default("v33")
+  createdAt    DateTime     @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, createdAt])
+}
+
+/// Preço-base de referência por recurso (§22). Seed inicial.
+model MarketPrice {
+  key       ResourceKey @id
+  basePrice Decimal     @db.Decimal(18, 4)
+  updatedAt DateTime    @updatedAt
+}
+
+/// Anúncio no Mercado Central com escrow do lote (§13).
+model MarketListing {
+  id        String              @id @default(cuid())
+  sellerId  String
+  key       ResourceKey
+  quantity  Int
+  unitPrice Decimal             @db.Decimal(18, 4)
+  status    MarketListingStatus @default(open)
+  createdAt DateTime            @default(now())
+
+  seller Player        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  orders MarketOrder[]
+
+  @@index([key, status])
+}
+
+model MarketOrder {
+  id        String   @id @default(cuid())
+  listingId String
+  buyerId   String
+  quantity  Int
+  total     Decimal  @db.Decimal(18, 4)
+  taxPaid   Decimal  @db.Decimal(18, 4)
+  createdAt DateTime @default(now())
+
+  listing MarketListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyer   Player        @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+}
+
+/// Acordo de Troca do comércio informal (§26.5) — aperto de mão digital.
+model TradeAgreement {
+  id             String               @id @default(cuid())
+  proposerId     String
+  counterpartyId String
+  terms          Json
+  deadline       DateTime?
+  status         TradeAgreementStatus @default(proposed)
+  createdAt      DateTime             @default(now())
+  confirmedAt    DateTime?
+
+  proposer     Player        @relation("AgreementProposer", fields: [proposerId], references: [id], onDelete: Cascade)
+  counterparty Player        @relation("AgreementCounterparty", fields: [counterpartyId], references: [id], onDelete: Cascade)
+  ratings      TradeRating[]
+
+  @@index([proposerId])
+  @@index([counterpartyId])
+}
+
+/// Avaliação de comércio 0–5 estrelas (§26.3), valor mínimo 500 Fert$.
+model TradeRating {
+  id          String   @id @default(cuid())
+  agreementId String?
+  raterId     String
+  ratedId     String
+  stars       Int
+  comment     String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  agreement TradeAgreement? @relation(fields: [agreementId], references: [id], onDelete: SetNull)
+  rater     Player          @relation("RatingRater", fields: [raterId], references: [id], onDelete: Cascade)
+  rated     Player          @relation("RatingRated", fields: [ratedId], references: [id], onDelete: Cascade)
+
+  @@index([ratedId])
+}
+
+/// Casa de Leilões (§13) — peças únicas, gate Nível 100.
+model Auction {
+  id           String        @id @default(cuid())
+  name         String
+  description  String        @db.Text
+  rarity       AuctionRarity
+  status       AuctionStatus @default(live)
+  currentBid   Decimal       @db.Decimal(18, 4)
+  minIncrement Decimal       @db.Decimal(18, 4)
+  endsAt       DateTime
+  createdAt    DateTime      @default(now())
+
+  bids Bid[]
+}
+
+model Bid {
+  id        String   @id @default(cuid())
+  auctionId String
+  playerId  String
+  amount    Decimal  @db.Decimal(18, 4)
+  createdAt DateTime @default(now())
+
+  auction Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  player  Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([auctionId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Federações (§4)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Federation {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  tag       String?  @unique
+  treasury  Decimal  @default(0) @db.Decimal(18, 4)
+  createdAt DateTime @default(now())
+
+  members    FederationMember[]
+  treaties   Treaty[]           @relation("TreatyFederation")
+  treatiesAs Treaty[]           @relation("TreatyAlly")
+}
+
+model FederationMember {
+  id           String         @id @default(cuid())
+  federationId String
+  playerId     String         @unique
+  role         FederationRole @default(member)
+  joinedAt     DateTime       @default(now())
+
+  federation Federation @relation(fields: [federationId], references: [id], onDelete: Cascade)
+  player     Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([federationId])
+}
+
+model Treaty {
+  id           String     @id @default(cuid())
+  federationId String
+  allyId       String
+  type         TreatyType
+  createdAt    DateTime   @default(now())
+
+  federation Federation @relation("TreatyFederation", fields: [federationId], references: [id], onDelete: Cascade)
+  ally       Federation @relation("TreatyAlly", fields: [allyId], references: [id], onDelete: Cascade)
+
+  @@index([federationId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Justiça / Ministério das Reputações (§9)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Dispute {
+  id            String        @id @default(cuid())
+  reporterId    String
+  accusedId     String
+  conciliatorId String?
+  category      String
+  summary       String        @db.Text
+  status        DisputeStatus @default(open)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  reporter    Player  @relation("DisputeReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  accused     Player  @relation("DisputeAccused", fields: [accusedId], references: [id], onDelete: Cascade)
+  conciliator Player? @relation("DisputeConciliator", fields: [conciliatorId], references: [id], onDelete: SetNull)
+
+  evidence Evidence[]
+  events   DisputeEvent[]
+
+  @@index([status])
+}
+
+model Evidence {
+  id        String       @id @default(cuid())
+  disputeId String
+  kind      EvidenceKind
+  label     String
+  createdAt DateTime     @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+}
+
+model DisputeEvent {
+  id        String   @id @default(cuid())
+  disputeId String
+  label     String
+  note      String?  @db.Text
+  createdAt DateTime @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Missões, conquistas e eventos (§6)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Mission {
+  id          String          @id @default(cuid())
+  key         String          @unique
+  title       String
+  description String          @db.Text
+  category    MissionCategory
+  rewardFert  Decimal         @default(0) @db.Decimal(18, 4)
+  rewardXp    Int             @default(0)
+
+  players PlayerMission[]
+}
+
+model PlayerMission {
+  id        String        @id @default(cuid())
+  playerId  String
+  missionId String
+  status    MissionStatus @default(available)
+  progress  Int           @default(0)
+  target    Int           @default(1)
+  updatedAt DateTime      @updatedAt
+
+  player  Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  mission Mission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, missionId])
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  key         String @unique
+  title       String
+  description String @db.Text
+
+  players PlayerAchievement[]
+}
+
+model PlayerAchievement {
+  id            String   @id @default(cuid())
+  playerId      String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  player      Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, achievementId])
+}
+
+model GameEvent {
+  id        String        @id @default(cuid())
+  key       String        @unique
+  type      GameEventType
+  title     String
+  body      String        @db.Text
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime      @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Frota e veículos (§16/§21)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Vehicle {
+  id        String        @id @default(cuid())
+  ownerId   String
+  kind      VehicleKind
+  plate     String?       @unique // §16.3 (militares não têm placa)
+  status    VehicleStatus @default(idle)
+  integrity Float         @default(1.0) // 0..1 (depreciação §16.4)
+  createdAt DateTime      @default(now())
+
+  owner Player @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Cargos públicos neutros (§14)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PublicOffice {
+  id       String     @id @default(cuid())
+  kind     OfficeKind @unique
+  holderId String?
+
+  holder     Player?           @relation("OfficeHolder", fields: [holderId], references: [id], onDelete: SetNull)
+  candidates OfficeCandidate[]
+  payments   OfficePayment[]
+}
+
+model OfficeCandidate {
+  id        String   @id @default(cuid())
+  officeId  String
+  playerId  String
+  createdAt DateTime @default(now())
+
+  office PublicOffice @relation(fields: [officeId], references: [id], onDelete: Cascade)
+  player Player       @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([officeId, playerId])
+}
+
+model OfficePayment {
+  id        String   @id @default(cuid())
+  officeId  String
+  playerId  String
+  amount    Decimal  @db.Decimal(18, 4)
+  period    String
+  createdAt DateTime @default(now())
+
+  office PublicOffice @relation(fields: [officeId], references: [id], onDelete: Cascade)
+  player Player       @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Território, zonas neutras, unidades e combate (§7/§27)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model NeutralZone {
+  id                String      @id @default(cuid())
+  name              String
+  resource          ResourceKey
+  level             Int         @default(1)
+  ownerId           String?
+  windowStart       Int? // janela de vulnerabilidade diária (hora 0–23), §27.7
+  protectedUntil    DateTime? // proteção de novato 8 dias (§28.4)
+  maintenancePaidAt DateTime?
+  createdAt         DateTime    @default(now())
+
+  owner      Player?         @relation("ZoneOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  structures ZoneStructure[]
+  battles    Battle[]        @relation("BattleZone")
+
+  @@index([ownerId])
+}
+
+model ZoneStructure {
+  id     String @id @default(cuid())
+  zoneId String
+  kind   String
+  name   String
+  level  Int    @default(1)
+
+  zone NeutralZone @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@index([zoneId])
+}
+
+/// Pilha de unidades militares/robôs (§27.1/§27.2). Guarnição da zona OU do jogador.
+model Unit {
+  id        String   @id @default(cuid())
+  ownerId   String
+  type      UnitType
+  level     Int      @default(1)
+  count     Int      @default(0)
+  integrity Float    @default(1.0)
+
+  owner Player @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
+}
+
+model Battle {
+  id         String       @id @default(cuid())
+  attackerId String
+  zoneId     String
+  type       BattleType
+  status     BattleStatus @default(pending)
+  seed       String // semente do fator aleatório (auditável, §27.5)
+  lootValue  Decimal      @default(0) @db.Decimal(18, 4)
+  startedAt  DateTime     @default(now())
+  endedAt    DateTime?
+
+  attacker Player        @relation("BattleAttacker", fields: [attackerId], references: [id], onDelete: Cascade)
+  zone     NeutralZone   @relation("BattleZone", fields: [zoneId], references: [id], onDelete: Cascade)
+  rounds   BattleRound[]
+
+  @@index([zoneId])
+}
+
+model BattleRound {
+  id           String  @id @default(cuid())
+  battleId     String
+  round        Int
+  attackForce  Float
+  defenseForce Float
+  note         String? @db.Text
+
+  battle Battle @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+  @@index([battleId])
+}
+
+/// Ranking de guerras por percentil empírico (§27.13).
+model WarRankingEntry {
+  id         String   @id @default(cuid())
+  playerId   String
+  season     String
+  metric     String
+  value      Float
+  percentile Float    @default(0)
+  updatedAt  DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, season, metric])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Espaçoporto e planetas NPC (§3)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model NpcPlanet {
+  id       String    @id @default(cuid())
+  key      String    @unique
+  name     String
+  distance String
+  risk     RouteRisk @default(none)
+  exports  String    @db.Text
+  imports  String    @db.Text
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notificações e chat (§10, transversal)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String               @id @default(cuid())
+  playerId  String
+  kind      NotificationKind
+  severity  NotificationSeverity @default(info)
+  title     String
+  body      String               @db.Text
+  route     String?
+  read      Boolean              @default(false)
+  createdAt DateTime             @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, read])
+}
+
+model ChatChannel {
+  id        String          @id @default(cuid())
+  type      ChatChannelType
+  name      String
+  createdAt DateTime        @default(now())
+
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  channelId String
+  senderId  String
+  body      String   @db.Text
+  reported  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  channel ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  sender  Player      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([channelId, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Terraformação global (§04/§12.3)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Indicador coletivo do servidor (uma linha por tipo). Marco 75% = gatilho T2.
+model TerraformIndicator {
+  kind      TerraformIndicatorKind @id
+  percent   Int                    @default(0)
+  perDay    Int                    @default(0)
+  updatedAt DateTime               @updatedAt
+}
+
+/// Contribuição de um jogador (limite diário anti-farming, §04).
+model TerraformContribution {
+  id        String                 @id @default(cuid())
+  playerId  String
+  kind      TerraformIndicatorKind
+  amount    Int
+  createdAt DateTime               @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Exploração lunar (§12) — fundação narrativa da T2
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Moon {
+  id           String         @id @default(cuid())
+  key          String         @unique
+  name         String
+  honoree      String
+  honoreeNote  String
+  atmosphere   MoonAtmosphere
+  rareResource ResourceKey
+  profile      String         @db.Text
+  t2Reading    String
+  mystery      Boolean        @default(false)
+
+  bulletins GagarinBulletin[]
+}
+
+model GagarinBulletin {
+  id          String       @id @default(cuid())
+  cycle       String
+  kind        BulletinKind
+  title       String
+  body        String       @db.Text
+  moonId      String?
+  publishedAt DateTime     @default(now())
+
+  moon Moon? @relation(fields: [moonId], references: [id], onDelete: SetNull)
+
+  @@index([moonId])
+}
+
+/// Configuração/estado global do servidor (singleton com key). Gagarin,
+/// gatilhos de temporada, versão de regras, etc.
+model ServerConfig {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

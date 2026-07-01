@@ -8,7 +8,9 @@
 Marte 2387. **Fonte de verdade: `FERTWAYS_GDD_v33_MESTRE_INTEGRAL_SEM_SUPRESSOES.html`** (raiz;
 edição mestre integral — supera v29: §1–§27 herdados + §0 tabela de precedência de 12 conflitos +
 §28 correções). Escopo atual: **frontend/visual only**, tudo com **mock data** atrás de interfaces
-de repositório (backend ADIADO; ignorar §23 Docker/Laravel).
+de repositório. **Backend (a partir de 2026-07-01): `backend/` = NestJS+TS(strict)+Prisma+MariaDB** (fundação —
+schema completo de 47 modelos migrado + health check; endpoints incrementais; ver `backend/README.md`). GDD §14
+(Laravel/MySQL) e §23 (Docker/Laravel) ficam superados por essa escolha.
 
 ## 2. Stack
 - **Cliente:** Flutter **web-only**, código em `app/` (a pasta `android/` foi removida —
