@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fertways — Manual do Colono</title>
+<style>
+@page { size: A4; margin: 15mm 13mm 16mm 13mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color: #2A2118; font-size: 10.5pt; line-height: 1.45; margin: 0;
+}
+h1, h2, h3 { font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+
+.cover {
+  background: linear-gradient(110deg, #C1440E 0%, #E8941E 100%);
+  color: #fff; border-radius: 12px; padding: 24px 26px; margin-bottom: 18px;
+}
+.cover .kicker { text-transform: uppercase; letter-spacing: 2px; font-size: 8.5pt; font-weight: 700; opacity: 0.92; }
+.cover h1 { margin: 6px 0 4px; font-size: 22pt; font-weight: 800; line-height: 1.05; }
+.cover .sub { font-size: 10.5pt; opacity: 0.96; max-width: 90%; }
+.cover .meta { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 8.5pt; }
+.cover .meta b { font-weight: 700; }
+
+.badge { display: inline-block; padding: 2px 9px; border-radius: 6px; font-size: 8pt; font-weight: 700; vertical-align: middle; }
+.badge.ok    { background: rgba(37,122,85,0.16);  color: #1A4D38; border: 1px solid rgba(37,122,85,0.45); }
+.badge.soon  { background: rgba(232,148,30,0.18); color: #97600D; border: 1px solid rgba(232,148,30,0.5); }
+.badge.info  { background: rgba(70,110,160,0.14); color: #2C4A6E; border: 1px solid rgba(70,110,160,0.4); }
+.badge.invert{ background: rgba(255,255,255,0.18);color: #fff; }
+
+h2 { font-size: 13pt; color: #C1440E; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #EFEAE0; }
+h3 { font-size: 10.8pt; color: #4B4034; margin: 14px 0 5px; }
+p { margin: 6px 0; }
+ul, ol { margin: 6px 0; padding-left: 20px; }
+li { margin: 4px 0; }
+.lead { font-size: 11pt; color: #4B4034; }
+b, strong { color: #2A2118; }
+
+table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9pt; }
+th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid #EFEAE0; vertical-align: top; }
+th { background: #F7F6F3; color: #6E6151; text-transform: uppercase; letter-spacing: 0.6px; font-size: 7.8pt; font-weight: 700; }
+tr td { color: #2A2118; }
+code { font-family: "SF Mono", "Roboto Mono", Menlo, monospace; font-size: 8.4pt; background: #F2EFE9; padding: 1px 5px; border-radius: 4px; color: #7C2C0C; }
+
+.cards { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+.card { flex: 1 1 150px; border: 1px solid #EFEAE0; border-radius: 10px; padding: 11px 13px; background: #FBFAF7; }
+.card .n { font-size: 15pt; font-weight: 800; color: #C1440E; line-height: 1.1; }
+.card .l { font-size: 8.4pt; color: #6E6151; margin-top: 3px; }
+
+.note { background: #F7F6F3; border-left: 3px solid #E8941E; border-radius: 6px; padding: 9px 13px; font-size: 9.2pt; color: #4B4034; margin: 10px 0; }
+.tip  { background: #F0F6F2; border-left: 3px solid #257A55; border-radius: 6px; padding: 9px 13px; font-size: 9.2pt; color: #26402F; margin: 10px 0; }
+
+ol.steps { counter-reset: step; list-style: none; padding-left: 0; }
+ol.steps > li { position: relative; padding: 6px 0 6px 40px; border-bottom: 1px dashed #EFEAE0; }
+ol.steps > li:last-child { border-bottom: none; }
+ol.steps > li::before {
+  counter-increment: step; content: counter(step);
+  position: absolute; left: 0; top: 6px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #C1440E; color: #fff; font-weight: 800; font-size: 11pt;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.section { page-break-inside: avoid; }
+.pagebreak { page-break-before: always; }
+footer { margin-top: 24px; padding-top: 8px; border-top: 1px solid #EFEAE0; font-size: 8pt; color: #917F66; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Fertways: The Next Colony · Guia do Jogador</div>
+  <h1>Manual do Colono</h1>
+  <div class="sub">Você acabou de receber uma colônia num planeta em terraformação. Este guia explica,
+    passo a passo, o que fazer nos seus primeiros minutos e como cada tela funciona.</div>
+  <div class="meta">
+    <span><b>Para:</b> novos jogadores</span>
+    <span><b>Idiomas do jogo:</b> Português · Espanhol · Inglês</span>
+    <span><b>Plataforma:</b> navegador (web)</span>
+    <span><b>Versão do guia:</b> 01/07/2026</span>
+  </div>
+</div>
+
+<p class="lead">Fertways é um jogo de <b>colônia, economia e política</b> num mundo compartilhado. Você
+administra uma colônia: produz recursos hora a hora, evolui construções, comercia com outros colonos e
+participa da vida pública do planeta (federações, cargos, ministérios). Não há "game over" — é um jogo de
+<b>gestão contínua</b>. Comece pequeno, aumente a produção e vá expandindo.</p>
+
+<h2>Primeiros passos — entrar no jogo</h2>
+<ol class="steps">
+  <li><b>Abra o jogo</b> no navegador (endereço fornecido pelo administrador, ex.: <code>http://localhost:8000</code>).</li>
+  <li><b>Crie sua conta</b> na tela de acesso (apelido, e-mail e senha) — ou, para testar rápido, use a
+      conta de demonstração <code>vale@fertways.test</code> / <code>colonia123</code>.</li>
+  <li><b>Escolha o idioma</b> no próprio cartão de login (PT / ES / EN). A escolha fica salva.</li>
+  <li>Ao entrar, você cai direto no <b>Mapa</b>, com sua colônia já criada e produzindo.</li>
+</ol>
+
+<h2>O que você recebe ao criar a conta</h2>
+<p>Toda conta nova nasce com uma colônia funcional no setor <code>F-07</code>, um subsídio inicial e frota
+básica. Você <b>não parte do zero</b> — parte de uma base que já produz:</p>
+
+<div class="cards">
+  <div class="card"><div class="n">50 Fert$</div><div class="l">subsídio inicial (a moeda do jogo)</div></div>
+  <div class="card"><div class="n">6 prédios</div><div class="l">já construídos + 2 slots livres para você construir</div></div>
+  <div class="card"><div class="n">8 recursos</div><div class="l">em estoque, produzindo por hora</div></div>
+  <div class="card"><div class="n">2 veículos</div><div class="l">Furgão + Robô Minerador (ociosos no hangar)</div></div>
+</div>
+
+<h3>Estoques iniciais e produção por hora</h3>
+<table>
+  <thead><tr><th>Recurso</th><th>Estoque inicial</th><th>Capacidade</th><th>Produção/hora</th></tr></thead>
+  <tbody>
+    <tr><td>Oxigênio</td><td>6.420</td><td>9.000</td><td>+54/h</td></tr>
+    <tr><td>Água</td><td>7.820</td><td>12.000</td><td>+88/h</td></tr>
+    <tr><td>Biomassa</td><td>4.880</td><td>7.500</td><td>+22/h</td></tr>
+    <tr><td>Energia</td><td>5.000</td><td>8.000</td><td>+40/h</td></tr>
+    <tr><td>Metal Bruto</td><td>1.200</td><td>5.000</td><td>+15/h</td></tr>
+    <tr><td>Ligas Metálicas</td><td>800</td><td>4.000</td><td>+8/h</td></tr>
+    <tr><td>Compostos Químicos</td><td>400</td><td>3.000</td><td>+6/h</td></tr>
+    <tr><td>Biocombustível</td><td>200</td><td>2.000</td><td>+4/h</td></tr>
+  </tbody>
+</table>
+<div class="note"><b>Produção é automática e contínua.</b> Mesmo com você offline, os recursos sobem sozinhos
+(até o teto da capacidade). Quando um recurso enche, ele para de crescer — por isso convém <b>gastar</b>
+(construir) ou <b>vender/trocar</b> o excedente. O <b>Biocombustível</b> é fabricado por receita:
+2 Biomassa + 3 Energia → 1 Biocombustível, limitado pela oferta desses insumos.</div>
+
+<h2>Entendendo a tela</h2>
+<p>A interface tem três áreas fixas:</p>
+<table>
+  <thead><tr><th>Área</th><th>Onde</th><th>O que faz</th></tr></thead>
+  <tbody>
+    <tr><td><b>Barra de recursos</b></td><td>topo (largura total)</td><td>mostra seus recursos e o saldo de Fert$ ao vivo</td></tr>
+    <tr><td><b>Navegação principal</b></td><td>lateral esquerda (tela larga) ou barra inferior (tela estreita)</td><td>as 5 áreas do jogo: Mapa · Capital · Mercado · Espaçoporto · Perfil</td></tr>
+    <tr><td><b>Barra de ações</b></td><td>rodapé (só em tela larga)</td><td>atalhos: Construir · Recrutar · Missões · Mensagens</td></tr>
+  </tbody>
+</table>
+
+<div class="note"><b>Sobre a barra de ações do rodapé:</b> ela tem quatro atalhos — <b>Construir</b>,
+<b>Recrutar</b>, <b>Missões</b> e <b>Mensagens</b>. <b>Construir</b> leva direto à sua Colônia (onde ficam as
+obras); <b>Missões</b> e <b>Mensagens</b> abrem suas telas. <b>Recrutar</b> segue reservado — o Quartel e as
+unidades militares existem no GDD (§17.2/§21), mas dependem do sistema de combate/zonas, ainda em construção;
+por isso mostra o aviso "— em breve". Os antigos botões <b>Pesquisar</b> e <b>Relatórios</b> foram retirados
+por ora: o GDD v33 apenas cita o conceito (um prédio "faz pesquisa"), sem definir a mecânica.</div>
+
+<div class="pagebreak"></div>
+<h2>As 5 áreas do jogo</h2>
+
+<h3>1 · Mapa <span class="badge ok">funcional</span></h3>
+<p>Sua visão do mundo e o coração da gestão da colônia. A partir do Mapa você acessa:</p>
+<ul>
+  <li><b>Colônia</b> — toque na sua colônia para ver os prédios. Toque num <b>Slot livre</b> para
+      <b>Construir</b>, ou num prédio para <b>Melhorar</b> (subir de nível). Cada obra <b>debita recursos</b>,
+      entra numa <b>fila com contagem regressiva</b> e, ao concluir, <b>aumenta a produção/hora</b> daquele
+      tipo de recurso. Dá para <b>cancelar</b> (devolve os recursos) ou <b>concluir na hora</b>.</li>
+  <li><b>Frota</b> — seus veículos. Ações reais: <b>Manutenção</b> (paga Fert$ e restaura a condição) e
+      <b>Sucatear</b> (remove o veículo).</li>
+  <li><b>Missões</b> — tarefas com recompensa. Botão <b>Resgatar</b> credita o prêmio no seu saldo.</li>
+  <li><b>Notificações</b> — avisos do sistema (ex.: prêmio de leilão que você venceu).</li>
+  <li><b>Zona neutra</b> e <b>Terraformação</b> — telas informativas do mundo compartilhado (a construção
+      de estruturas de zona conecta ao servidor numa etapa futura).</li>
+</ul>
+
+<h3>2 · Capital <span class="badge info">informativo</span></h3>
+<p>A capital política do planeta. Aqui você acompanha (por enquanto em modo consulta):</p>
+<ul>
+  <li><b>Rankings</b> — classificações de jogadores/colônias do servidor.</li>
+  <li><b>Cargos públicos</b> — os cargos políticos do planeta e quem os ocupa.</li>
+  <li><b>Ministérios</b> — instituições do planeta (upgrades de ministério chegam numa etapa futura).</li>
+</ul>
+
+<h3>3 · Mercado <span class="badge ok">funcional</span></h3>
+<p>Onde a economia acontece. Três formas de negociar:</p>
+<ul>
+  <li><b>Mercado Central</b> — <b>Comprar</b> lotes à venda (paga em Fert$, com <b>3% de taxa</b>) e
+      <b>Vender</b> seus recursos criando uma oferta. As trocas são reais e movem seu estoque e saldo.</li>
+  <li><b>Comércio Informal</b> — troca <b>recurso por recurso</b>, sem dinheiro (ex.: dar Oxigênio e receber
+      Compostos). Botão <b>Negociar</b> faz o swap na hora.</li>
+  <li><b>Leilões</b> — lotes especiais por lance em Fert$. Requer <b>nível 100</b> para dar lance. Quando o
+      leilão fecha, o vencedor é cobrado e <b>recebe o prêmio por notificação</b>.</li>
+</ul>
+
+<h3>4 · Espaçoporto <span class="badge info">informativo</span></h3>
+<p>Ponto de partida para além da colônia. Inclui a tela de <b>Exploração Lunar</b> (bases e boletins da
+Lua). Hoje é sobretudo consulta; a expansão fora do planeta evolui nas próximas etapas.</p>
+
+<h3>5 · Perfil <span class="badge ok">funcional</span></h3>
+<p>Seus dados de colono: nível, setor, reputação (4 índices) e sua <b>Federação</b>. A associação a uma
+federação é real — se você não pertence a nenhuma, verá o estado "sem federação".</p>
+
+<div class="pagebreak"></div>
+<h2>Roteiro dos primeiros 10 minutos</h2>
+<p>Se você não sabe por onde começar, siga esta ordem:</p>
+<ol class="steps">
+  <li><b>Olhe a barra de recursos no topo.</b> Note quanto você tem de cada recurso e de Fert$. Eles sobem
+      sozinhos com o tempo.</li>
+  <li><b>Abra sua Colônia</b> (Mapa → toque na colônia). Reconheça os prédios que já produzem: Atmosfera,
+      Água, Fazenda, Reator, Oficina.</li>
+  <li><b>Evolua um prédio de produção.</b> Toque num prédio → <b>Melhorar</b>. Isso gasta recursos e, ao
+      concluir, aumenta a produção/hora daquele recurso. Comece pelo que você mais consome.</li>
+  <li><b>Construa num slot livre.</b> Toque num <b>Slot livre</b> → <b>Construir</b> para adicionar uma nova
+      estrutura à colônia.</li>
+  <li><b>Venda o excedente.</b> Vá em <b>Mercado</b> e venda um recurso que esteja quase no teto, ou compre
+      algo que esteja em falta. Para trocar sem dinheiro, use o <b>Comércio Informal</b>.</li>
+  <li><b>Resgate missões.</b> Abra <b>Missões</b> e clique em <b>Resgatar</b> nas que já estiverem
+      completas — é Fert$ fácil no começo.</li>
+  <li><b>Cuide da frota.</b> Em <b>Frota</b>, faça <b>Manutenção</b> se a condição de um veículo cair.</li>
+  <li><b>Repita o ciclo:</b> produzir → evoluir → negociar. Cada nível de prédio torna o próximo passo mais
+      rápido.</li>
+</ol>
+
+<div class="tip"><b>Regra de ouro:</b> recurso parado no teto é recurso desperdiçado. Mantenha os estoques
+<b>circulando</b> — transforme excedente em construção (mais produção) ou em Fert$ (mercado). É assim que
+sua colônia cresce.</div>
+
+<h2>Os recursos do jogo</h2>
+<p>Os recursos têm níveis de complexidade. No começo você lida com os <b>primários</b> e <b>industriais</b>;
+os avançados e lunares aparecem conforme você progride.</p>
+<table>
+  <thead><tr><th>Nível</th><th>Recursos</th><th>Papel</th></tr></thead>
+  <tbody>
+    <tr><td><b>Primários</b></td><td>Oxigênio, Água, Biomassa, Energia</td><td>base da sobrevivência; produção contínua nos prédios essenciais</td></tr>
+    <tr><td><b>Industriais</b></td><td>Metal Bruto, Ligas Metálicas, Compostos Químicos, Biocombustível</td><td>insumos de construção e fabricação</td></tr>
+    <tr><td><b>Minerais/metais</b></td><td>Alumínio, Estanho, Cobre, Silício, Lítio, Tungstênio, Tântalo, Ouro</td><td>obtidos por comércio; usados em receitas avançadas</td></tr>
+    <tr><td><b>Componentes</b></td><td>Componente Básico / Intermediário / Avançado</td><td>manufatura de nível superior</td></tr>
+    <tr><td><b>Especiais/lunares</b></td><td>Hélio-3, Nióbio Alienígena, Quartzo, Ferro Vermelho, etc.</td><td>raros; ligados à exploração e a etapas futuras</td></tr>
+  </tbody>
+</table>
+
+<h2>O que já funciona × o que vem por aí</h2>
+<p>Para você saber o que esperar hoje, este é o estado honesto de cada função:</p>
+<table>
+  <thead><tr><th>Função</th><th>Status</th><th>Observação</th></tr></thead>
+  <tbody>
+    <tr><td>Produção de recursos por hora</td><td><span class="badge ok">funciona</span></td><td>acumula sozinho, respeita a capacidade</td></tr>
+    <tr><td>Construir / evoluir na Colônia</td><td><span class="badge ok">funciona</span></td><td>gasta recursos, fila regressiva, aumenta produção</td></tr>
+    <tr><td>Mercado Central (comprar/vender)</td><td><span class="badge ok">funciona</span></td><td>transações reais + 3% de taxa</td></tr>
+    <tr><td>Comércio Informal (troca)</td><td><span class="badge ok">funciona</span></td><td>swap recurso por recurso</td></tr>
+    <tr><td>Leilões (dar lance / prêmio)</td><td><span class="badge ok">funciona</span></td><td>exige nível 100; prêmio via notificação</td></tr>
+    <tr><td>Frota (manutenção / sucata)</td><td><span class="badge ok">funciona</span></td><td>—</td></tr>
+    <tr><td>Missões (resgatar recompensa)</td><td><span class="badge ok">funciona</span></td><td>—</td></tr>
+    <tr><td>Federação (entrar / estado)</td><td><span class="badge ok">funciona</span></td><td>associação real por jogador</td></tr>
+    <tr><td>Rankings · Cargos · Ministérios · Mensagens</td><td><span class="badge info">consulta</span></td><td>exibição do mundo; ações transacionais em etapas futuras</td></tr>
+    <tr><td>Zonas neutras / Combate</td><td><span class="badge info">consulta</span></td><td>construção conecta ao servidor numa etapa futura</td></tr>
+    <tr><td>Barra de atalhos do rodapé</td><td><span class="badge ok">funciona</span></td><td>Construir abre a Colônia; Missões e Mensagens abrem suas telas; Recrutar fica "em breve" (depende de combate/zonas)</td></tr>
+  </tbody>
+</table>
+
+<h2>Glossário rápido</h2>
+<table>
+  <thead><tr><th>Termo</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td><b>Fert$</b></td><td>a moeda do jogo. Usada para comprar no mercado, dar lances e pagar manutenção.</td></tr>
+    <tr><td><b>Produção/hora</b></td><td>quanto de um recurso a colônia gera por hora. Evoluir prédios aumenta esse número.</td></tr>
+    <tr><td><b>Slot livre</b></td><td>espaço vazio na colônia onde você pode Construir uma nova estrutura.</td></tr>
+    <tr><td><b>Fila de construção</b></td><td>obras em andamento com contagem regressiva; podem ser canceladas ou aceleradas.</td></tr>
+    <tr><td><b>Escrow / taxa</b></td><td>no Mercado Central, a compra é garantida (escrow) e cobra 3% de taxa.</td></tr>
+    <tr><td><b>Reputação</b></td><td>4 índices que medem sua conduta pública; influenciam a vida política.</td></tr>
+    <tr><td><b>Federação</b></td><td>aliança de colonos com regras e tratados próprios.</td></tr>
+  </tbody>
+</table>
+
+<div class="tip"><b>Dúvida frequente:</b> "criei a conta e não sei o que fazer." Resposta curta —
+vá em <b>Mapa → sua Colônia</b>, <b>evolua um prédio</b> e <b>construa num slot livre</b>. Depois passe no
+<b>Mercado</b> para vender o excedente e no <b>Missões</b> para resgatar recompensas. Esse ciclo é o jogo.</div>
+
+<footer>
+  <span>Fertways — Manual do Colono · Guia de introdução</span>
+  <span>Gerado em 01/07/2026</span>
+</footer>
+
+</body>
+</html>
